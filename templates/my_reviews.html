@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+{% block body %}
+
+  <body> 
+ Here are your reviews, user <b> {{ session["login"] }} </b>
+
+
+    <table class="table" style="width:100%">
+    <tr>
+      <th>MOVIE</th>
+      <th>RATING</th>
+    </tr>
+    <tr>
+      {% for rating in ratings %}  
+      <td><SPAN> {{ rating.movie.name }} </SPAN> </td>
+      <td><SPAN> {{ rating.rating }} </SPAN> </td>
+              
+    </tr>
+      {% endfor %}
+      
+ {% endblock %}

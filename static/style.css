@@ -1,0 +1,65 @@
+<style>
+
+/*orange: D95B43
+purple: 542437
+navy blue: 53777A
+mauve: C02942
+yellow: ECD078
+*/
+
+body {
+/*	
+background-color: #53777A;
+*/
+font-family: "Palatino Linotype", "Book Antiqua", Palatino, serif;
+color: #d6d6d6;
+
+}
+
+#menu_box {
+
+
+
+}
+
+#login_box{
+
+width: 360px;
+background-color: #ECD078;
+margin: auto;
+padding: 0px 25px 25px 25px;
+border: 2px solid #fff;
+border-radius: 25px;
+margin-top: 50;
+
+}
+
+
+
+#newprofile_box{
+
+width: 360px;
+background-color: #ECD078;
+margin: auto;
+padding: 0px 25px 25px 25px;
+border: 2px solid #fff;
+border-radius: 25px;
+margin-top: 50;
+
+}
+h1 {
+font-size: 30px;
+color: #53777A;
+}
+
+p {
+color: #542437;
+
+}
+
+form {
+
+margin-left: 60px;
+}
+
+</style>

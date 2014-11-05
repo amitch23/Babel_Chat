@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+{% block body %}
+
+
+  <body> 
+
+      <h1>Movie Ratings for: {{ user_id }}</h1>
+
+<div class="">
+  <!-- Default panel contents -->
+  <div class="">Ratings</div>
+  <div class="">
+    <p>Here are the ratings for {{ user_id}}.</p>
+  </div>
+
+  <!-- Table -->
+  <table class="table" style="width:100%">
+    <tr>
+      <th>MOVIE TITLE</th>
+      <th>RATING BY USER</th>
+    </tr>
+    <tr>
+      {% for rating in ratings %}  
+      <td><SPAN> {{rating.movie.name}} </SPAN> </td>
+      <td><SPAN> {{rating.rating}} </SPAN> </td>
+              
+    </tr>
+      {% endfor %}
+
+  </table>
+</div>
+ {% endblock %}

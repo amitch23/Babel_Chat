@@ -1,0 +1,27 @@
+
+<html>
+    <head>
+    <link type="text/css" rel="stylesheet" href="/static/style.css"/>
+ </head>
+
+    <body>
+      <div id="menu_box">
+      <ul>
+        {% if session.get("login", False) %}
+            <li class='user-name'>{{ session["login"] }}</li>
+        {% endif %}
+
+        {% if session.get("login", False) %}
+           <li><a href="/logout">Log Out</a></li>
+        {% else %}
+            <li><a href="/">Log In</a></li>
+        {% endif %}
+                    </ul>
+                </div>
+
+      
+    {% block body %}{% endblock %}
+
+
+    </body>
+</html>

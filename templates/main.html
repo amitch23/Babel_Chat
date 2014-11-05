@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% block body %}
+
+
+ <form action="/main" method="POST">
+        <h2>Search for a Movie Rating</h2>
+        <input type="text" name="movie" placeholder="Movie">
+        <button class="" type="submit">Search</button>
+      </form>
+
+
+      <br>
+      <a href="/my_reviews"><button class="" type="submit">View My Reviews</button></a>
+     
+      <br>
+      <a href="/add_review"><button class="" type="submit">Make a New Rating!</a>
+
+{% endblock %}
