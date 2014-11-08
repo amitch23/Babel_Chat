@@ -4,18 +4,22 @@
 
 </head>
 <body>
+{% for msg in get_flashed_messages() %}
+  msg = {{ msg }}
+{% endfor %}
 
 <div id="login_box">
     <form method="post" action="/login" id="login">
-        <h1> Log in to FilmRecs!</h1>
-        <p>Input your email and pasword if you're a pre-existing user. To sign up, input your email and invent a password and click "create new profile".</p>
+        <h1> Welcome to Babel Chat</h1>
+        <h2> Log in. if you're a new user, hit "sign up"</h2>
+        <p></p>
 
         <div id="email">
             <p>Email</p>
             <input type="text" name="email">
         </div>
 
-        <div id="pasword">
+        <div id="password">
             <p>Password</p>
             <input type="text" name="password">
         </div>
@@ -23,13 +27,11 @@
         <button type="submit" id="submit_button" name="submit">Submit</button> 
 
 
-        <a href="/new_user">Create New Profile</a>
-
-
-
+        <a href="/signup">Create New Profile</a>
 
 
     </form>
+
 </div>
- </body>
- </html>
+</body>
+</html>

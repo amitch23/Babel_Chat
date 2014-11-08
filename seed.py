@@ -6,22 +6,24 @@ import csv
 
 def load_users(session):
 #populate user table with 2 users        
-    user_1 = ["Jose Gonzalez", "jose@gmail.com", "pass1", 2, "Job"]
-    user_2 = ["Andrea Mitchell", "andrealeemitchell@gmail.com", "pass2", 1, "Fun"]
+    user_1 = ["Jose Gonzalez", "jose@gmail.com", "pass1", "Spanish", "ES", "Job"]
+    user_2 = ["Andrea Mitchell", "andrealeemitchell@gmail.com", "pass2", "English", "US", "Fun"]
 
     user1 = model.User(  
                         name =user_1[0],
                         email=user_1[1],
                         password=user_1[2],
-                        country_code=user_1[3],
-                        reason=user_1[4])
+                        mother_tongue=user_1[3],
+                        country_code=user_1[4],
+                        reason=user_1[5])
 
     user2 = model.User( 
                         name =user_2[0],
                         email=user_2[1],
                         password=user_2[2],
-                        country_code=user_2[3],
-                        reason=user_2[4])
+                        mother_tongue=user_2[3],
+                        country_code=user_2[4],
+                        reason=user_2[5])
 
 
     session.add(user1)
@@ -31,18 +33,21 @@ def load_users(session):
 def load_countries(session):
 #populate country table with 3 countries
 
-    country_1 = ["U.S.A."]
-    country_2 = ["Spain"]
-    country_3 = ["France"]
+    country_1 = ["US", "U.S.A."]
+    country_2 = ["ES", "Spain"]
+    country_3 = ["FR", "France"]
 
     country1 = model.Country(
-                        country_name=country_1[0])
+                        country_code=country_1[0],
+                        country_name=country_1[1])
 
     country2 = model.Country(
-                        country_name=country_2[0])
+                        country_code=country_2[0],
+                        country_name=country_2[1])
     
     country3 = model.Country(
-                        country_name=country_3[0])
+                        country_code=country_3[0],
+                        country_name=country_3[1])
 
     session.add(country1)
     session.add(country2)
@@ -53,18 +58,21 @@ def load_countries(session):
 def load_languages(session):
 #populate language table with 3 languages
 
-    language_1 = ["English"]
-    language_2 = ["Spanish"]
-    language_3 = ["French"]
+    language_1 = ["en-US", "English"]
+    language_2 = ["es-ES", "Spanish"]
+    language_3 = ["fr-FR", "French"]
 
     language1 = model.Language(
-                        language_name=language_1[0])
+                        language_code=language_1[0],
+                        language_name=language_1[1])
 
     language2 = model.Language(
+                        language_code=language_2[0],
                         language_name=language_2[0])
 
     language3=model.Language(
-                         language_name=language_3[0])
+                        language_code=language_2[0],
+                        language_name=language_3[0])
 
     session.add(language1)
     session.add(language2)
@@ -154,7 +162,7 @@ def load_conversations(session):
 #populate games table
 
     convo_1 = ["job", "Talk about your job and your role in your company."]    
-    convo_2 = ["job", "Talk about your daily work tasks."]    
+    convo_2 = ["job", "Talk about your daily work tasksn."]    
     convo_3 = ["travel", "Where have you travelled to and what was your favorite place?"]    
     convo_4 = ["travel", "How often do you travel per year?"]    
 

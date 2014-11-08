@@ -22,6 +22,10 @@
       
     {% block body %}{% endblock %}
 
+//gets and clear list of flash messages
+{% for msg in get_flashed_messages() %}
+  msg = {{ msg }}
+{% endfor %}
 
     </body>
 </html>

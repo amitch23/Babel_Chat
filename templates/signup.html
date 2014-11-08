@@ -1,0 +1,79 @@
+<html>
+<head>
+    <link type="text/css" rel="stylesheet" href="/static/style.css"/>
+
+</head>
+<body>
+
+<div id="signup_box">
+    <form method="post" action="/add_new_usr" id="new_usr">
+        <h1> Create New Profile</h1>
+        <p></p>
+
+         <div id="fullname">
+            <p>Full Name</p>
+            <input type="text" name="fullname">
+        </div>
+
+        <div id="email">
+            <p>Email</p>
+            <input type="text" name="email">
+        </div>
+
+        <div id="password">
+            <p>Password</p>
+            <input type="text" name="password">
+        </div>
+
+         <div id="mother_tongue">
+            <p>Mother Tongue</p>
+          <select name="mother_tongue">
+              <option value="en-US">English</option>
+              <option value="es-ES">Spanish</option>
+              <option value="fr-FR">French</option>
+           </select>
+        </div>
+
+        <div id="country_code">
+            <p>Country of Residence</p>
+          <select name="country_code">
+              <option value="US">U.S.A.</option>
+              <option value="ES">Spain</option>
+              <option value="FR">France</option>
+           </select>
+        </div>
+
+        <button type="submit" id="submit_button" name="submit">Next</button> 
+
+
+
+</div> 
+
+
+
+
+<!-- 
+
+
+drop down menu selector
+      <select name="getrequestid">
+          <option value="red">red</option>
+          <option value="green">Green</option>
+          <option value="blue">blue</option>
+        </select>
+        </div>
+
+
+radio button selector
+of whatever's selected by usr, the name will equal the value.
+        <div id="radio">
+        <input type="radio" name="gender" value="female">Love Music
+        <input type="radio" name="gender" value="male">Hate Music
+        </div> -->
+
+
+</form>
+
+</div>
+</body>
+ </html>

@@ -29,23 +29,45 @@ class User(Base):
     name = Column(String(64), nullable=False)
     email = Column(String(64), nullable=False)
     password = Column(String(64), nullable=False)
-    country_code = Column(String(64), nullable=False)
+    mother_tongue = Column(String(64), nullable=False)
+    country_code = Column(String(64), ForeignKey("countries.id"))
     reason = Column(String(64), nullable=False)
+
+    country = relationship("Country", backref=backref("countries", order_by=id))
+
+    #how to reference attributes
+    #backref allows me to go search the users by the country (i.e. many users per country)
+    # joel.country_id   == 7
+    # joel.country == <object France>
+    # joel.country.country_name == "France"
         
 class Country(Base):
 
     __tablename__ = "countries"
 
     id = Column(Integer, primary_key=True)
+    country_code = Column(String(64), nullable=False)
     country_name = Column(String(64), nullable=False)
+
+
+# US   United States (USA)
+# FR   France (Francie)
+# ES   Spain 
+
+    #the way to get the instances of users who live in France via backref "countries"
+    # france.countries = [u1, u2]
 
 class Language(Base):
 
     __tablename__ = "languages"
 
     id = Column(Integer, primary_key=True)
+    language_code = Column(String(64), nullable=False)
     language_name = Column(String(64), nullable=False)
 
+# english - en-US
+# french - fr-FR
+# spanish -es-ES
 
 class Language_desired(Base):
 
@@ -94,9 +116,15 @@ def connect():
     return session 
 
 
+def create_tables():
+
+    Base.metadata.create_all(engine)
+    pass
+
+
+
 
 def main():
-    """In case we need this for something"""
     pass
 
 if __name__ == "__main__":

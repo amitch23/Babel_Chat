@@ -1,0 +1,3 @@
+issues:
+
+-in the table "language_desired", my foreignkey/primary key pair for language is the id. BUT< I want this to the language code. Same goes for country code. So, take a look at the languages_desired table and it's just a bunch of incoherent numbers. Do I want to keep it like this? 
