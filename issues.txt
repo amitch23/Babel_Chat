@@ -1,3 +1,21 @@
 issues:
 
+1.
 -in the table "language_desired", my foreignkey/primary key pair for language is the id. BUT< I want this to the language code. Same goes for country code. So, take a look at the languages_desired table and it's just a bunch of incoherent numbers. Do I want to keep it like this? 
+
+!!!  - this may be because the code (language code = 'es_ES') that's given the foreign key is linked with a primary key (number), so they aren't actually the same value. THat's why it can't connect on it. So should I have the numeric id input at the time of population and user input?
+
+
+2.
+ -how can I access the country_name from a user instance:
+This should work in 'python -i model.py'
+
+andrea = session.query(User)filter_by(name="Andrea Mitchell").first()
+
+andrea.country
+--> <object USA>
+
+andrea.country.country_name
+--> u"USA"
+
+   I need this for my profile page to display the name and not the code

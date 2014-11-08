@@ -29,34 +29,19 @@ class User(Base):
     name = Column(String(64), nullable=False)
     email = Column(String(64), nullable=False)
     password = Column(String(64), nullable=False)
-    mother_tongue_code = Column(String(64), nullable=False)
+    mother_tongue_code = Column(String(64), ForeignKey("languages.id"))
     country_code = Column(String(64), ForeignKey("countries.id"))
     reason = Column(String(64), nullable=False)
 
-    country = relationship("Country", backref=backref("countries", order_by=id))
 
+    language = relationship("Language", order_by=id)
+
+    country = relationship("Country", backref=backref("countries", order_by=id))
     #how to reference attributes
     #backref allows me to go search the users by the country (i.e. many users per country)
     # joel.country_code   == 7
     # joel.country == <object France>
     # joel.country.country_name == "France"
-        
-class Country(Base):
-
-    __tablename__ = "countries"
-
-    id = Column(Integer, primary_key=True)
-    country_code = Column(String(64), nullable=False)
-    country_name = Column(String(64), nullable=False)
-
-
-# US   United States (USA)
-# FR   France (Francie)
-# ES   Spain 
-
-    #the way to get the instances of users who live in France via backref "countries"
-    # france.countries = [u1, u2]
-
 class Language(Base):
 
     __tablename__ = "languages"
@@ -68,6 +53,25 @@ class Language(Base):
 # english - en-US
 # french - fr-FR
 # spanish -es-ES
+
+        
+class Country(Base):
+
+    __tablename__ = "countries"
+
+    id = Column(Integer, primary_key=True)
+    country_code = Column(String(64), nullable=False)
+    country_name = Column(String(64), nullable=False)
+
+    # user = relationship("User", backref=backref("users", order_by=id))
+
+# US   United States (USA)
+# FR   France (Francie)
+# ES   Spain 
+
+    #the way to get the instances of users who live in France via backref "countries"
+    # france.countries = [u1, u2]
+
 
 class Language_desired(Base):
 

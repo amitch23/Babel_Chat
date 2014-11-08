@@ -38,7 +38,14 @@ def login():
     if usr:
         session["login"] = usr.name
         print session   
-        return redirect("profile.html")
+        return render_template("profile.html", 
+                                name=usr.name,
+                                email=usr.email, 
+                                mother_tongue=usr.mother_tongue_code,
+                                country=usr.country_code,
+                               #add lang desired and level
+
+         )
     else: 
         flash("User not recognized, please try again.")
         return redirect("/")
@@ -107,7 +114,6 @@ def add_reason():
     reason = request.form.get("reason")
     #add to session
     session['reason']=reason
-    print session
 
 
     #create instance of user and 
@@ -126,70 +132,28 @@ def add_reason():
 
     #add login value to session 
     session["login"]=user.name
+    print session
 
-    return render_template("profile.html", name=user.name)
+    return render_template("profile.html", 
+                            name=user.name,
+                            email=user.email, 
+                            mother_tongue=user.mother_tongue_code,
+                            country=user.country_code,
+                            # lang_desired=user.language_desired,
+                            )
     #check if all values in session aren't none?
 
     #pass all values to print out on profile page
 
 
-# @app.route("/profile")
-# def display
-
 @app.route("/logout")
 def logout():
-    session.clear()
+    # session.clear()
+    session["login"]= ""
     return redirect("/")
 
 
-# @app.route("/add_reason")
-# def final form:
-#     #create an instance of user 
-#     user = User(name=name, email=email, password=password, mother_tongue=mother_tongue)
 
-    # dbsession.add(user)
-    # dbsession.commit()
-
-
-
-# @app.route("/add_desired_lang", methods=['POST'])
-# def add_desired_lang():
-    
-#     user_id
-#     language_id
-#     level
-
-
-#      = request.form.get("country_code")
-#     email = request.form.get("email")
-#     password = request.form.get("password")
-#     mother_tongue = request.form.get("native_lang")
-
-#     # zipcode = request.form.get("zipcode")
-
-#     #create an instance of user 
-#     user = User(name=name, email=email, password=password, mother_tongue=mother_tongue)
-
-#     #check in db if email is there, if not add it to the database
-#     if dbsession.query(User).filter_by(email = email).first():
-#         flash("Sorry this email is taken. Please use another one.")
-#         return redirect("/add_new_usr")
-#     else:
-#         dbsession.add(user)
-#         dbsession.commit()
-#         return redirect("/language_desired")
-
-
-
-
-# @app.route("/")
-# def login_form():
-
-#     if session.get("login", False):
-#         return redirect("/index.html")
-
-#     else: 
-#         return render_template("login_form.html")
 
 # @app.route("/login", methods=['POST'])
 # def login():
