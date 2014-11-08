@@ -29,7 +29,7 @@ class User(Base):
     name = Column(String(64), nullable=False)
     email = Column(String(64), nullable=False)
     password = Column(String(64), nullable=False)
-    mother_tongue = Column(String(64), nullable=False)
+    mother_tongue_code = Column(String(64), nullable=False)
     country_code = Column(String(64), ForeignKey("countries.id"))
     reason = Column(String(64), nullable=False)
 
@@ -37,7 +37,7 @@ class User(Base):
 
     #how to reference attributes
     #backref allows me to go search the users by the country (i.e. many users per country)
-    # joel.country_id   == 7
+    # joel.country_code   == 7
     # joel.country == <object France>
     # joel.country.country_name == "France"
         

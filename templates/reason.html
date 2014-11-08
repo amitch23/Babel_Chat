@@ -1,0 +1,32 @@
+<html>
+<head>
+    <link type="text/css" rel="stylesheet" href="/static/style.css"/>
+
+</head>
+<body>
+
+<div id="reason">
+    <form method="post" action="/add_reason" id="add_reason">
+        <h1> Why are you learning {{ session["language"] }}?</h1>
+        <p></p>
+
+        <div id="reason">
+            <p></p>
+           <input type="radio" name="reason" value="job">For work-related reasons.</input>
+           <input type="radio" name="reason" value="travel">To Travel</input>
+           <input type="radio" name="reason" value="fun">Because it's fun!</input>
+        </div>
+
+
+        <button type="submit" id="submit_button" name="submit">Done!</button> 
+
+      </form>
+
+</div> 
+
+
+</form>
+
+</div>
+</body>
+ </html>

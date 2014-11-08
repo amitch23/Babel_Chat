@@ -4,6 +4,7 @@
 
 </head>
 <body>
+<!--outputs the flashed messages above the body and clears the flashed messages from the session-->
 {% for msg in get_flashed_messages() %}
   msg = {{ msg }}
 {% endfor %}
@@ -24,7 +25,7 @@
             <input type="text" name="password">
         </div>
 
-        <button type="submit" id="submit_button" name="submit">Submit</button> 
+        <button type="submit" id="submit_button" name="submit">Login</button> 
 
 
         <a href="/signup">Create New Profile</a>

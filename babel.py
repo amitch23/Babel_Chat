@@ -5,6 +5,7 @@ import jinja2
 app = Flask(__name__)
 app.secret_key ='abc'
 
+
 @app.route("/clearsession")
 def clearsession():
     session.clear()
@@ -16,6 +17,8 @@ def clearsession():
 
 @app.route("/")
 def display_index():
+    clearsession()
+    print session
     #display index page with login form
     return render_template("index.html")
 
@@ -30,22 +33,20 @@ def login():
 
     #create instance of user
     usr = dbsession.query(User).filter_by(email=email).filter_by(password=password).first()
-    print usr
 
     #add to session if in db, redirect to inex if not
     if usr:
-        session["login"] = usr.id
+        session["login"] = usr.name
         print session   
-
         return redirect("profile.html")
     else: 
-        # flash("User not recognized, please try again.")
+        flash("User not recognized, please try again.")
         return redirect("/")
-
 
 
 @app.route("/signup")
 def sign_up():
+    print session
     return render_template("signup.html")
 
 @app.route("/add_new_usr", methods=['POST'])
@@ -54,21 +55,20 @@ def create_new_user():
     name = request.form.get("fullname")
     email = request.form.get("email")
     password = request.form.get("password")
-    mother_tongue = request.form.get("native_lang")
+    mother_tongue = request.form.get("mother_tongue")
     country_code = request.form.get("country_code")
 
 
     #check in db if email is there, if not add all info to session
     if dbsession.query(User).filter_by(email = email).first():
-        # flash("Sorry this email is taken. Please use another one.")
+        flash("Sorry this email is taken. Please use another one.")
         return redirect("/signup")
-    #check also for same password? 
     else:
         #input info into session 
         session['name']= name
         session['email']=email
         session['password']=password
-        session['mother_tongue']=mother_tongue
+        session['mother_tongue_code']=mother_tongue
         session['country_code']=country_code
         print session
         #redirect to next form
@@ -87,11 +87,59 @@ def add_desired_lang():
     language = request.form.get("language")
     level = request.form.get("level")
 
-    session['language'] 
+    #query languages db to get language name, not code
+    lang_name = dbsession.query(Language).filter_by()
+    session['language']=language
 
-    #add desired language to session
-    #redirect to reason
+    session['level']=level
+    print session
+    #pass language as variable to 
+    return redirect("/reason")
 
+@app.route("/reason")
+def reason():
+    return render_template("reason.html")
+
+@app.route("/add_reason", methods=['POST'])
+def add_reason():
+
+    #get input from client
+    reason = request.form.get("reason")
+    #add to session
+    session['reason']=reason
+    print session
+
+
+    #create instance of user and 
+    #input all info into user table in database
+    user = User(
+                name=session["name"], 
+                email=session["email"],
+                password=session["password"],
+                country_code=session["country_code"],
+                mother_tongue_code=session["mother_tongue_code"],
+                reason=session['reason']
+                )
+
+    dbsession.add(user)
+    dbsession.commit()
+
+    #add login value to session 
+    session["login"]=user.name
+
+    return render_template("profile.html", name=user.name)
+    #check if all values in session aren't none?
+
+    #pass all values to print out on profile page
+
+
+# @app.route("/profile")
+# def display
+
+@app.route("/logout")
+def logout():
+    session.clear()
+    return redirect("/")
 
 
 # @app.route("/add_reason")
@@ -233,11 +281,6 @@ def add_desired_lang():
 # def logout():
 #     session["login"] = "" 
 #     return redirect("/") 
-        
-def clear_session():
-    session.clear()
-
-
 
 
 if __name__ == "__main__":

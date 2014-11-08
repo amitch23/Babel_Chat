@@ -13,7 +13,7 @@ def load_users(session):
                         name =user_1[0],
                         email=user_1[1],
                         password=user_1[2],
-                        mother_tongue=user_1[3],
+                        mother_tongue_code=user_1[3],
                         country_code=user_1[4],
                         reason=user_1[5])
 
@@ -21,7 +21,7 @@ def load_users(session):
                         name =user_2[0],
                         email=user_2[1],
                         password=user_2[2],
-                        mother_tongue=user_2[3],
+                        mother_tongue_code=user_2[3],
                         country_code=user_2[4],
                         reason=user_2[5])
 
