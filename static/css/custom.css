@@ -1,0 +1,67 @@
+/*
+Colors pallette, index:
+camel yellow: #e9a34d
+sage green: #cdd4b8
+input text gray: #838380
+input background eggshell: #fbf4e3
+login text cream: #f7e6ce
+link brown: #534741
+Welcome text brown: #c69c6d
+Logo navy blue: #6aa5a8
+background cream: #fff4e3
+
+*/
+body {
+
+
+}
+
+h1, h2, h3, h4, h5, h6, p {
+
+font-family: "Open Sans"; !important
+
+}
+
+.navbar {
+max-height: 35px; !important
+
+}
+
+.navbar-inverse {
+
+	background-color: #e9a34d; !important
+	color: #fff; !important
+
+}
+.navbar-nav>li>a {
+
+	color: #fff; !important
+
+}
+
+.navbar-brand {
+	color: #fff; !important
+}
+
+#navbar-header {
+	color: #fff; !important
+
+}
+
+.navbar-inverse .navbar-collapse, .navbar-inverse .navbar-form{
+
+	border-color: #e9a34d; !important
+}
+
+.navbar-inverse {
+
+	border-color: #e9a34d; !important
+}
+
+.btn-primary {
+	background-color: #e9a34d; !important
+	border-color: #e9a34d; !important
+}
+
+
+

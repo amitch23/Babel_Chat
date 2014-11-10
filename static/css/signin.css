@@ -1,0 +1,83 @@
+body {
+  padding-top: 40px;
+  padding-bottom: 40px;
+  background-color: ;
+}
+
+
+
+.form-signin {
+  max-width: 450px;
+  padding: 35px;
+  margin: 0 auto;
+  background-color: #cdd4b8;
+  opacity: .8;
+  border-radius: 8px;
+
+}
+.form-signin .form-signin-heading,
+.form-signin .checkbox {
+  margin-bottom: 10px;
+}
+
+
+.form-signin .form-control {
+  position: relative;
+  height: auto;
+  -webkit-box-sizing: border-box;
+     -moz-box-sizing: border-box;
+          box-sizing: border-box;
+  padding: 10px;
+  font-size: 16px;
+}
+.form-signin .form-control:focus {
+  z-index: 2;
+}
+.form-signin input[type="email"] {
+  margin: auto;
+  border-bottom-right-radius: 0;
+  border-bottom-left-radius: 0;
+  max-width: 300px;
+  background-color: #fbf4e3;
+  color: #838380;
+  display: block;
+  font-style: italic;
+}
+.form-signin input[type="password"] {
+  margin: auto;
+  margin-top: 20px;
+  margin-bottom: 20px;
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+  max-width: 300px;
+  background-color: #fbf4e3;
+  color: #838380;
+  display: block;
+  font-style: italic;
+
+ 
+
+}
+
+#login_box img {
+  margin-top: 50px;
+
+}
+
+#login_box button {
+
+    background-color: #e9a34d;
+    border-color: #e9a34d;
+    width: 150px;
+    float: right;
+
+}
+
+#login_box h1 {
+
+ color: #c69c6d;
+ font-size: 28px;
+}
+
+
+

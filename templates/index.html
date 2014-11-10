@@ -1,38 +1,37 @@
-<html>
-<head>
-    <link type="text/css" rel="stylesheet" href="/static/style.css"/>
+{% extends 'base.html' %}
+{% block body %}
 
-</head>
-<body>
 <!--outputs the flashed messages above the body and clears the flashed messages from the session-->
-{% for msg in get_flashed_messages() %}
-  msg = {{ msg }}
-{% endfor %}
 
-<div id="login_box">
-    <form method="post" action="/login" id="login">
-        <h1> Welcome to Babel Chat</h1>
-        <h2> Log in. if you're a new user, hit "sign up"</h2>
-        <p></p>
+
+<!-- /form boxes -->
+<div id="login_box" class="container">
+
+<img src="../static/img/lg_logo.png">
+        <h1> Welcome to Babel Chat!</h1>
+
+    <form method="post" action="/login" id="login" class="form-signin" role="form">
+        {% for msg in get_flashed_messages() %}
+           msg = {{ msg }}
+            {% endfor %}
+
+
 
         <div id="email">
-            <p>Email</p>
-            <input type="text" name="email">
+            <input type="email" name="email" class="form-control" placeholder="email" required>
         </div>
 
         <div id="password">
-            <p>Password</p>
-            <input type="text" name="password">
+            <input type="password" name="password" class="form-control" placeholder="Password" required>
         </div>
 
-        <button type="submit" id="submit_button" name="submit">Login</button> 
+        <button type="submit" id="submit_button" name="submit" class="btn btn-lg btn-primary btn-block">Log in</button> 
+   
 
-
-        <a href="/signup">Create New Profile</a>
-
-
+          <a href="/signup">Create New Profile</a>
     </form>
 
 </div>
-</body>
-</html>
+
+
+{% endblock %}

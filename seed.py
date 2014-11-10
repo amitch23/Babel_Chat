@@ -68,11 +68,11 @@ def load_languages(session):
 
     language2 = model.Language(
                         language_code=language_2[0],
-                        language_name=language_2[0])
+                        language_name=language_2[1])
 
     language3=model.Language(
                         language_code=language_2[0],
-                        language_name=language_3[0])
+                        language_name=language_3[1])
 
     session.add(language1)
     session.add(language2)

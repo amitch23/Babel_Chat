@@ -1,9 +1,5 @@
-<html>
-<head>
-    <link type="text/css" rel="stylesheet" href="/static/style.css"/>
-
-</head>
-<body>
+{% extends 'base.html' %}
+{% block body %}
 
 <div id="languages_desired">
     <form method="post" action="/add_desired_lang" id="add_lang">
@@ -59,6 +55,4 @@ of whatever's selected by usr, the name will equal the value.
 
 </form>
 
-</div>
-</body>
- </html>
+{% endblock %}

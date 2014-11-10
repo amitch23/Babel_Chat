@@ -1,9 +1,5 @@
-<html>
-<head>
-    <link type="text/css" rel="stylesheet" href="/static/style.css"/>
-
-</head>
-<body>
+{% extends 'base.html' %}
+{% block body %}
 
 <div id="signup_box">
     <form method="post" action="/add_new_usr" id="new_usr">
@@ -49,31 +45,4 @@
 
 </div> 
 
-
-
-
-<!-- 
-
-
-drop down menu selector
-      <select name="getrequestid">
-          <option value="red">red</option>
-          <option value="green">Green</option>
-          <option value="blue">blue</option>
-        </select>
-        </div>
-
-
-radio button selector
-of whatever's selected by usr, the name will equal the value.
-        <div id="radio">
-        <input type="radio" name="gender" value="female">Love Music
-        <input type="radio" name="gender" value="male">Hate Music
-        </div> -->
-
-
-</form>
-
-</div>
-</body>
- </html>
+{% endblock %}

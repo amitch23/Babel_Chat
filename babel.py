@@ -34,7 +34,7 @@ def login():
     #create instance of user
     usr = dbsession.query(User).filter_by(email=email).filter_by(password=password).first()
 
-    #add to session if in db, redirect to inex if not
+    #add to session if in db, redirect to index if not
     if usr:
         session["login"] = usr.name
         print session   

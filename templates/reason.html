@@ -1,9 +1,5 @@
-<html>
-<head>
-    <link type="text/css" rel="stylesheet" href="/static/style.css"/>
-
-</head>
-<body>
+{% extends 'base.html' %}
+{% block body %}
 
 <div id="reason">
     <form method="post" action="/add_reason" id="add_reason">
@@ -28,5 +24,4 @@
 </form>
 
 </div>
-</body>
- </html>
+{% endblock %}
