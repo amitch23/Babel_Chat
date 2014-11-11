@@ -171,7 +171,7 @@ def logout():
 def video_chat():
 
     #pass user name to videochat index 
-
+    #Problem!!! the user will be passed from the session, which only contains one user instance. How do I distinguish and store the second user's info?
     user_name=session['login']
     user = dbsession.query(User).filter_by(name=session['login']).first()
     return render_template("videochat.html", user=user)
@@ -183,13 +183,20 @@ def video_chat():
 #--------------------------------------------------
 
 
-
+#on connect, relay data to "my response" function client-side
 @socketio.on('connect', namespace='/chat')
 def test_connect():
     emit('my response', {'data': 'Connected', 'count': 0})
 
+#message sending back to the client to the sending client
+@socketio.on('my event', namespace='/chat')
+def test_message(message):
+    session['receive_count'] = session.get('receive_count', 0) + 1
+    emit('my response',
+         {'data': message['data'], 'count': session['receive_count']})
 
 
+#when room is joined, run a join_room method (?), add a count to the session, and emit data and count to log div (my response function)
 @socketio.on('join', namespace='/chat')
 def join(message):
     join_room(message['room'])
@@ -198,12 +205,8 @@ def join(message):
          {'data': 'In rooms: ' + ', '.join(request.namespace.rooms),
           'count': session['receive_count']})
 
-@socketio.on('my event', namespace='/chat')
-def test_message(message):
-    session['receive_count'] = session.get('receive_count', 0) + 1
-    emit('my response',
-         {'data': message['data'], 'count': session['receive_count']})
 
+#send a message to just those clients in the room
 @socketio.on('my room event', namespace='/chat')
 def send_room_message(message):
     session['receive_count'] = session.get('receive_count', 0) + 1
@@ -212,13 +215,13 @@ def send_room_message(message):
          {'data': message['data'], 'count': session['receive_count']},
          room=message['room'])
 
+#emitting message to ALL connected users via "broadcast=true"
 @socketio.on('my broadcast event', namespace='/chat')
 def test_message(message):
     session['receive_count'] = session.get('receive_count', 0) + 1
     emit('my response',
          {'data': message['data'], 'count': session['receive_count']},
          broadcast=True)
-
 
 
 
