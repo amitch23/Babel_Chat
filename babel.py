@@ -178,7 +178,7 @@ def video_chat():
     room_name = None
 
     if start:
-        # TODO: replace this with a function that generates a unique room name maybe based
+        # TODO: replace this with a function that generates a unique room name maybe based on the language that the initiating user wants to learn
         room_name = 'example_room'
 
 
