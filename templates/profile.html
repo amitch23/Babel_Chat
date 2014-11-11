@@ -1,11 +1,16 @@
 <html>
 <head>
     <link type="text/css" rel="stylesheet" href="/static/style.css"/>
-
+  	<script type="text/javascript" src="//code.jquery.com/jquery-1.4.2.min.js"></script>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/socket.io/0.9.16/socket.io.min.js"></script>
 </head>
+
+    <script type="text/javascript" charset="utf-8"></script>
+
 <body>
 
 <p>name {{ name }}
+
 
    email {{ email }}
    native language {{ mother_tongue }}
@@ -22,6 +27,13 @@ button to enter chat room and look for other people to enter
 name:
 email:
 
+//button on this page that leads to the video chat page. On video chat page, a "join room" button, which
+creates the room, sends the name of the room and client A's id/name to the server. 
+
+The server then broadcasts a message "client a wants to chat in room xxx" to all connected clients
+
+a button will appear on client B's browser "join room with client A"?
+client b accepts, enters room, and userb.id and room name is passed to session? (socket somehow)
 
 
 

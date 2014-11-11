@@ -6,8 +6,12 @@ import csv
 
 def load_users(session):
 #populate user table with 2 users        
-    user_1 = ["Jose Gonzalez", "jose@gmail.com", "pass1", "Spanish", "ES", "Job"]
-    user_2 = ["Andrea Mitchell", "andrealeemitchell@gmail.com", "pass2", "English", "US", "Fun"]
+    user_1 = ["Andrea Mitchell", "andrealeemitchell@gmail.com", "pass1", "en-US", "US", "Fun"]
+
+    user_2 = ["Jose Gonzalez", "jose@gmail.com", "pass2", "es-ES", "ES", "Job"]
+  
+    user_3 = ["Pierre Beret", "Pierre@gmail.com", "pass3", "fr-FR", "FR", "Fun"]
+
 
     user1 = model.User(  
                         name =user_1[0],
@@ -25,10 +29,47 @@ def load_users(session):
                         country_code=user_2[4],
                         reason=user_2[5])
 
+    user3 = model.User( 
+                        name =user_3[0],
+                        email=user_3[1],
+                        password=user_3[2],
+                        mother_tongue_code=user_3[3],
+                        country_code=user_3[4],
+                        reason=user_3[5])
+
+
 
     session.add(user1)
     session.add(user2)
+    session.add(user3)
     session.commit()
+
+
+def load_languages(session):
+#populate language table with 3 languages
+
+    language_1 = ["en-US", "English"]
+    language_2 = ["es-ES", "Spanish"]
+    language_3 = ["fr-FR", "French"]
+
+    language1 = model.Language(
+                        language_code=language_1[0],
+                        language_name=language_1[1])
+
+    language2 = model.Language(
+                        language_code=language_2[0],
+                        language_name=language_2[1])
+
+    language3=model.Language(
+                        language_code=language_3[0],
+                        language_name=language_3[1])
+
+    session.add(language1)
+    session.add(language2)
+    session.add(language3)
+
+    session.commit()
+
     
 def load_countries(session):
 #populate country table with 3 countries
@@ -55,67 +96,56 @@ def load_countries(session):
 
     session.commit()
 
-def load_languages(session):
-#populate language table with 3 languages
-
-    language_1 = ["en-US", "English"]
-    language_2 = ["es-ES", "Spanish"]
-    language_3 = ["fr-FR", "French"]
-
-    language1 = model.Language(
-                        language_code=language_1[0],
-                        language_name=language_1[1])
-
-    language2 = model.Language(
-                        language_code=language_2[0],
-                        language_name=language_2[1])
-
-    language3=model.Language(
-                        language_code=language_2[0],
-                        language_name=language_3[1])
-
-    session.add(language1)
-    session.add(language2)
-    session.add(language3)
-
-    session.commit()
 
 def load_languages_desired(session):
 #populate languages_desired table with 2 languages for each user 
     
-    lang_des_1=[1, 1, "intermediate"]
+    lang_des_1=[1, 2, "intermediate"]
     lang_des_2=[1, 3, "beginner"]
-    lang_des_3=[2, 2, "advanced"]
+    lang_des_3=[2, 1, "advanced"]
     lang_des_4=[2, 3, "beginner"]
+    lang_des_5=[3, 1, "advanced"]
+    lang_des_6=[3, 2, "beginner"]
 
 
 
     lang_des1 = model.Language_desired(
                         user_id=lang_des_1[0],
-                        language_id=lang_des_1[1],
+                        language_code=lang_des_1[1],
                         level=lang_des_1[2])
 
     lang_des2 = model.Language_desired(
                         user_id=lang_des_2[0],
-                        language_id=lang_des_2[1],
+                        language_code=lang_des_2[1],
                         level=lang_des_2[2])
 
     lang_des3 = model.Language_desired(
                         user_id=lang_des_3[0],
-                        language_id=lang_des_3[1],
+                        language_code=lang_des_3[1],
                         level=lang_des_3[2])
 
     lang_des4 = model.Language_desired(
                         user_id=lang_des_4[0],
-                        language_id=lang_des_4[1],
+                        language_code=lang_des_4[1],
                         level=lang_des_4[2])
+
+    lang_des5 = model.Language_desired(
+                        user_id=lang_des_5[0],
+                        language_code=lang_des_5[1],
+                        level=lang_des_5[2])
+
+    lang_des6 = model.Language_desired(
+                        user_id=lang_des_6[0],
+                        language_code=lang_des_6[1],
+                        level=lang_des_6[2])
 
 
     session.add(lang_des1)
     session.add(lang_des2)
     session.add(lang_des3)
     session.add(lang_des4)
-
+    session.add(lang_des5)
+    session.add(lang_des6)
 
     session.commit()
 
@@ -148,6 +178,7 @@ def load_games(session):
     game5 = model.Game(
                         game_type=game_5[0],
                         filename=game_5[1])
+
 
     session.add(game1)
     session.add(game2)

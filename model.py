@@ -29,14 +29,14 @@ class User(Base):
     name = Column(String(64), nullable=False)
     email = Column(String(64), nullable=False)
     password = Column(String(64), nullable=False)
-    mother_tongue_code = Column(String(64), ForeignKey("languages.id"))
-    country_code = Column(String(64), ForeignKey("countries.id"))
+    mother_tongue_code = Column(String(64), ForeignKey("languages.language_code"))
+    country_code = Column(String(64), ForeignKey("countries.country_code"))
     reason = Column(String(64), nullable=False)
 
 
-    language = relationship("Language", order_by=id)
+    language = relationship("Language", backref=backref("native_speakers"))
 
-    country = relationship("Country", backref=backref("countries", order_by=id))
+    country = relationship("Country", backref=backref("users"))
     #how to reference attributes
     #backref allows me to go search the users by the country (i.e. many users per country)
     # joel.country_code   == 7
@@ -46,9 +46,12 @@ class Language(Base):
 
     __tablename__ = "languages"
 
-    id = Column(Integer, primary_key=True)
-    language_code = Column(String(64), nullable=False)
+    # id = Column(Integer, primary_key=True)
+    language_code = Column(String(64), nullable=False, primary_key=True)
     language_name = Column(String(64), nullable=False)
+
+    #native speakers defined by "native_speakers" backref to user table,
+    #i.e. "language_instance.native_speakers.name --> 'Andrea Mitchell'""
 
 # english - en-US
 # french - fr-FR
@@ -59,9 +62,12 @@ class Country(Base):
 
     __tablename__ = "countries"
 
-    id = Column(Integer, primary_key=True)
-    country_code = Column(String(64), nullable=False)
+    # id = Column(Integer, primary_key=True)
+    country_code = Column(String(64), nullable=False, primary_key=True)
     country_name = Column(String(64), nullable=False)
+
+    #countries defined by "users" backref to user table,
+    #i.e. "country_instance.users.name --> 'Andrea Mitchell'""
 
     # user = relationship("User", backref=backref("users", order_by=id))
 
@@ -79,11 +85,13 @@ class Language_desired(Base):
 
     id = Column(Integer, primary_key=True)
     user_id = Column(Integer, ForeignKey('users.id'))
-    language_id = Column(Integer, ForeignKey('languages.id'))
+    language_code = Column(String(64), ForeignKey('languages.language_code'))
     level = Column(String(64), nullable=False)
 
     user = relationship("User",backref=backref("Language_desired", order_by=id))
     language = relationship("Language", backref=backref("Language_desired", order_by=id))
+
+
 
 class Game(Base):
     #setting up the sql syntax for sqlalchemy

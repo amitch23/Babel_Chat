@@ -1,5 +1,6 @@
 issues:
 
+model.py and seed.py
 1.
 -in the table "language_desired", my foreignkey/primary key pair for language is the id. BUT< I want this to the language code. Same goes for country code. So, take a look at the languages_desired table and it's just a bunch of incoherent numbers. Do I want to keep it like this? 
 
@@ -19,3 +20,17 @@ andrea.country.country_name
 --> u"USA"
 
    I need this for my profile page to display the name and not the code
+
+index bugs to fix:
+
+1. if user enters random stuff, it refreshes but doesn't flash any message. It should flash some sort of instruction/reason.
+
+2. when I'm logged in, I can just hit back and it goes back to login state
+
+
+3. convo q's: Because they need to be ordered, should I have all the questions by category, extract them all as a list, then loop through them to pass each question to both browsers?
+
+
+login manager - flask plugin
+
+function is logged in to check if user's in session

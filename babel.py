@@ -1,10 +1,20 @@
+from gevent import monkey
+monkey.patch_all()
+
 from flask import Flask, render_template, redirect, request, flash, session
 from model import User, Country, Language, Language_desired, Game, Conversation, session as dbsession 
 import jinja2
 
-app = Flask(__name__)
-app.secret_key ='abc'
+import time
+from threading import Thread
+from flask.ext.socketio import SocketIO, emit, join_room, leave_room
 
+
+app = Flask(__name__)
+app.debug = True
+app.config['SECRET_KEY']='secret!'
+socketio=SocketIO(app)
+thread=None
 
 @app.route("/clearsession")
 def clearsession():
@@ -17,7 +27,7 @@ def clearsession():
 
 @app.route("/")
 def display_index():
-    clearsession()
+    # clearsession()
     print session
     #display index page with login form
     return render_template("index.html")
@@ -33,7 +43,7 @@ def login():
 
     #create instance of user
     usr = dbsession.query(User).filter_by(email=email).filter_by(password=password).first()
-
+    print usr.language.language_name
     #add to session if in db, redirect to index if not
     if usr:
         session["login"] = usr.name
@@ -41,8 +51,8 @@ def login():
         return render_template("profile.html", 
                                 name=usr.name,
                                 email=usr.email, 
-                                mother_tongue=usr.mother_tongue_code,
-                                country=usr.country_code,
+                                mother_tongue=usr.language.language_name,
+                                country=usr.country.country_name,
                                #add lang desired and level
 
          )
@@ -134,11 +144,15 @@ def add_reason():
     session["login"]=user.name
     print session
 
+    print user.language.language_name
+
     return render_template("profile.html", 
                             name=user.name,
                             email=user.email, 
-                            mother_tongue=user.mother_tongue_code,
-                            country=user.country_code,
+                            mother_tongue=user.language.language_name,
+                            country=user.country.country_name,
+                            # lang_desired=user.Language_desired.language.language_name
+
                             # lang_desired=user.language_desired,
                             )
     #check if all values in session aren't none?
@@ -155,97 +169,8 @@ def logout():
 
 
 
-# @app.route("/login", methods=['POST'])
-# def login():
-
-#     email = request.form.get("email")
-#     password = request.form.get("password")
-    
-#      # #check if user is in database.
-#     u = dbsession.query(User).filter_by(email = email).filter_by(password=password).first()
-   
-
-#     #if user in db, add to session (cookie dictionary), if not redirect to login url
-#     if u:
-#         session["login"] = u.id
-#         print session
-#         return redirect("/main")      
-#     else:
-#         flash("User not recognized, please try again.")
-#         return redirect("/")
-
-# @app.route("/main")
-# def main():
-#     print session
-#     return render_template("main.html")
-
-# @app.route("/main", methods=["POST"])
-# def search():
-#     #retrieve user input from main.html and set variable movie to movie title
-#     movie = request.form.get("movie")
-#     #query database by movie title
-#     movie_info = dbsession.query(Movie).filter_by(name = movie).first()
-#     #fetch attribute for release date
-#     released_at = movie_info.released_at
-#     #fetch attribute for imdb_url
-#     imdb_url = movie_info.imdb_url
-#     #fetch attribute for ratings
-#     ratings = movie_info.ratings
-
-#     print session
-
-#     return render_template("movie_info.html", ratings = ratings, movie = movie, release_date = released_at, imdb_url = imdb_url)
-
-
-
-# @app.route("/user_id/<int:user_id>")
-# def find_user_ratings(user_id):
-#     #get all the ratings for each individual user
-#     ratings = dbsession.query(Rating).filter_by(user_id = user_id).all()
-#     #pass the ratings list and user id to the template
-#     return render_template("/user_ratings.html", ratings = ratings, user_id = user_id)
-
-
-
-# @app.route("/my_reviews")
-# def my_reviews():
-#     #gets the email from the session dictionary of logged-in user
-#     user_id = session["login"]
-#     #get the ratings of that userS
-#     ratings = dbsession.query(Rating).filter_by(user_id = user_id).all()
-#     #render my_reviews, pass user id and ratings
-#     return render_template("my_reviews.html", user_id = user_id, ratings = ratings)
-
-
-
-# @app.route("/add_review")
-# def add():
-#     return render_template("add_review.html")
-
-# @app.route("/add_review", methods=["POST"])
-# def add_review():
-#     #get movie from from in add_review.html
-#     movie = request.form.get("movie")
-
-#     #fetching the movie id from movie
-#     movie_id = dbsession.query(Movie).filter_by(name = movie).first().id
-
-#     #get rating from form in add_review.html
-#     rating = request.form.get("rating")
-
-#     #create instance of Rating with movie id, 
-#     rating = Rating(movie_id = movie_id, user_id = session["login"], rating = rating)
-#     dbsession.add(rating)
-#     dbsession.commit()
-#     #flash message that it's been added?
-#     return render_template("main.html")
-
-
-# @app.route("/logout")
-# def logout():
-#     session["login"] = "" 
-#     return redirect("/") 
 
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    socketio.run(app)
+    # app.run(debug=True)
