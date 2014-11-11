@@ -5,17 +5,20 @@
 <div id="profile_wrapper">
 
 
-<p>name {{ name }}
-   email {{ email }}
-   native language {{ mother_tongue }}
-   country {{ country }}
-   Wants to learn: {{ lang_desired }}
+<p>name {{ user.name }}
+   email {{ user.email }}
+   native language {{ user.mother_tongue }}
+   country {{ user.country.country_name }}
+   Wants to learn: {{ user.language_code}}
  </p>
 
 
 <!-- <button type="submit" id="submit_button" name="submit" class="btn btn-lg btn-primary btn-block">Start Video Chat</button> -->
 
-<h1 style="font-size: 35px; font-color: #000; !important"> <a href="/video_chat">Start Video Chat</a> </h1>
+<h1 style="font-size: 35px; font-color: #000; !important"> <a href="/video_chat?start={{ user.mother_tongue_code }}">Start A New Game</a> </h1>
+
+
+<h1 style="font-size: 35px; font-color: #000; !important"> <a href="/video_chat">Join the Waiting Room</a> </h1>
 
 </div>
 

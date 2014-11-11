@@ -7,30 +7,47 @@
 <body>
 
 <p>
-    name: {{ user.name }}
-    email: {{ user.email }}
-    native language: {{ user.mother_tongue }}
-    country: {{ user.country.country_name }}
-    Wants to learn: {{ user.language.language_name}}
+    name: {{ user.name }}<br/>
+    email: {{ user.email }}<br/>
+    native language: {{ user.mother_tongue }}<br/>
+    country: {{ user.country.country_name }}<br/>
+    Wants to learn: {{ user.language.language_name}}<br/>
+    {% if room_name %}
+        {{ user.name }} is starting room: {{ room_name }}
+    {% else %}
+        {{ user.name }} is in the waiting room.
+    {% endif %}
 
   </p>
 
  <form id="join" method='POST' action="#">
     <input type="text" name="join_room" id="join_room" placeholder="Room Name">
     <input type="submit" value="Join Room">
+ 
  </form>
 
- <form id="emit" method='POST' action='#'>
+ <form id="send_msg_to_clientA" method='POST' action='#'>
         <input type="text" name="emit_data" id="emit_data" placeholder="Message">
-        <input type="submit" value="Echo"></div>
+        <input type="submit" value="Send back to original sender"></div>
  </form>
 
-  <form id="broadcast" method='POST' action='#'>
+  <form id="broadcast_to_all" method='POST' action='#'>
         <input type="text" name="broadcast_data" id="broadcast_data" placeholder="Message">
-        <input type="submit" value="Broadcast">
+        <input type="submit" value="Broadcast to everyone (in any room)">
     </form>
 
+    <form id="send_msg_to_room" method='POST' action='#'>
+        <input type="text" name="room_name" id="room_name" placeholder="Room Name">
+        <input type="text" name="room_data" id="room_data" placeholder="Message">
+        <input type="submit" value="Send to Room">
+    </form>
 
+    <form id="leave" method='POST' action='#'>
+        <input type="text" name="leave_room" id="leave_room" placeholder="Room Name">
+        <input type="submit" value="Leave Room">
+    </form>
+
+<h2>Messages received:</h2>
 <div id="log"></div>
 
 <script type="text/javascript" charset="utf-8">
@@ -42,20 +59,31 @@
 
         //upon socket connection, emit the message "you're connected" to the client via parameter for socket handler, "my event"
         socket.on('connect', function() {
-            socket.emit('my event', {data: "You\'re connected!"});
+            socket.emit('message', {data: "You\'re connected!"});
             });
 
+        socket.on('connected', function(msg) {
+            console.log("Socket Connected!");
+            {% if room_name %}
+                socket.emit('join', {start: 1, room: "{{ room_name }}" });
+            {% endif %}
+            //else: 
+        });
 
-        //'my event' passes data to this function, which appends message to div element id = log
-        socket.on('my response', function(msg) {
+        socket.on('invite_to_join', function(msg) {
+            //magically put button that will offer a join room button,
+            //then in another js listener function, call the join function, which will finally add the 2nd user to the room. Now both will have sockets to the server, will be in the same room, and the data objects passed will....dunno
+            console.log(msg);
+            console.log(msg["count"]);
             $('#log').append('<br>Received #' + msg.count + ': ' + msg.data);
         });
 
-        //listener to send input data to 'my event in server'
-         $('form#emit').submit(function(event) {
-                socket.emit('my event', {data: $('#emit_data').val()});
-                return false;
-            });
+        //'message' passes data to this function, which appends message to div element id = log
+        socket.on('output to log', function(msg) {
+            console.log(msg);
+            console.log(msg["count"]);
+            $('#log').append('<br>Received #' + msg.count + ': ' + msg.data);
+        });
 
         //handler for joining room
         $('form#join').submit(function(event) {
@@ -63,19 +91,44 @@
             return false;
         });
 
+
+        //handler to send input data to 'message' in server
+         $('form#send_msg_to_clientA').submit(function(event) {
+            socket.emit('message', {data: $('#emit_data').val()});
+            return false;
+        });
+
+
+        //handler to broadcast data to all clients
+        $('form#broadcast_to_all').submit(function(event) {
+            socket.emit('my broadcast event', {data: $('#broadcast_data').val()});
+            return false;
+        });
+        
+
         //on submit button, emit object to client @ 'my room event' in babel.py, which then sends data to 'my response' handler above
-        $('form#send_room').submit(function(event) {
+        $('form#send_msg_to_room').submit(function(event) {
             socket.emit('my room event', {room: $('#room_name').val(), data: $('#room_data').val()});
             return false;
         });
 
-  
+        $('form#leave').submit(function(event) {
+            socket.emit("leave", {room: $("#leave_room").val()});
+            return false;
 
-          $('form#broadcast').submit(function(event) {
-                socket.emit('my broadcast event', {data: $('#broadcast_data').val()});
-                return false;
-            });
+        });
+
+          // $('form#leave').submit(function(event) {
+          //       socket.emit('leave', {room: $('#leave_room').val()});
+          //       return false;
+          //   });
+
+
+
     });
+
+  
+// 1. first user clicks button to create game.
 
 
 </script>
