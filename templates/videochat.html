@@ -1,0 +1,102 @@
+<html>
+<head>
+    <link type="text/css" rel="stylesheet" href="/static/style.css"/>
+    <script type="text/javascript" src="//code.jquery.com/jquery-1.4.2.min.js"></script>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/socket.io/0.9.16/socket.io.min.js"></script>
+</head>
+<body>
+
+<p>
+    name: {{ user.name }}
+    email: {{ user.email }}
+    native language: {{ user.mother_tongue }}
+    country: {{ user.country.country_name }}
+    Wants to learn: {{ user.language.language_name}}
+
+  </p>
+
+ <form id="join" method='POST' action="#">
+    <input type="text" name="join_room" id="join_room" placeholder="Room Name">
+    <input type="submit" value="Join Room">
+ </form>
+
+ <form id="emit" method='POST' action='#'>
+        <input type="text" name="emit_data" id="emit_data" placeholder="Message">
+        <input type="submit" value="Echo"></div>
+ </form>
+
+  <form id="broadcast" method='POST' action='#'>
+        <input type="text" name="broadcast_data" id="broadcast_data" placeholder="Message">
+        <input type="submit" value="Broadcast">
+    </form>
+
+
+<div id="log"></div>
+
+<script type="text/javascript" charset="utf-8">
+    
+    $(document).ready(function(){
+        namespace = '/chat';
+
+        var socket = io.connect('http://' + document.domain + ':' + location.port + namespace);
+
+        //upon socket connection, emit the message "you're connected" to the client via parameter for socket handler, "my event"
+        socket.on('connect', function() {
+            socket.emit('my event', {data: "You\'re connected!"});
+            });
+
+        //'my event' passes data to this function, which appends message to div element id = log
+        socket.on('my response', function(msg) {
+            $('#log').append('<br>Received #' + msg.count + ': ' + msg.data);
+        });
+
+
+        //handler for joining room
+        $('form#join').submit(function(event) {
+            socket.emit('join', {room: $('#join_room').val()});
+            return false;
+        });
+        //on submit button, emit object to client @ 'my room event' in babel.py, which then sends data to 'my response' handler above
+        $('form#send_room').submit(function(event) {
+            socket.emit('my room event', {room: $('#room_name').val(), data: $('#room_data').val()});
+            return false;
+        });
+
+        //listener to send input data to 'my event in server'
+         $('form#emit').submit(function(event) {
+                socket.emit('my event', {data: $('#emit_data').val()});
+                return false;
+            });
+
+
+          $('form#broadcast').submit(function(event) {
+                socket.emit('my broadcast event', {data: $('#broadcast_data').val()});
+                return false;
+            });
+    });
+
+
+</script>
+
+
+<!-- header bar, with logo/link to index, login name, logout link
+
+profile filler pic, name info, (all database info passed as variables)
+
+//button on this page that leads to the video chat page. On video chat page, a "join room" button, which
+creates the room, sends the name of the room and client A's id/name to the server. 
+
+The server then broadcasts a message "client A wants to chat in room xxx" to all connected clients
+
+a button will appear on client B's browser "join room with client A"?
+client b accepts, enters room, and userb.id and room name is passed to session? (socket session, somehow)
+
+
+
+ -->
+
+
+    </form>
+</div>
+ </body>
+ </html>

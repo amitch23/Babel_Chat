@@ -43,19 +43,13 @@ def login():
 
     #create instance of user
     usr = dbsession.query(User).filter_by(email=email).filter_by(password=password).first()
-    print usr.language.language_name
+
     #add to session if in db, redirect to index if not
     if usr:
         session["login"] = usr.name
         print session   
-        return render_template("profile.html", 
-                                name=usr.name,
-                                email=usr.email, 
-                                mother_tongue=usr.language.language_name,
-                                country=usr.country.country_name,
-                               #add lang desired and level
+        return redirect("/profile")
 
-         )
     else: 
         flash("User not recognized, please try again.")
         return redirect("/")
@@ -119,6 +113,7 @@ def reason():
 
 @app.route("/add_reason", methods=['POST'])
 def add_reason():
+    #add user to dbsession and redirect to profile.html
 
     #get input from client
     reason = request.form.get("reason")
@@ -144,28 +139,85 @@ def add_reason():
     session["login"]=user.name
     print session
 
-    print user.language.language_name
+    return redirect("/profile") 
 
-    return render_template("profile.html", 
+
+@app.route("/profile")
+def display_profile():
+    #if user.name in session (key='login'), add attributes to session and pass to profile.html
+    user = dbsession.query(User).filter_by(name=session["login"]).first()
+    session["email"] = user.name
+    session["mother_tongue"] =user.language.language_name
+    session["country"]=user.country.country_name
+    print session
+
+    return render_template("profile.html",
                             name=user.name,
                             email=user.email, 
                             mother_tongue=user.language.language_name,
-                            country=user.country.country_name,
-                            # lang_desired=user.Language_desired.language.language_name
-
-                            # lang_desired=user.language_desired,
+                            country=user.country.country_name
+                            # language_desired=user.language_desired.language_name
                             )
-    #check if all values in session aren't none?
-
-    #pass all values to print out on profile page
-
 
 @app.route("/logout")
 def logout():
-    # session.clear()
-    session["login"]= ""
+    session.clear()
+    # session["login"]= ""
     return redirect("/")
 
+
+
+@app.route("/video_chat")
+def video_chat():
+
+    #pass user name to videochat index 
+
+    user_name=session['login']
+    user = dbsession.query(User).filter_by(name=session['login']).first()
+    return render_template("videochat.html", user=user)
+
+
+
+#--------------------------------------------------^^
+     #flask routes above, socket.io handlers below
+#--------------------------------------------------
+
+
+
+@socketio.on('connect', namespace='/chat')
+def test_connect():
+    emit('my response', {'data': 'Connected', 'count': 0})
+
+
+
+@socketio.on('join', namespace='/chat')
+def join(message):
+    join_room(message['room'])
+    session['receive_count'] = session.get('receive_count', 0) + 1
+    emit('my response',
+         {'data': 'In rooms: ' + ', '.join(request.namespace.rooms),
+          'count': session['receive_count']})
+
+@socketio.on('my event', namespace='/chat')
+def test_message(message):
+    session['receive_count'] = session.get('receive_count', 0) + 1
+    emit('my response',
+         {'data': message['data'], 'count': session['receive_count']})
+
+@socketio.on('my room event', namespace='/chat')
+def send_room_message(message):
+    session['receive_count'] = session.get('receive_count', 0) + 1
+    #emitting to users in the room via "room=message..."
+    emit('my response',
+         {'data': message['data'], 'count': session['receive_count']},
+         room=message['room'])
+
+@socketio.on('my broadcast event', namespace='/chat')
+def test_message(message):
+    session['receive_count'] = session.get('receive_count', 0) + 1
+    emit('my response',
+         {'data': message['data'], 'count': session['receive_count']},
+         broadcast=True)
 
 
 

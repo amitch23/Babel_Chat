@@ -16,7 +16,7 @@ body {
 
 }
 
-h1, h2, h3, h4, h5, h6, p {
+html, body, h1, h2, h3, h4, h5, h6, p {
 
 font-family: "Open Sans"; !important
 
@@ -39,9 +39,6 @@ max-height: 35px; !important
 
 }
 
-.navbar-brand {
-	color: #fff; !important
-}
 
 #navbar-header {
 	color: #fff; !important
@@ -63,5 +60,32 @@ max-height: 35px; !important
 	border-color: #e9a34d; !important
 }
 
+
+.navbar-inverse .navbar-nav>.active>a{
+background-color: #e9a34d;
+
+}
+
+ .navbar-inverse .navbar-nav>.active>a:hover{
+background-color: #e9a34d;
+
+
+ }
+
+  .navbar-inverse .navbar-nav>.active>a:focus{
+background-color: #e9a34d;
+
+
+  }
+
+  .navbar-inverse .navbar-brand{
+
+  	color: #fff;
+  }
+
+.navbar-inverse .navbar-nav>li>a{
+color: #fff;
+
+}
 
 
