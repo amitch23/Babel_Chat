@@ -47,6 +47,7 @@ def login():
     #add to session if in db, redirect to index if not
     if usr:
         session["login"] = usr.name
+        session["mother_tongue"] = usr.mother_tongue_code
         print session   
         return redirect("/profile")
 
@@ -179,11 +180,12 @@ def video_chat():
 
     if start:
         # TODO: replace this with a function that generates a unique room name maybe based on the language that the initiating user wants to learn
-        room_name = 'example_room'
+        room_name = session["mother_tongue"] + " room with " + session['login']
 
 
-    user_name=session['login']
     user = dbsession.query(User).filter_by(name=session['login']).first()
+
+
     return render_template("videochat.html", user=user, room_name=room_name)
 
 
@@ -193,14 +195,15 @@ def video_chat():
 #--------------------------------------------------
 
 
-#on connect, relay data to "my response" function client-side
-@socketio.on('connect', namespace='/chat')
-def test_connect():
-    #emit message, start game room with room name
-    # emit('output to log', {'data': 'Connected', 'count': 0})
-    emit('connected', {'data': 'Connected', 'count': 0})
+#1.on connect, relay data to "my response" function client-side
+# @socketio.on('connect', namespace='/chat')
+# def test_connect():
+#     #emit message, start game room with room name
+#     # emit('output to log', {'data': 'Connected', 'count': 0})
+#     #emit('connected', {'data': 'Connected', 'count': 0})
+#     print "somebody connected to a websocket"
 
-#when room is joined, run a join_room method (?), add a count to the session, and emit data and count to log div (my response function)
+#3. when room is joined, run a join_room method, add a count to the session, and emit data and count to log div (output to log function)
 @socketio.on('join', namespace='/chat')
 def join(message):
     # join user to room
@@ -217,18 +220,17 @@ def join(message):
     #output info to log div in html with info about who's in room
     emit('output to log',
          {'data': 'In rooms: ' + ', '.join(request.namespace.rooms),
-          'count': session['receive_count']})
+          'room': message['room'],
+           'count': session['receive_count']})
 
-    # If the user started the room, broadcast a message letting
-    #  everyone else know that that user started the room 
-
-    #if the message data was passed from the function of the user who created the room(html line 67), pass the message that the first user started the room
+    #if the message data was passed from the function of the user who created the room(html/js line 67), pass the message that the first user started the room
     if message['start'] == 1:
         emit('invite_to_join',
              { 'data': "%s created room %s" % (session["login"], message['room']), 
                'room_name': message['room'],
                'count': session['receive_count']},
              broadcast=True)
+
 
 
 
@@ -247,10 +249,6 @@ def test_message(message):
     emit('output to log',
          {'data': message['data'], 'count': session['receive_count']},
          broadcast=True)
-
-
-
-
 
 
 #send a message to just those clients in the room
@@ -278,14 +276,22 @@ def leave_the_room(message):
           'count': session['receive_count']}) 
 
 
+# Websocket Class
 
-# @socketio.on('leave', namespace='/test')
-# def leave(message):
-#     leave_room(message['room'])
-#     session['receive_count'] = session.get('receive_count', 0) + 1
-#     emit('my response',
-#          {'data': 'In rooms: ' + ', '.join(request.namespace.rooms),
-#           'count': session['receive_count']})
+# Andrea Websocket Instance
+#   -- in rooms ['Andrea Mitchell en-US']
+#   -- connected
+
+
+# Jose Websocket Instance
+#  -- Connected
+#   -- in rooms ['Andrea Mitchell en-US']
+
+
+# send('action', {})
+
+# emit('action', {}, room='c')
+
 
 
 

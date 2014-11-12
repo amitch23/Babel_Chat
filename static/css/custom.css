@@ -88,4 +88,23 @@ color: #fff;
 
 }
 
+#profile_wrapper {
+	margin-top: 50px;
+	color: #000;
+
+
+}
+
+
+#profile_wrapper p{
+	color: #000; !important
+
+
+}
+
+a, a:focus, a:hover {
+	color: #6aa5a8;
+
+
+}
 

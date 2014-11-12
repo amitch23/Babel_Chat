@@ -19,17 +19,18 @@
     {% endif %}
 
   </p>
-
+<!-- 
  <form id="join" method='POST' action="#">
     <input type="text" name="join_room" id="join_room" placeholder="Room Name">
     <input type="submit" value="Join Room">
- 
- </form>
+ </form> -->
 
- <form id="send_msg_to_clientA" method='POST' action='#'>
+<div id="button_placeholder"></div>
+
+ <!-- <form id="send_msg_to_clientA" method='POST' action='#'>
         <input type="text" name="emit_data" id="emit_data" placeholder="Message">
         <input type="submit" value="Send back to original sender"></div>
- </form>
+ </form> -->
 
   <form id="broadcast_to_all" method='POST' action='#'>
         <input type="text" name="broadcast_data" id="broadcast_data" placeholder="Message">
@@ -51,59 +52,96 @@
 <div id="log"></div>
 
 <script type="text/javascript" charset="utf-8">
+    in_room = null;
     
     $(document).ready(function(){
         namespace = '/chat';
 
         var socket = io.connect('http://' + document.domain + ':' + location.port + namespace);
 
-        //upon socket connection, emit the message "you're connected" to the client via parameter for socket handler, "my event"
+        //1.upon socket connection, emit the message "you're connected" to the client via parameter for socket handler, "connect"
         socket.on('connect', function() {
-            socket.emit('message', {data: "You\'re connected!"});
-            });
-
-        socket.on('connected', function(msg) {
-            console.log("Socket Connected!");
+            $('#log').append("<br>You're connected");
             {% if room_name %}
+                in_room = "{{ room_name }}";
+
+                $("#room_name").val(in_room);
                 socket.emit('join', {start: 1, room: "{{ room_name }}" });
             {% endif %}
-            //else: 
-        });
+            });
 
-        socket.on('invite_to_join', function(msg) {
-            //magically put button that will offer a join room button,
-            //then in another js listener function, call the join function, which will finally add the 2nd user to the room. Now both will have sockets to the server, will be in the same room, and the data objects passed will....dunno
-            console.log(msg);
-            console.log(msg["count"]);
-            $('#log').append('<br>Received #' + msg.count + ': ' + msg.data);
-        });
+        //2. get the data, "connected", and if the user clicked on start new game in profile.html, call join function in server
+        // socket.on('connected', function(msg) {
+        //     console.log("Socket Connected!");
+        //     {% if room_name %}
+        //         socket.emit('join', {start: 1, room: "{{ room_name }}" });
+        //     {% endif %}
+        //     //else: 
+        // });
 
-        //'message' passes data to this function, which appends message to div element id = log
+
+        // 'message' passes data to this function, which appends message to div element id = log
         socket.on('output to log', function(msg) {
             console.log(msg);
             console.log(msg["count"]);
             $('#log').append('<br>Received #' + msg.count + ': ' + msg.data);
         });
 
-        //handler for joining room
-        $('form#join').submit(function(event) {
-            socket.emit('join', {room: $('#join_room').val()});
-            return false;
+
+
+        //5. put a button on the page for jose when 1st client starts room to join the room and pass the room name and maybe his name?)
+        socket.on('invite_to_join', function(msg) {
+            //magically put button that will offer a join room button,
+            //then in another js listener function, call the join function, which will finally add the 2nd user to the room. Now both will have sockets to the server, will be in the same room, and the data objects passed will....dunno
+            console.log(msg);
+            console.log(msg.count);
+
+            {% if room_name==None %}
+                var btn = $('<button />')
+                    .text("Click to join " + msg.room_name)
+                    .click(function(event)
+                    {
+                        socket.emit('join', {start: 2, room: msg.room_name});
+                        $("#room_name").val(msg.room_name);
+                        // console.log("BOOM BUTTON CLICKED!");
+                    });
+                   $('#button_placeholder').append(btn); 
+                // $('#button_placeholder').append("<button id='join_invite'>Would you like to join " + msg.room_name + "?</button>"); 
+            {% endif %}
+
+            //append received message to log div
+            $('#log').append('<br>Received #' + msg.count + ': ' + msg.data);
         });
+
+
+            $("#join_invite").click(function(event) {
+            console.log("button join invite clicked");
+
+
+        });
+
+
+
+      
+        // //handler for joining room
+        // $('form#join').submit(function(event) {
+        //     socket.emit('join', {room: $('#join_room').val()});
+        //     return false;
+        // });
 
 
         //handler to send input data to 'message' in server
-         $('form#send_msg_to_clientA').submit(function(event) {
-            socket.emit('message', {data: $('#emit_data').val()});
-            return false;
-        });
+        //  $('form#send_msg_to_clientA').submit(function(event) {
+        //     socket.emit('message', {data: $('#emit_data').val()});
+        //     return false;
+        // });
 
 
         //handler to broadcast data to all clients
-        $('form#broadcast_to_all').submit(function(event) {
-            socket.emit('my broadcast event', {data: $('#broadcast_data').val()});
-            return false;
-        });
+        // $('form#broadcast_to_all').submit(function(event) {
+        //     socket.emit('my broadcast event', {data: $('#broadcast_data').val()});
+        //     return false;
+        // });
         
 
         //on submit button, emit object to client @ 'my room event' in babel.py, which then sends data to 'my response' handler above
@@ -123,8 +161,6 @@
           //       return false;
           //   });
 
-
-
     });
 
   
@@ -134,18 +170,6 @@
 </script>
 
 
-<!-- 
-
-//button on this page that leads to the video chat page. On video chat page, a "join room" button, which
-creates the room, sends the name of the room and client A's id/name to the server. 
-!! need to figure out how client b's info will be passed/stored and how the 2 will be distinguished. Demo day, how/when will I connect the 2nd user?
-
-The server then broadcasts a message "client A wants to chat in room xxx" to all connected clients
-
-a button will appear on client B's browser "join room with client A"?
-client b accepts, enters room, and userb.id and room name is passed to session? (socket session?, somehow)
-
- -->
 
 
 </div>
