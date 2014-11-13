@@ -9,9 +9,15 @@
 <p>
     name: {{ user.name }}<br/>
     email: {{ user.email }}<br/>
-    native language: {{ user.mother_tongue }}<br/>
+    native language: {{ user.language.language_name }}<br/>
     country: {{ user.country.country_name }}<br/>
-    Wants to learn: {{ user.language.language_name}}<br/>
+
+    <strong><ul>Wants to learn</ul></strong>
+   {% for lang in user.Language_desired %}
+        <li>{{ lang.language.language_name }}</li>
+   {% endfor %}<br/>
+
+
     {% if room_name %}
         {{ user.name }} is starting room: {{ room_name }}
     {% else %}
@@ -52,6 +58,7 @@
 <div id="log"></div>
 
 <script type="text/javascript" charset="utf-8">
+   
     in_room = null;
     
     $(document).ready(function(){
@@ -59,26 +66,17 @@
 
         var socket = io.connect('http://' + document.domain + ':' + location.port + namespace);
 
-        //1.upon socket connection, emit the message "you're connected" to the client via parameter for socket handler, "connect"
+        //1.upon socket connection, emit the message "you're connected" to the client 
         socket.on('connect', function() {
             $('#log').append("<br>You're connected");
             {% if room_name %}
+                //populate input box with room name if in room
                 in_room = "{{ room_name }}";
-
                 $("#room_name").val(in_room);
+                //upon connect of initiating, join room
                 socket.emit('join', {start: 1, room: "{{ room_name }}" });
             {% endif %}
             });
-
-        //2. get the data, "connected", and if the user clicked on start new game in profile.html, call join function in server
-        // socket.on('connected', function(msg) {
-        //     console.log("Socket Connected!");
-        //     {% if room_name %}
-        //         socket.emit('join', {start: 1, room: "{{ room_name }}" });
-        //     {% endif %}
-        //     //else: 
-        // });
-
 
         // 'message' passes data to this function, which appends message to div element id = log
         socket.on('output to log', function(msg) {

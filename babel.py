@@ -35,9 +35,9 @@ def display_index():
 
 @app.route("/login", methods=['POST'])
 def login():
+    
     #check if user in db, add to session and redirect to profile
     #if not in db, redirect to index page
-
     email = request.form.get("email")
     password = request.form.get("password")
 
@@ -48,6 +48,7 @@ def login():
     if usr:
         session["login"] = usr.name
         session["mother_tongue"] = usr.mother_tongue_code
+        session["lang_desired"] = usr.Language_desired[0].language.language_name
         print session   
         return redirect("/profile")
 
@@ -67,7 +68,7 @@ def create_new_user():
     name = request.form.get("fullname")
     email = request.form.get("email")
     password = request.form.get("password")
-    mother_tongue = request.form.get("mother_tongue")
+    mother_tongue_code = request.form.get("mother_tongue")
     country_code = request.form.get("country_code")
 
 
@@ -80,7 +81,7 @@ def create_new_user():
         session['name']= name
         session['email']=email
         session['password']=password
-        session['mother_tongue_code']=mother_tongue
+        session['mother_tongue_code']=mother_tongue_code
         session['country_code']=country_code
         print session
         #redirect to next form
@@ -96,14 +97,14 @@ def lang_desired():
 def add_desired_lang():
 
     #get input from user
-    language = request.form.get("language")
+    language_code = request.form.get("language")
     level = request.form.get("level")
 
     #query languages db to get language name, not code
     lang_name = dbsession.query(Language).filter_by()
-    session['language']=language
-
+    session['language']=language_code
     session['level']=level
+
     print session
     #pass language as variable to 
     return redirect("/reason")
@@ -124,7 +125,7 @@ def add_reason():
 
     #create instance of user and 
     #input all info into user table in database
-    user = User(
+    usr = User(
                 name=session["name"], 
                 email=session["email"],
                 password=session["password"],
@@ -133,11 +134,29 @@ def add_reason():
                 reason=session['reason']
                 )
 
-    dbsession.add(user)
+    dbsession.add(usr)
     dbsession.commit()
 
-    #add login value to session 
-    session["login"]=user.name
+
+
+    print session
+    print usr
+
+    lang_desired = Language_desired(
+                user_id=usr.id,
+                language_code = session['language'],
+                level = session['level']     
+                )
+
+    dbsession.add(lang_desired)
+    dbsession.commit()
+
+    session.clear()
+    #add info to session 
+    session["login"] = usr.name
+    session["mother_tongue"] = usr.mother_tongue_code
+    session["lang_desired"] = usr.Language_desired[0].language.language_name
+
     print session
 
     return redirect("/profile") 
@@ -171,19 +190,19 @@ def logout():
 @app.route("/video_chat")
 def video_chat():
 
-    #pass user name to videochat index 
-    #Problem!!! the user will be passed from the session, which only contains one user instance. How do I distinguish and store the second user's info?
-    print session
+    #
+    user = dbsession.query(User).filter_by(name=session['login']).first()
+
     
     start = request.args.get('start')
     room_name = None
 
     if start:
         # TODO: replace this with a function that generates a unique room name maybe based on the language that the initiating user wants to learn
-        room_name = session["mother_tongue"] + " room with " + session['login']
+        room_name = session['login'] + "/'s" + session["mother_tongue"] + " Room" 
 
 
-    user = dbsession.query(User).filter_by(name=session['login']).first()
+    print session
 
 
     return render_template("videochat.html", user=user, room_name=room_name)
@@ -195,23 +214,11 @@ def video_chat():
 #--------------------------------------------------
 
 
-#1.on connect, relay data to "my response" function client-side
-# @socketio.on('connect', namespace='/chat')
-# def test_connect():
-#     #emit message, start game room with room name
-#     # emit('output to log', {'data': 'Connected', 'count': 0})
-#     #emit('connected', {'data': 'Connected', 'count': 0})
-#     print "somebody connected to a websocket"
-
-#3. when room is joined, run a join_room method, add a count to the session, and emit data and count to log div (output to log function)
+#2. when room is joined, run a join_room method, add a count to the session, and emit data and count to log div (output to log function)
 @socketio.on('join', namespace='/chat')
 def join(message):
     # join user to room
-
     join_room(message['room'])
-
-    print join_room
-    print message
 
     #add count to session
     session['receive_count'] = session.get('receive_count', 0) + 1

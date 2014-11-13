@@ -12,8 +12,8 @@
 
     <form method="post" action="/login" id="login" class="form-signin" role="form">
         {% for msg in get_flashed_messages() %}
-           msg = {{ msg }}
-            {% endfor %}
+              {{ msg }}
+        {% endfor %}
 
 
 

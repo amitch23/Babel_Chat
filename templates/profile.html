@@ -9,7 +9,12 @@
    email: {{ user.email }} <br/>
    native language: {{ user.mother_tongue_code }} <br/>
    country: {{ user.country.country_name }} <br/>
-   Wants to learn: {{ user.language_code}} <br/>
+   
+    <strong><ul>Wants to learn</ul></strong>
+   {% for lang in user.Language_desired %}
+        <li>{{ lang.language.language_name }}</li>
+   {% endfor %}<br/>
+
  </p>
 
 

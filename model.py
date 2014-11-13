@@ -88,8 +88,8 @@ class Language_desired(Base):
     language_code = Column(String(64), ForeignKey('languages.language_code'))
     level = Column(String(64), nullable=False)
 
-    user = relationship("User",backref=backref("Language_desired", order_by=id))
-    language = relationship("Language", backref=backref("Language_desired", order_by=id))
+    user = relationship("User",backref=backref("Language_desired"))
+    language = relationship("Language", backref=backref("Language_desired"))
 
 
 

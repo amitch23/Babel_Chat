@@ -100,12 +100,12 @@ def load_countries(session):
 def load_languages_desired(session):
 #populate languages_desired table with 2 languages for each user 
     
-    lang_des_1=[1, 2, "intermediate"]
-    lang_des_2=[1, 3, "beginner"]
-    lang_des_3=[2, 1, "advanced"]
-    lang_des_4=[2, 3, "beginner"]
-    lang_des_5=[3, 1, "advanced"]
-    lang_des_6=[3, 2, "beginner"]
+    lang_des_1=[1, "es-ES", "intermediate"]
+    lang_des_2=[1, "fr-FR", "beginner"]
+    lang_des_3=[2, "en-US", "advanced"]
+    lang_des_4=[2, "fr-FR", "beginner"]
+    lang_des_5=[3, "en-US", "advanced"]
+    lang_des_6=[3, "es-ES", "beginner"]
 
 
 
