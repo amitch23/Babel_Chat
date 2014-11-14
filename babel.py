@@ -204,41 +204,40 @@ def video_chat():
     return render_template("videochat.html", user=user, room_name=room_name)
 
 
-
 #--------------------------------------------------^^
      #flask routes above, socket.io handlers below
 #--------------------------------------------------
 
-#-------------------handles join/leave room/connecting socket functionality----------
+#----handles join/leave room/connecting socket functionality-------
 
-#2. when room is joined, run a join_room method, add a count to the session, and emit data and count to log div (output to log function)
+
 @socketio.on('join', namespace='/chat')
 def join(message):
-    # join user to room
+    # join users to room
     join_room(message['room'])
+  
     print message
-    #add count to session
-    session['receive_count'] = session.get('receive_count', 0) + 1
     print session
     
     #output info to log div in html with info about who's in room
     emit('output to log',
-         {'data': 'In rooms: ' + ', '.join(request.namespace.rooms),
-          'room': message['room'],
-           'count': session['receive_count']})
+         {'data': 'In rooms: ' + message['room'],
+          'room': message['room']})
 
-    #if the message data was passed from the function of the user who created the room(html/js line 67), pass the message that the first user started the room
+    #if the message was from game initiator, send msg to 2nd client to join 
     if message['start'] == 1:
         emit('invite_to_join',
              { 'data': "%s created room %s" % (session["login"], message['room']), 
-               'room_name': message['room'],
-               'count': session['receive_count']},
+               'room_name': message['room']},
              broadcast=True)
 
+    #if the msg from 2nd player, send msg 'start_game' to client
     else:
         emit('start_game',
               {'data': "%s has joined %s" % (session['login'], message['room']),
               'room_name': message['room']})
+
+
 
 @socketio.on('leave', namespace='/chat')
 def leave_the_room(message):
@@ -247,39 +246,53 @@ def leave_the_room(message):
     print "---------"
     leave_room(message['room'])
     print "---------"
-    session['receive_count'] = session.get('receive_count', 0) + 1
     print session
     emit('output to log',
          {'data': 'In rooms: ' + ', '.join(request.namespace.rooms),
           'count': session['receive_count']}) 
 
 #---------------------handles beginning of game----------#
+
 @socketio.on("get_game_content", namespace = '/chat')
 def fetch_game_content(message):
-    #fetch game content in list form by 2nd usr's reason in users table
-
-    usr2 = dbsession.query(User).filter_by(name=session["login"]).first()
-    print message
+    #fetch game content in a list by 2nd usr's reason in users table
+    usr = dbsession.query(User).filter_by(name=session["login"]).first()
 
     game_content_list = []
 
-    if usr2.reason=="Job":
+    if usr.reason=="Job":
         job_qs = dbsession.query(Conversation).filter_by(category="job").all()
         for q in job_qs:
             game_content_list.append(q.question)
 
-    elif usr2.reason=="Travel":
+    elif usr.reason=="Travel":
         travel_qs = dbsession.query(Conversation).filter_by(category="travel").all()
         for q in travel_qs:
             game_content_list.append(q.question)
+
+    #choose game randomly, import choice for list of ['taboo', 'guesswho', 'whereami']
+    elif usr.reason=="Fun":
+        # need to distinguish game, maybe pass as additional data?
+        game_cards = dbsession.query(Game).filter_by(game_type="taboo").all()
+        for card in game_cards:
+            game_content_list.append(card.filename)
 
     emit("display_game_content",
           {'room':message['room'], 'game_content':game_content_list}, 
           room=message['room'])
 
 
-    #if reason of 1st user is 'job' or 'travel', query db for appropriate convo questions and return them as a giant list
-    #if reason of 1st user is 'fun', randomly choose a set of game cards, put them in an empty list, and return that list to the client.
+
+
+@socketio.on("request_nxt_q", namespace='/chat')
+def fetch_nxt_q(message):
+    print message
+    emit("display_nxt_q",
+          {'room':message['room'], "counter":message['counter']}, 
+          room=message['room'])
+
+
+
 
 #------------------end beginning of game--------
 

@@ -41,6 +41,8 @@
 
 <div id="game_forms"></div>
 <div id="button_placeholder"></div>
+<div id="next_placeholder"><button id='nxt_q' class="hidden">Next</button></div>
+
 <div id="game_content"></div>
  <!-- <form id="send_msg_to_clientA" method='POST' action='#'>
         <input type="text" name="emit_data" id="emit_data" placeholder="Message">
@@ -79,15 +81,16 @@
 
         var socket = io.connect('http://' + document.domain + ':' + location.port + namespace);
 
-        //1.upon socket connection, emit the message "you're connected" to the client 
+        var game_content_list = []; 
+        var room_name = "{{ room_name }}";
+        var counter = 0;
+
+        //1.upon socket connection, emit the message "you're connected" to the client and send message "join" to server with room name
         socket.on('connect', function() {
             $('#log').append("<br>You're connected");
             //if initiating usr, join room in server and invite others to join
             {% if room_name %}
                 //populate input box with room name if in room
-                in_room = "{{ room_name }}";
-                console.log("{{room_name}}");
-                $("#room_name").val(in_room);
                 //upon connect of initiating, join room
                 socket.emit('join', {start: 1, room: "{{ room_name }}" });
             {% endif %}
@@ -95,8 +98,7 @@
 
         //5. put a button on the page for jose when 1st client starts room to join the room and pass the room name and maybe his name?)
         socket.on('invite_to_join', function(msg) {
-            //magically put button that will offer a join room button,
-            //then in another js listener function, call the join function, which will finally add the 2nd user to the room. Now both will have sockets to the server, will be in the same room, and the data objects passed will....dunno
+            //invites usr in waiting room to join room via btn click
             console.log(msg);
             console.log(msg.count);
 
@@ -107,6 +109,7 @@
                     {
                         socket.emit('join', {start: 2, room: msg.room_name});
                         $("#room_name").val(msg.room_name);
+                        room_name = msg.room_name;
                     });
                    $('#button_placeholder').append(btn); 
 
@@ -114,39 +117,82 @@
 
             //append received message to log div
             $('#log').append('<br>Received #' + msg.count + ': ' + msg.data);
-
         });
 
 
-        //make invite button disappear and pass room name and start value(?) to server to query for what game to start with first.
+        //start game - msg to server to get game content
         socket.on("start_game", function(msg) {
-            console.log("game started");
-            $('#button_placeholder').empty(); 
-            socket.emit('get_game_content', {room: msg.room_name, start: 2});
-
+            $('#button_placeholder').empty();
+            room_name=msg.room_name; 
+            socket.emit('get_game_content', {room: msg.room_name});
         });
 
-        //display contents one by one to both clients
+
+        //display 1st q to both clients
+
         socket.on("display_game_content", function(msg) {
-            var counter = 0
+            
+            //save content as global var object with # and value, loop through
+            for (var i = 0; i < msg.game_content.length; i++) {
+                game_content_list.push(msg.game_content[i]);
+            };
 
-            $('#game_content').append(msg.game_content[0]);
 
-            var btn = $('<button />')
-                .text("Next")
-                .click(function(event)
-                {
-                    if (counter > msg.game_content.length) {
-                        console.log("end game");
-                    }
-                    else {
-                    counter = counter + 1;
-                    $('#game_content').html(msg.game_content[counter]);
-                    }
-                });
-            $('#button_placeholder').append(btn); 
+            length_of_gc = game_content_list.length;
+            console.log(length_of_gc);
+            counter = 0;
+
+            //display first question
+            $('#game_content').append(msg.game_content[counter]);
+
+
+           //display nxt btn and click handler
+           $('#nxt_q').removeClass('hidden');
+            // $('#button_placeholder').append("<button id='nxt_q'>Next</button>"); 
+            // $('#nxt_q').click(function(evt){
+            //     console.log("hello");
+            //     console.log(msg);
+            //     socket.emit("request_nxt_q", {counter:counter, room: msg.room});
+
+            // });
 
         });
+
+        $('#nxt_q').click(function(evt){
+                console.log("hello");
+                //console.log(msg);
+                //counter++;
+
+                socket.emit("request_nxt_q", {counter:counter+1, room: room_name});
+
+        });
+
+
+        socket.on("display_nxt_q", function(msg) {
+            //get next item in list by counter
+            counter = msg.counter;
+            $('#game_content').html(game_content_list[msg.counter]);
+
+
+        });
+
+
+        //     //display next button with click handler
+        //     var btn = $('<button />')
+        //         .text("Next")
+        //         .click(function(event)
+        //         {
+        //             if (counter > msg.game_content.length) {
+        //                 console.log("end game");
+        //             }
+        //             else {
+        //             counter = counter + 1;
+        //             $('#game_content').html(msg.game_content[counter]);
+        //             }
+        //         });
+        //     $('#button_placeholder').append(btn); 
+
+        // });
 
            //on submit button, emit object to client @ 'my room event' in babel.py, which then sends data to 'my response' handler above
         // $('form#send_msg_to_room').submit(function(event) {
@@ -185,8 +231,7 @@
         // 'message' passes data to this function, which appends message to div element id = log
         socket.on('output to log', function(msg) {
             console.log(msg);
-            console.log(msg["count"]);
-            $('#log').append('<br>Received #' + msg.count + ': ' + msg.data);
+            $('#log').append('<br>Received: ' + msg.data);
         });
         
 
