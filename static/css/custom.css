@@ -108,3 +108,24 @@ a, a:focus, a:hover {
 
 }
 
+#video_wrapper {
+width:200px;
+height:500px;
+background: #cdd4b8;
+float: left;
+color: #fff;
+}
+
+#game_wrapper {
+width:300px;
+height: 600px;
+background: #6aa5a8;
+float: right;
+color: #fff;
+}
+
+#game_forms {
+	padding: 25px;
+
+
+}

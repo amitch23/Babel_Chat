@@ -47,8 +47,8 @@ def login():
     #add to session if in db, redirect to index if not
     if usr:
         session["login"] = usr.name
-        session["mother_tongue"] = usr.mother_tongue_code
-        session["lang_desired"] = usr.Language_desired[0].language.language_name
+        session["mother_tongue"] = usr.language.language_name
+        # session["lang_desired"] = usr.Language_desired[0].language.language_name
         print session   
         return redirect("/profile")
 
@@ -138,6 +138,7 @@ def add_reason():
     dbsession.commit()
 
 
+ 
 
     print session
     print usr
@@ -154,8 +155,8 @@ def add_reason():
     session.clear()
     #add info to session 
     session["login"] = usr.name
-    session["mother_tongue"] = usr.mother_tongue_code
-    session["lang_desired"] = usr.Language_desired[0].language.language_name
+    session["mother_tongue"] = usr.language.language_name
+    # session["lang_desired"] = usr.Language_desired[0].language.language_name
 
     print session
 
@@ -164,7 +165,7 @@ def add_reason():
 
 @app.route("/profile")
 def display_profile():
-    #if user.name in session (key='login'), add attributes to session and pass to profile.html
+
     user = dbsession.query(User).filter_by(name=session["login"]).first()
     # session["email"] = user.name
     # session["mother_tongue"] =user.language.language_name
@@ -182,15 +183,14 @@ def display_profile():
 @app.route("/logout")
 def logout():
     session.clear()
-    # session["login"]= ""
     return redirect("/")
 
-
+# ------------------ sockets fired upon url below! --------------------#
 
 @app.route("/video_chat")
 def video_chat():
 
-    #
+    
     user = dbsession.query(User).filter_by(name=session['login']).first()
 
     
@@ -198,8 +198,8 @@ def video_chat():
     room_name = None
 
     if start:
-        # TODO: replace this with a function that generates a unique room name maybe based on the language that the initiating user wants to learn
-        room_name = session['login'] + "/'s" + session["mother_tongue"] + " Room" 
+        # TODO: replace this with a function that generates a unique room name based on the language that the initiating user wants to learn
+        room_name = session['login'] + "\'s " + session["mother_tongue"] + " Room" 
 
 
     print session
@@ -213,13 +213,14 @@ def video_chat():
      #flask routes above, socket.io handlers below
 #--------------------------------------------------
 
+#-------------------handles join/leave room/connecting socket functionality----------
 
 #2. when room is joined, run a join_room method, add a count to the session, and emit data and count to log div (output to log function)
 @socketio.on('join', namespace='/chat')
 def join(message):
     # join user to room
     join_room(message['room'])
-
+    print message
     #add count to session
     session['receive_count'] = session.get('receive_count', 0) + 1
     print session
@@ -238,7 +239,64 @@ def join(message):
                'count': session['receive_count']},
              broadcast=True)
 
+    else:
+        # message['start']==2:
+        emit('start_game',
+              {'data': "%s has joined %s" % (session['login'], message['room']),
+              'room_name': message['room']})
 
+@socketio.on('leave', namespace='/chat')
+def leave_the_room(message):
+    print "---------"
+    print "LEAVE ROOM: ", message
+    print "---------"
+    leave_room(message['room'])
+    print "---------"
+    session['receive_count'] = session.get('receive_count', 0) + 1
+    print session
+    emit('output to log',
+         {'data': 'In rooms: ' + ', '.join(request.namespace.rooms),
+          'count': session['receive_count']}) 
+
+
+#----------------end handle join/leave room/connecting sockets--------#
+
+
+
+#---------------------handles beginning of game----------#
+@socketio.on("get_game_content", namespace = '/chat')
+def fetch_game_content(message):
+    #fetch game content in list form by 2nd usr's reason in users table
+
+    usr2 = dbsession.query(User).filter_by(name=session["login"]).first()
+    print message
+
+    game_content_list = []
+
+    if usr2.reason=="Job":
+        job_qs = dbsession.query(Conversation).filter_by(category="job").all()
+        for q in job_qs:
+            game_content_list.append(q.question)
+
+    elif:
+        usr2.reason=="Travel":
+        travel_qs = dbsession.query(Conversation).filter_by(category="travel").all()
+        for q in travel_qs:
+            game_content_list.append(q.question)
+
+    emit("display_game_content",
+          {'room':message['room'], 'game_content':game_content_list}, 
+          room=message['room'])
+
+
+
+    #if reason of 1st user is 'job' or 'travel', query db for appropriate convo questions and return them as a giant list
+    #if reason of 1st user is 'fun', randomly choose a set of game cards, put them in an empty list, and return that list to the client.
+
+    
+
+
+#------------------end beginning of game--------
 
 
 #message sending back to clientA (client who sent original message)
@@ -269,18 +327,6 @@ def send_room_message(message):
          room=message['room'])
 
 
-@socketio.on('leave', namespace='/chat')
-def leave_the_room(message):
-    print "---------"
-    print "LEAVE ROOM: ", message
-    print "---------"
-    leave_room(message['room'])
-    print "---------"
-    session['receive_count'] = session.get('receive_count', 0) + 1
-    print session
-    emit('output to log',
-         {'data': 'In rooms: ' + ', '.join(request.namespace.rooms),
-          'count': session['receive_count']}) 
 
 
 # Websocket Class

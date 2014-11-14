@@ -10,7 +10,7 @@ def load_users(session):
 
     user_2 = ["Jose Gonzalez", "jose@gmail.com", "pass2", "es-ES", "ES", "Job"]
   
-    user_3 = ["Pierre Beret", "Pierre@gmail.com", "pass3", "fr-FR", "FR", "Fun"]
+    user_3 = ["Pierre Beret", "Pierre@gmail.com", "pass3", "fr-FR", "FR", "Travel"]
 
 
     user1 = model.User(  

@@ -3,6 +3,9 @@
     <link type="text/css" rel="stylesheet" href="/static/style.css"/>
     <script type="text/javascript" src="//code.jquery.com/jquery-1.4.2.min.js"></script>
     <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/socket.io/0.9.16/socket.io.min.js"></script>
+
+    <link href="../static/css/custom.css" rel="stylesheet">
+
 </head>
 <body>
 
@@ -25,14 +28,21 @@
     {% endif %}
 
   </p>
+<div id="video_wrapper">VIDEO GOES HERE</div>
+
+
 <!-- 
  <form id="join" method='POST' action="#">
     <input type="text" name="join_room" id="join_room" placeholder="Room Name">
     <input type="submit" value="Join Room">
  </form> -->
 
-<div id="button_placeholder"></div>
+<div id="game_wrapper">
 
+
+<div id="game_forms"></div>
+<div id="button_placeholder"></div>
+<div id="game_content"></div>
  <!-- <form id="send_msg_to_clientA" method='POST' action='#'>
         <input type="text" name="emit_data" id="emit_data" placeholder="Message">
         <input type="submit" value="Send back to original sender"></div>
@@ -57,9 +67,15 @@
 <h2>Messages received:</h2>
 <div id="log"></div>
 
+</div> <!--game wrapper end div-->
+
+
+
 <script type="text/javascript" charset="utf-8">
    
-    in_room = null;
+//handle connect sockets and join/leave room functionality
+
+    var in_room = null;
     
     $(document).ready(function(){
         namespace = '/chat';
@@ -69,14 +85,17 @@
         //1.upon socket connection, emit the message "you're connected" to the client 
         socket.on('connect', function() {
             $('#log').append("<br>You're connected");
+            //if initiating usr, join room in server and invite others to join
             {% if room_name %}
                 //populate input box with room name if in room
                 in_room = "{{ room_name }}";
+                console.log("{{room_name}}");
                 $("#room_name").val(in_room);
                 //upon connect of initiating, join room
                 socket.emit('join', {start: 1, room: "{{ room_name }}" });
             {% endif %}
             });
+
 
         // 'message' passes data to this function, which appends message to div element id = log
         socket.on('output to log', function(msg) {
@@ -101,26 +120,79 @@
                     {
                         socket.emit('join', {start: 2, room: msg.room_name});
                         $("#room_name").val(msg.room_name);
-                        // console.log("BOOM BUTTON CLICKED!");
                     });
                    $('#button_placeholder').append(btn); 
-                // $('#button_placeholder').append("<button id='join_invite'>Would you like to join " + msg.room_name + "?</button>"); 
+
             {% endif %}
 
             //append received message to log div
             $('#log').append('<br>Received #' + msg.count + ': ' + msg.data);
-        });
-
-
-            $("#join_invite").click(function(event) {
-            console.log("button join invite clicked");
-
 
         });
 
 
+        //make invite button disappear and pass room name and start value(?) to server to query for what game to start with first.
+        socket.on("start_game", function(msg) {
+            console.log("game started");
+            $('#button_placeholder').empty(); 
+            socket.emit('get_game_content', {room: msg.room_name, start: 2});
 
+        });
+
+
+
+        //display contents one by one to both clients
+        socket.on("display_game_content", function(msg) {
+
+           //
+
+            var counter = 0
+
+            $('#game_content').append(msg.game_content[0]);
+
+            var btn = $('<button />')
+                .text("Next")
+                .click(function(event)
+                {
+                    if (counter > msg.game_content.length) {
+                        console.log("end game");
+                    }
+                    else {
+                    counter = counter + 1;
+                    $('#game_content').html(msg.game_content[counter]);
+                    }
+                });
+            $('#button_placeholder').append(btn); 
+
+
+        });
+
+ 
+
+
+
+          //on submit button, emit object to client @ 'my room event' in babel.py, which then sends data to 'my response' handler above
+        $('form#send_msg_to_room').submit(function(event) {
+            socket.emit('my room event', {room: $('#room_name').val(), data: $('#room_data').val()});
+            return false;
+        });
+
+        $('form#leave').submit(function(event) {
+            socket.emit("leave", {room: $("#leave_room").val()});
+            return false;
+
+        });
+
+//handle connect sockets and join/leave room functionality
+
+        
       
+
+
+
+
+
+
         // //handler for joining room
         // $('form#join').submit(function(event) {
         //     socket.emit('join', {room: $('#join_room').val()});
@@ -142,27 +214,10 @@
         // });
         
 
-        //on submit button, emit object to client @ 'my room event' in babel.py, which then sends data to 'my response' handler above
-        $('form#send_msg_to_room').submit(function(event) {
-            socket.emit('my room event', {room: $('#room_name').val(), data: $('#room_data').val()});
-            return false;
-        });
-
-        $('form#leave').submit(function(event) {
-            socket.emit("leave", {room: $("#leave_room").val()});
-            return false;
-
-        });
-
-          // $('form#leave').submit(function(event) {
-          //       socket.emit('leave', {room: $('#leave_room').val()});
-          //       return false;
-          //   });
 
     });
 
   
-// 1. first user clicks button to create game.
 
 
 </script>
@@ -170,6 +225,5 @@
 
 
 
-</div>
  </body>
  </html>
