@@ -5,7 +5,7 @@ import csv
 
 
 def load_users(session):
-#populate user table with 2 users        
+#populate users table with 2 users        
     user_1 = ["Andrea Mitchell", "andrealeemitchell@gmail.com", "pass1", "en-US", "US", "Fun"]
 
     user_2 = ["Jose Gonzalez", "jose@gmail.com", "pass2", "es-ES", "ES", "Job"]
@@ -46,7 +46,7 @@ def load_users(session):
 
 
 def load_languages(session):
-#populate language table with 3 languages
+#populate languages table with 3 languages
 
     language_1 = ["en-US", "English"]
     language_2 = ["es-ES", "Spanish"]
@@ -72,7 +72,7 @@ def load_languages(session):
 
     
 def load_countries(session):
-#populate country table with 3 countries
+#populate countries table with 3 countries
 
     country_1 = ["US", "U.S.A."]
     country_2 = ["ES", "Spain"]
@@ -190,12 +190,14 @@ def load_games(session):
     
 
 def load_conversations(session):
-#populate games table
+#populate conversations table
 
     convo_1 = ["job", "Talk about your job and your role in your company."]    
-    convo_2 = ["job", "Talk about your daily work tasksn."]    
-    convo_3 = ["travel", "Where have you travelled to and what was your favorite place?"]    
-    convo_4 = ["travel", "How often do you travel per year?"]    
+    convo_2 = ["job", "Talk about your daily work tasks."]    
+    convo_3 = ["job", "Who is most likely to usurp the boss?"] 
+    convo_4 = ["travel", "Where have you travelled to and what was your favorite place?"]    
+    convo_5 = ["travel", "How often do you travel?"]  
+    convo_6 = ["travel", "What are you favorite travel activities?"]   
 
     convo1 = model.Conversation(
                         category=convo_1[0],
@@ -214,46 +216,24 @@ def load_conversations(session):
                         category=convo_4[0],
                         question=convo_4[1])
 
+    convo5 = model.Conversation(
+                        category=convo_5[0],
+                        question=convo_5[1])
+
+    convo6 = model.Conversation(
+                        category=convo_6[0],
+                        question=convo_6[1])
+
+
+
     session.add(convo1)
     session.add(convo2)
     session.add(convo3)
     session.add(convo4)
+    session.add(convo5)
+    session.add(convo6)
 
     session.commit()
-
-# # def load_movies(session):
-
-# #     # use u.item
-# #     f = open("seed_data/u.item", "r")
-        
-# #     movie_table = f.readlines()
-
-# #     # read and parse each row/line
-# #     for line in movie_table:
-# #         row = line.strip().split('|')
-
-# #         if row[2] != '':
-# #             datetime_obj = datetime.strptime(row[2], "%d-%b-%Y")
-# #         else: 
-# #             datetime_obj = None
-
-# #         title = row[1].split("(")
-# #         title = title[0].decode("latin-1").strip()
-
-# #         # create an object
-# #         eachmovie = model.Movie(
-# #                                name = title,
-# #                                released_at = datetime_obj,
-# #                                imdb_url = row[3])
-
-# #         session.add(eachmovie)
-
-# #     session.commit()
-
-  
-# #     f.close()
-
-
 
     
 def main(session):
@@ -263,8 +243,7 @@ def main(session):
     load_languages_desired(session)
     load_games(session)
     load_conversations(session)
-    # You'll call each of the load_* functions with the session as an argument
-    
+   
 
 if __name__ == "__main__":
     s = model.connect()

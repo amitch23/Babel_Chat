@@ -1,6 +1,5 @@
 <html>
 <head>
-    <link type="text/css" rel="stylesheet" href="/static/style.css"/>
     <script type="text/javascript" src="//code.jquery.com/jquery-1.4.2.min.js"></script>
     <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/socket.io/0.9.16/socket.io.min.js"></script>
 
@@ -48,7 +47,7 @@
         <input type="submit" value="Send back to original sender"></div>
  </form> -->
 
-  <form id="broadcast_to_all" method='POST' action='#'>
+<!--   <form id="broadcast_to_all" method='POST' action='#'>
         <input type="text" name="broadcast_data" id="broadcast_data" placeholder="Message">
         <input type="submit" value="Broadcast to everyone (in any room)">
     </form>
@@ -62,14 +61,12 @@
     <form id="leave" method='POST' action='#'>
         <input type="text" name="leave_room" id="leave_room" placeholder="Room Name">
         <input type="submit" value="Leave Room">
-    </form>
+    </form> -->
 
-<h2>Messages received:</h2>
+<h3>Messages received:</h3>
 <div id="log"></div>
 
 </div> <!--game wrapper end div-->
-
-
 
 <script type="text/javascript" charset="utf-8">
    
@@ -95,16 +92,6 @@
                 socket.emit('join', {start: 1, room: "{{ room_name }}" });
             {% endif %}
             });
-
-
-        // 'message' passes data to this function, which appends message to div element id = log
-        socket.on('output to log', function(msg) {
-            console.log(msg);
-            console.log(msg["count"]);
-            $('#log').append('<br>Received #' + msg.count + ': ' + msg.data);
-        });
-
-
 
         //5. put a button on the page for jose when 1st client starts room to join the room and pass the room name and maybe his name?)
         socket.on('invite_to_join', function(msg) {
@@ -139,13 +126,8 @@
 
         });
 
-
-
         //display contents one by one to both clients
         socket.on("display_game_content", function(msg) {
-
-           //
-
             var counter = 0
 
             $('#game_content').append(msg.game_content[0]);
@@ -164,35 +146,23 @@
                 });
             $('#button_placeholder').append(btn); 
 
-
         });
 
- 
+           //on submit button, emit object to client @ 'my room event' in babel.py, which then sends data to 'my response' handler above
+        // $('form#send_msg_to_room').submit(function(event) {
+        //     socket.emit('my room event', {room: $('#room_name').val(), data: $('#room_data').val()});
+        //     return false;
+        // });
 
+        // $('form#leave').submit(function(event) {
+        //     socket.emit("leave", {room: $("#leave_room").val()});
+        //     return false;
 
-
-          //on submit button, emit object to client @ 'my room event' in babel.py, which then sends data to 'my response' handler above
-        $('form#send_msg_to_room').submit(function(event) {
-            socket.emit('my room event', {room: $('#room_name').val(), data: $('#room_data').val()});
-            return false;
-        });
-
-        $('form#leave').submit(function(event) {
-            socket.emit("leave", {room: $("#leave_room").val()});
-            return false;
-
-        });
+        // });
 
 //handle connect sockets and join/leave room functionality
 
         
-      
-
-
-
-
-
-
         // //handler for joining room
         // $('form#join').submit(function(event) {
         //     socket.emit('join', {room: $('#join_room').val()});
@@ -212,6 +182,12 @@
         //     socket.emit('my broadcast event', {data: $('#broadcast_data').val()});
         //     return false;
         // });
+        // 'message' passes data to this function, which appends message to div element id = log
+        socket.on('output to log', function(msg) {
+            console.log(msg);
+            console.log(msg["count"]);
+            $('#log').append('<br>Received #' + msg.count + ': ' + msg.data);
+        });
         
 
 

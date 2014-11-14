@@ -200,11 +200,7 @@ def video_chat():
     if start:
         # TODO: replace this with a function that generates a unique room name based on the language that the initiating user wants to learn
         room_name = session['login'] + "\'s " + session["mother_tongue"] + " Room" 
-
-
     print session
-
-
     return render_template("videochat.html", user=user, room_name=room_name)
 
 
@@ -240,7 +236,6 @@ def join(message):
              broadcast=True)
 
     else:
-        # message['start']==2:
         emit('start_game',
               {'data': "%s has joined %s" % (session['login'], message['room']),
               'room_name': message['room']})
@@ -258,11 +253,6 @@ def leave_the_room(message):
          {'data': 'In rooms: ' + ', '.join(request.namespace.rooms),
           'count': session['receive_count']}) 
 
-
-#----------------end handle join/leave room/connecting sockets--------#
-
-
-
 #---------------------handles beginning of game----------#
 @socketio.on("get_game_content", namespace = '/chat')
 def fetch_game_content(message):
@@ -278,8 +268,7 @@ def fetch_game_content(message):
         for q in job_qs:
             game_content_list.append(q.question)
 
-    elif:
-        usr2.reason=="Travel":
+    elif usr2.reason=="Travel":
         travel_qs = dbsession.query(Conversation).filter_by(category="travel").all()
         for q in travel_qs:
             game_content_list.append(q.question)
@@ -289,64 +278,38 @@ def fetch_game_content(message):
           room=message['room'])
 
 
-
     #if reason of 1st user is 'job' or 'travel', query db for appropriate convo questions and return them as a giant list
     #if reason of 1st user is 'fun', randomly choose a set of game cards, put them in an empty list, and return that list to the client.
-
-    
-
 
 #------------------end beginning of game--------
 
 
-#message sending back to clientA (client who sent original message)
-@socketio.on('message', namespace='/chat')
-def test_message(message):
-    session['receive_count'] = session.get('receive_count', 0) + 1
-    emit('output to log',
-         {'data': message['data'], 'count': session['receive_count']})
+# #message sending back to clientA (client who sent original message)
+# @socketio.on('message', namespace='/chat')
+# def test_message(message):
+#     session['receive_count'] = session.get('receive_count', 0) + 1
+#     emit('output to log',
+#          {'data': message['data'], 'count': session['receive_count']})
 
 
-#emitting message to ALL connected users via "broadcast=true"
-@socketio.on('my broadcast event', namespace='/chat')
-def test_message(message):
-    session['receive_count'] = session.get('receive_count', 0) + 1
-    emit('output to log',
-         {'data': message['data'], 'count': session['receive_count']},
-         broadcast=True)
+# #emitting message to ALL connected users via "broadcast=true"
+# @socketio.on('my broadcast event', namespace='/chat')
+# def test_message(message):
+#     session['receive_count'] = session.get('receive_count', 0) + 1
+#     emit('output to log',
+#          {'data': message['data'], 'count': session['receive_count']},
+#          broadcast=True)
 
 
-#send a message to just those clients in the room
-@socketio.on('my room event', namespace='/chat')
-def send_room_message(message):
-    session['receive_count'] = session.get('receive_count', 0) + 1
-    print session
-    #emitting to users in the room via "room=message..."
-    emit('output to log',
-         {'data': message['data'], 'count': session['receive_count']},
-         room=message['room'])
-
-
-
-
-# Websocket Class
-
-# Andrea Websocket Instance
-#   -- in rooms ['Andrea Mitchell en-US']
-#   -- connected
-
-
-# Jose Websocket Instance
-#  -- Connected
-#   -- in rooms ['Andrea Mitchell en-US']
-
-
-# send('action', {})
-
-# emit('action', {}, room='c')
-
-
-
+# #send a message to just those clients in the room
+# @socketio.on('my room event', namespace='/chat')
+# def send_room_message(message):
+#     session['receive_count'] = session.get('receive_count', 0) + 1
+#     print session
+#     #emitting to users in the room via "room=message..."
+#     emit('output to log',
+#          {'data': message['data'], 'count': session['receive_count']},
+#          room=message['room'])
 
 
 if __name__ == "__main__":
