@@ -96,6 +96,8 @@
         var room_name = "{{ room_name }}";
         var counter = 0;
         var placeholder_txt = "It's not your turn now. Listen to your partner and guess the word."
+        var turn = false;
+
 
         //1.upon socket connection, emit the message "you're connected" to the client and send message "join" to server with room name
         socket.on('connect', function() {
@@ -126,7 +128,7 @@
             $('#log').append('<br>Received #' + msg.count + ': ' + msg.data);
         });
 
-//-------------------handles starting game and game moves-----------------------
+//-------------------handles starting conversation game-----------------------
 
 
         //msg 'start_game' to server to get game content
@@ -144,22 +146,29 @@
             for (var i = 0; i < msg.game_content.length; i++) {
                 game_content_list.push(msg.game_content[i]);
             };
-
-            // length_of_gc = game_content_list.length;
-            // console.log(length_of_gc);
             counter = 0;
-
             //display first question
             $('#game_content').append(msg.game_content[counter]);
-
-           //remove hidden class on next button
+           //remove hidden class on 'next' button
            $('#nxt_q').removeClass('hidden');
-
-           
         });
 
-        var turn = false;
+        //event listener for nxt-question button
+        $('#nxt_q').click(function(evt){
+            socket.emit("request_nxt_q", {counter:counter+1, room: room_name});
+        });
 
+        //displays next q by updated counter #
+        socket.on("display_nxt_q", function(msg) {
+            //get next item in list by counter
+            counter = msg.counter;
+            console.log(" this is the room: {{ room_name}} ");
+            //if 
+
+            $('#game_content').html(game_content_list[msg.counter]);
+        });
+
+//-------------------handles card games and game moves-----------------------
 
         socket.on("display_card_content", function(msg) {
 
@@ -182,47 +191,29 @@
 
         });
 
-
-
-        //event listener for nxt-question button
-        $('#nxt_q').click(function(evt){
-            socket.emit("request_nxt_q", {counter:counter+1, room: room_name});
-        });
-
+ 
         //event listener for next card button
         $("#nxt_card").click(function(evt) {
             //request next card from server
             socket.emit("request_nxt_q", {counter:counter+1, room: room_name, game_type:"cards", });
-
         });
 
-
-        //displays next q by updated counter #
-        socket.on("display_nxt_q", function(msg) {
-            //get next item in list by counter
-            counter = msg.counter;
-            console.log(" this is the room: {{ room_name}} ");
-            //if 
-
-            $('#game_content').html(game_content_list[msg.counter]);
-        });
-
+        
         // displays next card by updated counter #
         socket.on("display_nxt_card", function(msg) {
             //get next item in list by counter
             
             if (counter < game_content_list.length){
-
+                //switch values for turn for each player
                 turn = !turn;
                 counter = msg.counter;
-
-
+                //put placeholder txt, clear img src, hide nxt btn
                 if (turn==false) {
                     $('#txt_area').html(placeholder_txt);
                     $('#card').attr('src', '');
                     $('#nxt_card').addClass('hidden');
                 }
-
+                //clear txt area, add next card img, unhide nxt btn
                 else {
                     $('#txt_area').html('');
                     $('#card').attr('src', game_content_list[msg.counter]);
@@ -250,7 +241,6 @@
         // });
 
 //handle connect sockets and join/leave room functionality
-
         
         // //handler for joining room
         // $('form#join').submit(function(event) {

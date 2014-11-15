@@ -283,9 +283,10 @@ def fetch_game_content(message):
     if usr.reason=="Fun":
         # need to distinguish game, maybe pass as additional data?
         game_cards = dbsession.query(Game).filter_by(game_type="taboo").all()
+        
         for card in game_cards:
             card_url_list.append(card.filename)
-        print card_url_list
+
         emit("display_card_content",
               {'room':message['room'], 'card_content':card_url_list}, 
               room=message['room'])
@@ -299,8 +300,6 @@ def fetch_nxt_q(message):
     else:    
         emit("display_nxt_q",
           {'room':message['room'], "counter":message['counter']}, room=message['room'])
-
-
 
 
 
