@@ -27,10 +27,13 @@ def clearsession():
 
 @app.route("/")
 def display_index():
-    # clearsession()
+
+    user = dbsession.query(User).get(1)
+
+
     print session
     #display index page with login form
-    return render_template("index.html")
+    return render_template("index.html", user=user)
 
 
 @app.route("/login", methods=['POST'])
@@ -137,9 +140,6 @@ def add_reason():
     dbsession.add(usr)
     dbsession.commit()
 
-
- 
-
     print session
     print usr
 
@@ -158,8 +158,6 @@ def add_reason():
     session["mother_tongue"] = usr.language.language_name
     # session["lang_desired"] = usr.Language_desired[0].language.language_name
 
-    print session
-
     return redirect("/profile") 
 
 
@@ -167,18 +165,10 @@ def add_reason():
 def display_profile():
 
     user = dbsession.query(User).filter_by(name=session["login"]).first()
-    # session["email"] = user.name
-    # session["mother_tongue"] =user.language.language_name
-    # session["country"]=user.country.country_name
+   
     print session
-
     return render_template("profile.html", user=user)
-                            # name=user.name,
-                            # email=user.email, 
-                            # mother_tongue=user.language.language_name,
-                            # country=user.country.country_name
-                            # # language_desired=user.language_desired.language_name
-                            # )
+                           
 
 @app.route("/logout")
 def logout():
@@ -193,12 +183,10 @@ def video_chat():
     
     user = dbsession.query(User).filter_by(name=session['login']).first()
 
-    
     start = request.args.get('start')
     room_name = None
 
     if start:
-        # TODO: replace this with a function that generates a unique room name based on the language that the initiating user wants to learn
         room_name = session['login'] + "\'s " + session["mother_tongue"] + " Room" 
     print session
     return render_template("videochat.html", user=user, room_name=room_name)

@@ -127,10 +127,17 @@ color: #fff;
 #game_forms {
 	padding: 25px;
 
+/*	background-color: red;
+*/
 
 }
 
 .hidden {
 visibility: hidden;
+
+}
+
+.navbar-toggle {
+background-color: red;
 
 }
