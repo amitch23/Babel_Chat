@@ -265,6 +265,10 @@ def fetch_game_content(message):
         job_qs = dbsession.query(Conversation).filter_by(category="job").all()
         for q in job_qs:
             game_content_list.append(q.question)
+            
+        emit("display_game_content",
+              {'room':message['room'], 'game_content':game_content_list}, 
+              room=message['room'])
 
     elif usr.reason=="Travel":
         travel_qs = dbsession.query(Conversation).filter_by(category="travel").all()
@@ -290,8 +294,7 @@ def fetch_game_content(message):
 # gets counter # and sends room name and counter # to both clients in room
 @socketio.on("request_nxt_q", namespace='/chat')
 def fetch_nxt_q(message):
-    
-    if message["game_type"]=="cards":
+    if message.get("game_type") == "cards":
         emit("display_nxt_card", {'room':message['room'], 'counter':message['counter']}, room=message['room'])
     else:    
         emit("display_nxt_q",
