@@ -40,8 +40,19 @@
 
 
 <div id="game_forms"></div>
-<div id="button_placeholder"></div>
+
+<div id="join_button_placeholder"><button id='join_room' class="hidden">Join </button></div>
+
+
 <div id="next_placeholder"><button id='nxt_q' class="hidden">Next</button></div>
+
+<div id="next_card_placeholder"><button id='nxt_card' class="hidden">Next Card</button></div>
+
+
+<div id="txt_area"></div>
+<img src="" id="card"></img>
+
+
 
 <div id="game_content"></div>
  <!-- <form id="send_msg_to_clientA" method='POST' action='#'>
@@ -84,6 +95,7 @@
         var game_content_list = []; 
         var room_name = "{{ room_name }}";
         var counter = 0;
+        var placeholder_txt = "It's not your turn now. Listen to your partner and guess the word."
 
         //1.upon socket connection, emit the message "you're connected" to the client and send message "join" to server with room name
         socket.on('connect', function() {
@@ -100,99 +112,130 @@
         socket.on('invite_to_join', function(msg) {
             //invites usr in waiting room to join room via btn click
             console.log(msg);
-            console.log(msg.count);
 
             {% if room_name==None %}
-                var btn = $('<button />')
-                    .text("Click to join " + msg.room_name)
-                    .click(function(event)
-                    {
-                        socket.emit('join', {start: 2, room: msg.room_name});
-                        $("#room_name").val(msg.room_name);
-                        room_name = msg.room_name;
-                    });
-                   $('#button_placeholder').append(btn); 
-
+                $("#join_room").removeClass('hidden');
+                $("#join_room").html("Join " + msg.room_name);
+                $("#join_room").click(function(evt){
+                    socket.emit('join', {start: 2, room: msg.room_name});
+                    room_name = msg.room_name;
+                });
             {% endif %}
 
             //append received message to log div
             $('#log').append('<br>Received #' + msg.count + ': ' + msg.data);
         });
 
+//-------------------handles starting game and game moves-----------------------
 
-        //start game - msg to server to get game content
+
+        //msg 'start_game' to server to get game content
         socket.on("start_game", function(msg) {
-            $('#button_placeholder').empty();
+            $('#join_room').addClass("hidden");
             room_name=msg.room_name; 
             socket.emit('get_game_content', {room: msg.room_name});
         });
 
 
-        //display 1st q to both clients
-
+        //display 1st game element to both clients
         socket.on("display_game_content", function(msg) {
             
-            //save content as global var object with # and value, loop through
+            //save content as list in game_content_list (global var) 
             for (var i = 0; i < msg.game_content.length; i++) {
                 game_content_list.push(msg.game_content[i]);
             };
 
-
-            length_of_gc = game_content_list.length;
-            console.log(length_of_gc);
+            // length_of_gc = game_content_list.length;
+            // console.log(length_of_gc);
             counter = 0;
 
             //display first question
             $('#game_content').append(msg.game_content[counter]);
 
-
-           //display nxt btn and click handler
+           //remove hidden class on next button
            $('#nxt_q').removeClass('hidden');
-            // $('#button_placeholder').append("<button id='nxt_q'>Next</button>"); 
-            // $('#nxt_q').click(function(evt){
-            //     console.log("hello");
-            //     console.log(msg);
-            //     socket.emit("request_nxt_q", {counter:counter, room: msg.room});
 
-            // });
+           
+        });
+
+        var turn = false;
+
+
+        socket.on("display_card_content", function(msg) {
+
+            for (var i = 0; i < msg.card_content.length; i++) {
+                    game_content_list.push(msg.card_content[i]);
+                };
+                console.log(msg.game_content_list);
+           
+            counter = 0;
+           $('#nxt_card').removeClass('hidden');
+
+            {% if room_name==None %}
+                $('#card').attr('src', game_content_list[counter]);
+                turn = true;
+            {% elif room_name!=None %}
+                $('#nxt_card').addClass('hidden');
+                $('#txt_area').html(placeholder_txt);
+                turn = false;
+           {% endif %}
 
         });
 
+
+
+        //event listener for nxt-question button
         $('#nxt_q').click(function(evt){
-                console.log("hello");
-                //console.log(msg);
-                //counter++;
+            socket.emit("request_nxt_q", {counter:counter+1, room: room_name});
+        });
 
-                socket.emit("request_nxt_q", {counter:counter+1, room: room_name});
+        //event listener for next card button
+        $("#nxt_card").click(function(evt) {
+            //request next card from server
+            socket.emit("request_nxt_q", {counter:counter+1, room: room_name, game_type:"cards", });
 
         });
 
 
+        //displays next q by updated counter #
         socket.on("display_nxt_q", function(msg) {
             //get next item in list by counter
             counter = msg.counter;
+            console.log(" this is the room: {{ room_name}} ");
+            //if 
+
             $('#game_content').html(game_content_list[msg.counter]);
-
-
         });
 
+        // displays next card by updated counter #
+        socket.on("display_nxt_card", function(msg) {
+            //get next item in list by counter
+            
+            if (counter < game_content_list.length){
 
-        //     //display next button with click handler
-        //     var btn = $('<button />')
-        //         .text("Next")
-        //         .click(function(event)
-        //         {
-        //             if (counter > msg.game_content.length) {
-        //                 console.log("end game");
-        //             }
-        //             else {
-        //             counter = counter + 1;
-        //             $('#game_content').html(msg.game_content[counter]);
-        //             }
-        //         });
-        //     $('#button_placeholder').append(btn); 
+                turn = !turn;
+                counter = msg.counter;
 
-        // });
+
+                if (turn==false) {
+                    $('#txt_area').html(placeholder_txt);
+                    $('#card').attr('src', '');
+                    $('#nxt_card').addClass('hidden');
+                }
+
+                else {
+                    $('#txt_area').html('');
+                    $('#card').attr('src', game_content_list[msg.counter]);
+                    $('#nxt_card').removeClass('hidden');
+                }
+            }
+
+            else {
+                //clear button and image
+                //call another function to play again or end session
+            }
+        });
+
 
            //on submit button, emit object to client @ 'my room event' in babel.py, which then sends data to 'my response' handler above
         // $('form#send_msg_to_room').submit(function(event) {

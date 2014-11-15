@@ -251,7 +251,7 @@ def leave_the_room(message):
          {'data': 'In rooms: ' + ', '.join(request.namespace.rooms),
           'count': session['receive_count']}) 
 
-#---------------------handles beginning of game----------#
+#---------------------handles starting game and game moves-----------------#
 
 @socketio.on("get_game_content", namespace = '/chat')
 def fetch_game_content(message):
@@ -259,6 +259,7 @@ def fetch_game_content(message):
     usr = dbsession.query(User).filter_by(name=session["login"]).first()
 
     game_content_list = []
+    card_url_list = []
 
     if usr.reason=="Job":
         job_qs = dbsession.query(Conversation).filter_by(category="job").all()
@@ -270,26 +271,32 @@ def fetch_game_content(message):
         for q in travel_qs:
             game_content_list.append(q.question)
 
+        emit("display_game_content",
+              {'room':message['room'], 'game_content':game_content_list}, 
+              room=message['room'])
+
     #choose game randomly, import choice for list of ['taboo', 'guesswho', 'whereami']
-    elif usr.reason=="Fun":
+    if usr.reason=="Fun":
         # need to distinguish game, maybe pass as additional data?
         game_cards = dbsession.query(Game).filter_by(game_type="taboo").all()
         for card in game_cards:
-            game_content_list.append(card.filename)
-
-    emit("display_game_content",
-          {'room':message['room'], 'game_content':game_content_list}, 
-          room=message['room'])
-
-
+            card_url_list.append(card.filename)
+        print card_url_list
+        emit("display_card_content",
+              {'room':message['room'], 'card_content':card_url_list}, 
+              room=message['room'])
 
 
+# gets counter # and sends room name and counter # to both clients in room
 @socketio.on("request_nxt_q", namespace='/chat')
 def fetch_nxt_q(message):
-    print message
-    emit("display_nxt_q",
-          {'room':message['room'], "counter":message['counter']}, 
-          room=message['room'])
+    
+    if message["game_type"]=="cards":
+        emit("display_nxt_card", {'room':message['room'], 'counter':message['counter']}, room=message['room'])
+    else:    
+        emit("display_nxt_q",
+          {'room':message['room'], "counter":message['counter']}, room=message['room'])
+
 
 
 
@@ -297,32 +304,32 @@ def fetch_nxt_q(message):
 #------------------end beginning of game--------
 
 
-# #message sending back to clientA (client who sent original message)
-# @socketio.on('message', namespace='/chat')
-# def test_message(message):
-#     session['receive_count'] = session.get('receive_count', 0) + 1
-#     emit('output to log',
-#          {'data': message['data'], 'count': session['receive_count']})
+#message sending back to clientA (client who sent original message)
+@socketio.on('message', namespace='/chat')
+def test_message(message):
+    session['receive_count'] = session.get('receive_count', 0) + 1
+    emit('output to log',
+         {'data': message['data'], 'count': session['receive_count']})
 
 
-# #emitting message to ALL connected users via "broadcast=true"
-# @socketio.on('my broadcast event', namespace='/chat')
-# def test_message(message):
-#     session['receive_count'] = session.get('receive_count', 0) + 1
-#     emit('output to log',
-#          {'data': message['data'], 'count': session['receive_count']},
-#          broadcast=True)
+#emitting message to ALL connected users via "broadcast=true"
+@socketio.on('my broadcast event', namespace='/chat')
+def test_message(message):
+    session['receive_count'] = session.get('receive_count', 0) + 1
+    emit('output to log',
+         {'data': message['data'], 'count': session['receive_count']},
+         broadcast=True)
 
 
-# #send a message to just those clients in the room
-# @socketio.on('my room event', namespace='/chat')
-# def send_room_message(message):
-#     session['receive_count'] = session.get('receive_count', 0) + 1
-#     print session
-#     #emitting to users in the room via "room=message..."
-#     emit('output to log',
-#          {'data': message['data'], 'count': session['receive_count']},
-#          room=message['room'])
+#send a message to just those clients in the room
+@socketio.on('my room event', namespace='/chat')
+def send_room_message(message):
+    session['receive_count'] = session.get('receive_count', 0) + 1
+    print session
+    #emitting to users in the room via "room=message..."
+    emit('output to log',
+         {'data': message['data'], 'count': session['receive_count']},
+         room=message['room'])
 
 
 if __name__ == "__main__":
