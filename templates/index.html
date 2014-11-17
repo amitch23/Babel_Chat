@@ -1,8 +1,6 @@
 {% extends 'base.html' %}
 {% block body %}
 
-
-
 <!-- /form boxes -->
 <div id="login_box" class="container">
 
@@ -13,8 +11,6 @@
         {% for msg in get_flashed_messages() %}
               {{ msg }}
         {% endfor %}
-
-
 
         <div id="email">
             <input type="email" name="email" class="form-control" placeholder="email" required>

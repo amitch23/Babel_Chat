@@ -1,13 +1,17 @@
 {% extends 'base.html' %}
 {% block body %}
 
-<div id="languages_desired">
-    <form method="post" action="/add_desired_lang" id="add_lang">
+<div id="login_box">
+    <form method="post" action="/add_desired_lang" id="add_lang" class='form-signin' role='form'>
+    {% for msg in get_flashed_messages() %}
+              {{ msg }}
+        {% endfor %}
+
         <h1> What Language do you want to learn?</h1>
         <p></p>
 
          <div id="language">
-            <p>Language</p>
+            <h4>Language</h4>
            <select name="language">
               <option value="en-US">English</option>
               <option value="es-ES">Spanish</option>
@@ -17,7 +21,7 @@
             
 
         <div id="level">
-            <p>Level</p>
+            <h4>Level</h4>
            <input type="radio" name="level" value="beginner">Beginner</input>
            <input type="radio" name="level" value="intermediate">Intermediate</input>
            <input type="radio" name="level" value="advanced">Advanced</input>
@@ -26,7 +30,6 @@
 
         <button type="submit" id="submit_button" name="submit">Next</button> 
 
-      </form>
 
 </div> 
 
@@ -53,6 +56,5 @@ of whatever's selected by usr, the name will equal the value.
         </div> -->
 
 
-</form>
 
 {% endblock %}

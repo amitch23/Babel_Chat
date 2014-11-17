@@ -2,7 +2,7 @@
 {% extends 'base.html' %}
 {% block body %}
 
-
+<!-- 
 <p>
     name: {{ user.name }}<br/>
     email: {{ user.email }}<br/>
@@ -21,11 +21,12 @@
         {{ user.name }} is in the waiting room.
     {% endif %}
 
-  </p>
-<div id="video_wrapper">VIDEO GOES HERE</div>
 
+  </p> -->
 
+<div id="videochat_wrapper">
 
+<div id="video_wrapper"></div>
 
 <div id="game_wrapper">
 
@@ -41,7 +42,9 @@
 
 
 <div id="game_content"></div>
-<img src="" id="card"></img>
+
+<div id="card_wrapper"></div> 
+
 
 <h3>Messages received:</h3>
 <div id="log"></div>
@@ -49,6 +52,10 @@
 
 </div><!--game forms-->
 
+</div><!--game_wrapper-->
+
+<button id="end_session_btn">End Video Chat session</button>
+</div><!--videochat_wrapper-->
 
 <!-- 
  <form id="join" method='POST' action="#">
@@ -79,7 +86,6 @@
     </form> -->
 
 
-</div> <!--game wrapper end div-->
 
 <script type="text/javascript" charset="utf-8">
    
@@ -129,11 +135,12 @@
             $('#log').append('<br>Received #' + msg.count + ': ' + msg.data);
         });
 
-//-------------------handles starting conversation game-----------------------
+//-----------handles starting conversation game-----------------------
 
 
         //msg 'start_game' to server to get game content
         socket.on("start_game", function(msg) {
+            console.log("game started");
             $('#join_room').addClass("hidden");
             room_name=msg.room_name; 
             socket.emit('get_game_content', {room: msg.room_name});
@@ -182,7 +189,7 @@
            $('#nxt_card').removeClass('hidden');
 
             {% if room_name==None %}
-                $('#card').attr('src', game_content_list[counter]);
+                 $('#card_wrapper').html('<img src="' + game_content_list[counter] + '" id="card"></img>');
                 turn = true;
             {% elif room_name!=None %}
                 $('#nxt_card').addClass('hidden');
@@ -211,13 +218,16 @@
                 //put placeholder txt, clear img src, hide nxt btn
                 if (turn==false) {
                     $('#game_content').html(placeholder_txt);
-                    $('#card').attr('src', '');
+                    $('#card_wrapper').html('');
+
+                    // $('#card').attr('src', '');
                     $('#nxt_card').addClass('hidden');
                 }
                 //clear txt area, add next card img, unhide nxt btn
                 else {
                     $('#game_content').html('');
-                    $('#card').attr('src', game_content_list[msg.counter]);
+                    // $('#card').attr('src', game_content_list[msg.counter]);
+                    $('#card_wrapper').html('<img src="' + game_content_list[msg.counter] + '" id="card"></img>');
                     $('#nxt_card').removeClass('hidden');
                 }
             }
@@ -268,8 +278,6 @@
             $('#log').append('<br>Received: ' + msg.data);
         });
         
-
-
     });
 
   

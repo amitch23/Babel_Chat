@@ -11,8 +11,9 @@ Logo navy blue: #6aa5a8
 background cream: #fff4e3
 
 */
-body {
 
+/* -------------------index.html and login forms------ */
+body {
 
 }
 
@@ -108,17 +109,40 @@ a, a:focus, a:hover {
 
 }
 
+
+.navbar-toggle {
+background-color: #fbf4e3;
+
+}
+
+/*.select {
+background-color:  ;
+padding: 50px;
+}
+
+*/
+/* --------------------videochat.html-----*/
+
+#videochat_wrapper {
+background-image: url("../img/halftone.png");
+width: 1000px;
+height: 580px;
+margin: auto;
+padding: 40px;
+border: #fff 1px;
+}
+
 #video_wrapper {
-width:200px;
-height:500px;
-background: #cdd4b8;
+width:600px;
+height:430px;
+background: #000;
 float: left;
-color: #fff;
+color: #1B1B1B;
 }
 
 #game_wrapper {
 width:300px;
-height: 600px;
+height: 430px;
 background: #6aa5a8;
 float: right;
 color: #fff;
@@ -126,6 +150,7 @@ color: #fff;
 
 #game_forms {
 	padding: 25px;
+text-shadow: 0 1px 3px rgba(0,0,0,.5);
 
 /*	background-color: red;
 */
@@ -137,7 +162,47 @@ visibility: hidden;
 
 }
 
-.navbar-toggle {
-background-color: red;
+#end_session_btn {
+
+background-color: #fff;
+color: rgb(60, 58, 58);
+margin: 25px 0px 0px 0px;
+padding: 8px;
+float: right;
+
+}
+
+/* these need to select not ALL buttons, because then it messes with
+the functionality of the next button for next game. Write separate selectors 
+for the buttons on videochat.html */
+
+/*input, select, button, textarea {
+
+  background-color: #e9a34d;
+    border-color: #e9a34d;
+    width: 100%;
+    }*/
+
+/*input, select, textarea {
+
+background-color: #6aa5a8;
+    border-color: #e9a34d;
+    width: 100%;
+    }
+
+*/
+
+#card {
+	width: 100%;
+	max-height: 100%;
+}
+
+
+#card_wrapper {
+	height: 300px;
+}
+
+.cntr {
+margin-right:100px;
 
 }

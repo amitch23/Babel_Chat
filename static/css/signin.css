@@ -33,17 +33,9 @@ body {
 .form-signin .form-control:focus {
   z-index: 2;
 }
-.form-signin input[type="email"] {
-  margin: auto;
-  border-bottom-right-radius: 0;
-  border-bottom-left-radius: 0;
-  max-width: 300px;
-  background-color: #fbf4e3;
-  color: #838380;
-  display: block;
-  font-style: italic;
-}
-.form-signin input[type="password"] {
+
+
+.form-signin input {
   margin: auto;
   margin-top: 20px;
   margin-bottom: 20px;
@@ -55,7 +47,10 @@ body {
   display: block;
   font-style: italic;
 
- 
+}
+
+#login_box {
+  margin: 50px 0px 50px 0px;
 
 }
 
@@ -69,14 +64,14 @@ body {
     background-color: #e9a34d;
     border-color: #e9a34d;
     width: 150px;
-    float: right;
+   /* float: right;*/
 
 }
 
 #login_box h1 {
 
  color: #c69c6d;
- font-size: 28px;
+ font-size: 25px;
 }
 
 

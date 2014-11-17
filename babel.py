@@ -104,8 +104,9 @@ def add_desired_lang():
     level = request.form.get("level")
 
     #query languages db to get language name, not code
-    lang_name = dbsession.query(Language).filter_by()
-    session['language']=language_code
+    lang = dbsession.query(Language).filter_by(language_code=language_code).first()
+
+    session['language']=lang.language_name
     session['level']=level
 
     print session
@@ -124,7 +125,7 @@ def add_reason():
     reason = request.form.get("reason")
     #add to session
     session['reason']=reason
-
+    print session
 
     #create instance of user and 
     #input all info into user table in database
@@ -143,9 +144,12 @@ def add_reason():
     print session
     print usr
 
+    lang = dbsession.query(Language).filter_by(language_name=session['language']).first()
+    print lang.language_code
+
     lang_desired = Language_desired(
                 user_id=usr.id,
-                language_code = session['language'],
+                language_code = lang.language_code,
                 level = session['level']     
                 )
 
@@ -221,6 +225,7 @@ def join(message):
 
     #if the msg from 2nd player, send msg 'start_game' to client
     else:
+    	print "hello"
         emit('start_game',
               {'data': "%s has joined %s" % (session['login'], message['room']),
               'room_name': message['room']})
@@ -246,6 +251,7 @@ def fetch_game_content(message):
     #fetch game content in a list by 2nd usr's reason in users table
     usr = dbsession.query(User).filter_by(name=session["login"]).first()
 
+    print "fetching game content"
     game_content_list = []
     card_url_list = []
 
@@ -294,32 +300,32 @@ def fetch_nxt_q(message):
 #------------------end beginning of game--------
 
 
-#message sending back to clientA (client who sent original message)
-@socketio.on('message', namespace='/chat')
-def test_message(message):
-    session['receive_count'] = session.get('receive_count', 0) + 1
-    emit('output to log',
-         {'data': message['data'], 'count': session['receive_count']})
+# #message sending back to clientA (client who sent original message)
+# @socketio.on('message', namespace='/chat')
+# def test_message(message):
+#     session['receive_count'] = session.get('receive_count', 0) + 1
+#     emit('output to log',
+#          {'data': message['data'], 'count': session['receive_count']})
 
 
-#emitting message to ALL connected users via "broadcast=true"
-@socketio.on('my broadcast event', namespace='/chat')
-def test_message(message):
-    session['receive_count'] = session.get('receive_count', 0) + 1
-    emit('output to log',
-         {'data': message['data'], 'count': session['receive_count']},
-         broadcast=True)
+# #emitting message to ALL connected users via "broadcast=true"
+# @socketio.on('my broadcast event', namespace='/chat')
+# def test_message(message):
+#     session['receive_count'] = session.get('receive_count', 0) + 1
+#     emit('output to log',
+#          {'data': message['data'], 'count': session['receive_count']},
+#          broadcast=True)
 
 
-#send a message to just those clients in the room
-@socketio.on('my room event', namespace='/chat')
-def send_room_message(message):
-    session['receive_count'] = session.get('receive_count', 0) + 1
-    print session
-    #emitting to users in the room via "room=message..."
-    emit('output to log',
-         {'data': message['data'], 'count': session['receive_count']},
-         room=message['room'])
+# #send a message to just those clients in the room
+# @socketio.on('my room event', namespace='/chat')
+# def send_room_message(message):
+#     session['receive_count'] = session.get('receive_count', 0) + 1
+#     print session
+#     #emitting to users in the room via "room=message..."
+#     emit('output to log',
+#          {'data': message['data'], 'count': session['receive_count']},
+#          room=message['room'])
 
 
 if __name__ == "__main__":

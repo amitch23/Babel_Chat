@@ -1,34 +1,94 @@
 {% extends 'base.html' %}
 {% block body %}
 
-<div id="signup_box">
-    <form method="post" action="/add_new_usr" id="new_usr">
+
+<div id="">
+    <form method="post" action="/add_new_usr" id="login" class='form-signin' role='form'>
+    {% for msg in get_flashed_messages() %}
+              {{ msg }}
+        {% endfor %}
+
         <h1> Create New Profile</h1>
         <p></p>
 
          <div id="fullname">
-            <p>Full Name</p>
-            <input type="text" name="fullname">
+            <input type="text" name="fullname" class='form-control' placeholder="Full Name" required>
         </div>
 
-        <div id="email">
-            <p>Email</p>
-            <input type="text" name="email">
+         <div id="email">
+            <input type="email" name="email" class="form-control" placeholder="email" required>
         </div>
 
         <div id="password">
-            <p>Password</p>
-            <input type="text" name="password">
+            <input type="password" name="password" class="form-control" placeholder="Password" required>
         </div>
 
-         <div id="mother_tongue">
-            <p>Mother Tongue</p>
-          <select name="mother_tongue">
-              <option value="en-US">English</option>
+    
+<!-- 
+  <div class="dropdown" id="mother_tongue">
+      <a id="dLabel" data-target="#" href="" data-toggle="dropdown" aria-haspopup="true" role="button" aria-expanded="false">
+        Mother Tongue:
+        <span class="caret"></span>
+      </a>
+
+      <select name="mother_tongue">
+       <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+        <li class="active" role="presentation"><a role="menuitem" tabindex="-1" href="#">Action</a></li>
+              <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Another action</a></li>
+              <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Something else here</a></li>
+              <li role="presentation" class="divider"></li>
+              <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Separated link</a></li>
+      </ul>
+</div> -->
+
+
+<!--   <div class="dropdown">
+  <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true">
+    Dropdown
+    <span class="caret"></span>
+  </button>
+  <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+    <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Action</a></li>
+    <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Another action</a></li>
+    <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Something else here</a></li>
+    <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Separated link</a></li>
+  </ul>
+</div> -->
+
+    <!--      <div id="mother_tongue_selector">
+            <h4>Mother Tongue</h4>
+          <select class="select" name="mother_tongue">
+              <option class="option_dd" value="en-US">English</option>
               <option value="es-ES">Spanish</option>
               <option value="fr-FR">French</option>
            </select>
         </div>
+
+ -->
+
+<div class="dropdown">
+  <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true">
+    Dropdown
+    <span class="caret"></span>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-right cntr" role="menu" aria-labelledby="dropdownMenu1" id="language-dropdown">
+    <li role="presentation"><a role="menuitem" data-lang-id="en" tabindex="-1" href="#">Action</a></li>
+    <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Another action</a></li>
+    <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Something else here</a></li>
+    <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Separated link</a></li>
+  </ul>
+</div>
+
+<script>
+  $("select a tag inside ul with id language-dropdown").click(function(e){
+    e.preventDefault();
+    console.log(this);
+    var formValue = $(this).attr("data-lang-id");
+    $.post("/flask_route", {data: formValue})
+  })
+
+
+</script>
 
         <div id="country_code">
             <p>Country of Residence</p>
@@ -44,5 +104,18 @@
 
 
 </div> 
+
+<script>
+  $("Select button").click(function(e){
+    e.preventDefault();
+    console.log(this);
+    $("select the form tag").serialize();
+    var formValue = $(this).attr("data-lang-id");
+    $.post("/flask_route", {data: formValue})
+  })
+
+
+</script>
+
 
 {% endblock %}

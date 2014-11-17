@@ -1,8 +1,8 @@
 {% extends 'base.html' %}
 {% block body %}
 
-<div id="reason">
-    <form method="post" action="/add_reason" id="add_reason">
+<div id="login_box">
+    <form method="post" action="/add_reason" id="add_reason" class="form-signin" role="form">
         <h1> Why are you learning {{ session["language"] }}?</h1>
         <p></p>
 
@@ -21,7 +21,6 @@
 </div> 
 
 
-</form>
 
 </div>
 {% endblock %}

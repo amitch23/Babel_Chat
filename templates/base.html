@@ -77,7 +77,7 @@
 
           <ul class="nav navbar-nav navbar-right">
             {% if session.get("login", False) %}
-                <li class="active"><a href="/profile">{{ user.name }}<span class='sr-only'>(current)</span></a></li>
+                <li class="active"><a href="/profile">{{ session['login'] }}<span class='sr-only'>(current)</span></a></li>
               {% endif %}
 
               {% if session.get("login", False) %}
@@ -106,8 +106,7 @@
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
     <script src="../static/js/bootstrap.min.js"></script>
-    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
-    <script src="../../assets/js/ie10-viewport-bug-workaround.js"></script>
+
 
 
 
