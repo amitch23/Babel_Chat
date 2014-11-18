@@ -29,23 +29,15 @@ opentok = OpenTok(api_key, api_secret)
 toksession = opentok.create_session()
 
 
-
-
 @app.route("/clearsession")
 def clearsession():
     session.clear()
     return "session cleared"
-# @app.route("/")
-# def index():
-#     user_list = model.session.query(model.User).limit(5).all()
-#     return render_template("user_list.html", users=user_list)
 
 @app.route("/")
 def display_index():
 
     user = dbsession.query(User).get(1)
-
-
     print session
     #display index page with login form
     return render_template("index.html", user=user)
@@ -90,7 +82,7 @@ def create_new_user():
     country_code = request.form.get("country_code")
 
 
-    #check in db if email is there, if not add all info to session
+    #check in db if email, if not add all info to session
     if dbsession.query(User).filter_by(email = email).first():
         flash("Sorry this email is taken. Please use another one.")
         return redirect("/signup")
@@ -105,11 +97,9 @@ def create_new_user():
         #redirect to next form
         return redirect("/language_desired")
 
-
 @app.route("/language_desired")
 def lang_desired():
     return render_template("languages_desired.html")
-
 
 @app.route("/add_desired_lang", methods=['POST'])
 def add_desired_lang():
@@ -171,12 +161,12 @@ def add_reason():
     dbsession.add(lang_desired)
     dbsession.commit()
 
+    #clear session to get rid of superfluous info
     session.clear()
     #add info to session 
     session["login"] = usr.name
     session["mother_tongue"] = usr.language.language_name
     # session["lang_desired"] = usr.Language_desired[0].language.language_name
-
     return redirect("/profile") 
 
 
@@ -194,41 +184,7 @@ def logout():
     session.clear()
     return redirect("/")
 
-# ------------------ sockets fired upon url below! --------------------#
-
-
-# @app.route("/tokvideotest")
-# def hello():
-#     key = api_key
-#     session_id = session.session_id
-#     token = opentok.generate_token(session_id)
-#     return render_template('tokvideotest1.html', api_key=key, session_id=session_id, token=token)
-
-
-# @app.route("/test")
-# def test2():
-
-#      #handles opentok session, token creation    
-
-#     key = api_key
-#     session_id = toksession.session_id
-#     token = opentok.generate_token(session_id)    
-
-#     user = dbsession.query(User).filter_by(name=session['login']).first()
-
-#     start = request.args.get('start')
-#     room_name = None
-
-    
-#     if start:
-#         room_name = session['login'] + "\'s " + session["mother_tongue"] + " Room" 
-#     print room_name
-
-
-#     return render_template("test3.html", api_key=key, session_id=session_id, token=token)
-
-
-
+# --------- sockets fired below! ------------------#
 
 @app.route("/video_chat")
 def video_chat():
@@ -251,16 +207,11 @@ def video_chat():
     print session
     return render_template("videochat.html", user=user, room_name=room_name, api_key=key, session_id=session_id, token=token)
 
-
-# @app.route("/tokvideotest")
-# def tok_test():
-#     return render_template("tokvideotest.html")
-
 #--------------------------------------------------^^
      #flask routes above, socket.io handlers below
 #--------------------------------------------------
 
-#----handles join/leave room/connecting socket functionality-------
+#----handles join/leave room/connecting socket and start game-------
 
 
 @socketio.on('join', namespace='/chat')
@@ -285,11 +236,9 @@ def join(message):
 
     #if the msg from 2nd player, send msg 'start_game' to client
     else:
-    	print "hello"
         emit('start_game',
               {'data': "%s has joined %s" % (session['login'], message['room']),
               'room_name': message['room']})
-
 
 
 @socketio.on('leave', namespace='/chat')
@@ -304,7 +253,7 @@ def leave_the_room(message):
          {'data': 'In rooms: ' + ', '.join(request.namespace.rooms),
           'count': session['receive_count']}) 
 
-#---------------------handles starting game and game moves-----------------#
+#--------handles game moves-----------------#
 
 @socketio.on("get_game_content", namespace = '/chat')
 def fetch_game_content(message):
@@ -346,7 +295,7 @@ def fetch_game_content(message):
               room=message['room'])
 
 
-# gets counter # and sends room name and counter # to both clients in room
+# sends room name and msg to both clients for game 'loops'
 @socketio.on("request_nxt_q", namespace='/chat')
 def fetch_nxt_q(message):
     if message.get("game_type") == "cards":
@@ -355,38 +304,7 @@ def fetch_nxt_q(message):
         emit("display_nxt_q",
           {'room':message['room'], "counter":message['counter']}, room=message['room'])
 
-
-
-#------------------end beginning of game--------
-
-
-# #message sending back to clientA (client who sent original message)
-# @socketio.on('message', namespace='/chat')
-# def test_message(message):
-#     session['receive_count'] = session.get('receive_count', 0) + 1
-#     emit('output to log',
-#          {'data': message['data'], 'count': session['receive_count']})
-
-
-# #emitting message to ALL connected users via "broadcast=true"
-# @socketio.on('my broadcast event', namespace='/chat')
-# def test_message(message):
-#     session['receive_count'] = session.get('receive_count', 0) + 1
-#     emit('output to log',
-#          {'data': message['data'], 'count': session['receive_count']},
-#          broadcast=True)
-
-
-# #send a message to just those clients in the room
-# @socketio.on('my room event', namespace='/chat')
-# def send_room_message(message):
-#     session['receive_count'] = session.get('receive_count', 0) + 1
-#     print session
-#     #emitting to users in the room via "room=message..."
-#     emit('output to log',
-#          {'data': message['data'], 'count': session['receive_count']},
-#          room=message['room'])
-
+#------------------end of game moves --------
 
 if __name__ == "__main__":
     socketio.run(app, host="0.0.0.0")

@@ -1,73 +1,7 @@
-{% extends 'base.html' %}
-{% block body %}
-
-
-    <script src="//static.opentok.com/webrtc/v2.2/js/TB.min.js"></script>
-    <script type="text/javascript">
-        var apiKey = '{{ api_key }}';
-        var sessionId = '{{ session_id }}';
-        var token = '{{ token }}';
-    </script>
-    <script src="{{ url_for('static', filename='js/test3.js') }}"></script>
-
-
-<div id="videochat_wrapper">
-
-<div id="video_wrapper">
-
-    <div id="publisher"></div>
-
-    <div id="subscribers"></div>
-
-
-</div>
-
-<div id="game_wrapper">
-
-
-<div id="game_forms">
-
-<div id="join_button_placeholder"><button id='join_room' class="hidden">Join </button></div>
-
-
-<div id="next_placeholder"><button id='nxt_q' class="hidden">Next</button></div>
-
-<div id="next_card_placeholder"><button id='nxt_card' class="hidden">Next Card</button></div>
-
-
-<div id="game_content"></div>
-
-<div id="card_wrapper"></div> 
-
-
-<h3>Messages received:</h3>
-<div id="log"></div>
-
-
-</div><!--game forms-->
-
-</div><!--game_wrapper-->
-
-<button id="end_session_btn">End Video Chat session</button>
-</div><!--videochat_wrapper-->
-
-
-
-
-
-
-
-
-
-<script type="text/javascript" charset="utf-8">
-   
-//handle connect sockets and join/leave room functionality
-
-
-
     var in_room = null;
     
     $(document).ready(function(){
+        console.log("sockets fired");
         namespace = '/chat';
 
         var socket = io.connect('http://' + document.domain + ':' + location.port + namespace);
@@ -180,10 +114,6 @@
             socket.emit("request_nxt_q", {counter:counter+1, room: room_name, game_type:"cards", });
         });
 
-        $("#end_session_btn").click(function () {
-            session.disconnect();
-
-        });
         
         // displays next card by updated counter #
         socket.on("display_nxt_card", function(msg) {
@@ -216,25 +146,10 @@
             }
         });
 
-
-        // $('form#leave').submit(function(event) {
-        //     socket.emit("leave", {room: $("#leave_room").val()});
-        //     return false;
-
-        // });
-
-//handle connect sockets and join/leave room functionality
-
         socket.on('output to log', function(msg) {
             console.log(msg);
             $('#log').append('<br>Received: ' + msg.data);
         });
-        
-    });
+    
+});
 
-  
-
-
-</script>
-
-{% endblock %}
