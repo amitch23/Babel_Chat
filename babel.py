@@ -205,33 +205,15 @@ def logout():
 #     return render_template('tokvideotest1.html', api_key=key, session_id=session_id, token=token)
 
 
-@app.route("/test")
-def test2():
+# @app.route("/test")
+# def test2():
 
-     #handles opentok session, token creation    
-
-    key = api_key
-    session_id = toksession.session_id
-    token = opentok.generate_token(session_id)    
-
-
-
-    return render_template("test3.html", api_key=key, session_id=session_id, token=token)
-
-
-
-
-# @app.route("/video_chat")
-# def video_chat():
-
-#     #handles opentok session, token creation    
-#     opentok = OpenTok(api_key, api_secret)
-#     toksession = opentok.create_session()
+#      #handles opentok session, token creation    
 
 #     key = api_key
 #     session_id = toksession.session_id
 #     token = opentok.generate_token(session_id)    
-    
+
 #     user = dbsession.query(User).filter_by(name=session['login']).first()
 
 #     start = request.args.get('start')
@@ -240,8 +222,34 @@ def test2():
     
 #     if start:
 #         room_name = session['login'] + "\'s " + session["mother_tongue"] + " Room" 
-#     print session
-#     return render_template("videochat.html", user=user, room_name=room_name, api_key=key, session_id=session_id, token=token)
+#     print room_name
+
+
+#     return render_template("test3.html", api_key=key, session_id=session_id, token=token)
+
+
+
+
+@app.route("/video_chat")
+def video_chat():
+
+    #handles opentok session, token creation    
+
+    key = api_key
+    session_id = toksession.session_id
+    token = opentok.generate_token(session_id)    
+    
+    user = dbsession.query(User).filter_by(name=session['login']).first()
+
+    start = request.args.get('start')
+    room_name = None
+
+    
+    if start:
+        room_name = session['login'] + "\'s " + session["mother_tongue"] + " Room" 
+
+    print session
+    return render_template("videochat.html", user=user, room_name=room_name, api_key=key, session_id=session_id, token=token)
 
 
 # @app.route("/tokvideotest")

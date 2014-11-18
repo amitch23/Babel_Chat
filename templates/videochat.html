@@ -2,7 +2,7 @@
 {% extends 'base.html' %}
 {% block body %}
 
-<!--enables webrtc in this template, when usr starts game -->
+<!--enables webrtc in this template, when usr enters videochat.html -->
   <script src="//static.opentok.com/webrtc/v2.2/js/TB.min.js"></script>
     <script type="text/javascript">
         var apiKey = '{{ api_key }}';
@@ -10,7 +10,7 @@
         var token = '{{ token }}';
         console.log("token1" + token);
     </script>
-    <script src="{{ url_for('static', filename='js/toktest.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/tok.js') }}"></script>
 
 
 
