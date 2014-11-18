@@ -56,13 +56,15 @@
 
 
         //display 1st game element to both clients
-        socket.on("display_game_content", function(msg) {
+        socket.on("display_convo_content", function(msg) {
             
             //save content as list in game_content_list (global var) 
             for (var i = 0; i < msg.game_content.length; i++) {
                 game_content_list.push(msg.game_content[i]);
             };
             counter = 0;
+            //display instructions for game
+
             //display first question
             $('#game_content').append(msg.game_content[counter]);
            //remove hidden class on 'next' button
@@ -110,11 +112,12 @@
  
         //event listener for next card button
         $("#nxt_card").click(function(evt) {
-            //request next card from server
+            //request next card from server and increase counter by 1
             socket.emit("request_nxt_q", {counter:counter+1, room: room_name, game_type:"cards", });
         });
 
         
+
         // displays next card by updated counter #
         socket.on("display_nxt_card", function(msg) {
             //get next item in list by counter
@@ -146,6 +149,8 @@
             }
         });
 
+
+        //debugging, print to browser
         socket.on('output to log', function(msg) {
             console.log(msg);
             $('#log').append('<br>Received: ' + msg.data);

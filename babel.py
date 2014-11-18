@@ -269,7 +269,7 @@ def fetch_game_content(message):
         for q in job_qs:
             game_content_list.append(q.question)
             
-        emit("display_game_content",
+        emit("display_convo_content",
               {'room':message['room'], 'game_content':game_content_list}, 
               room=message['room'])
 
@@ -278,7 +278,7 @@ def fetch_game_content(message):
         for q in travel_qs:
             game_content_list.append(q.question)
 
-        emit("display_game_content",
+        emit("display_convo_content",
               {'room':message['room'], 'game_content':game_content_list}, 
               room=message['room'])
 
