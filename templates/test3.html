@@ -1,41 +1,20 @@
-
 {% extends 'base.html' %}
 {% block body %}
 
-<!--enables webrtc in this template, when usr starts game -->
-  <script src="//static.opentok.com/webrtc/v2.2/js/TB.min.js"></script>
+
+    <script src="//static.opentok.com/webrtc/v2.2/js/TB.min.js"></script>
     <script type="text/javascript">
         var apiKey = '{{ api_key }}';
         var sessionId = '{{ session_id }}';
         var token = '{{ token }}';
-        console.log("token1" + token);
     </script>
-    <script src="{{ url_for('static', filename='js/toktest.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/test3.js') }}"></script>
+    <h2>Hello, World!</h2>
 
+<!--     <div id="publisher"></div>
 
-
-<!-- 
-<p>
-    name: {{ user.name }}<br/>
-    email: {{ user.email }}<br/>
-    native language: {{ user.language.language_name }}<br/>
-    country: {{ user.country.country_name }}<br/>
-
-    <strong><ul>Wants to learn</ul></strong>
-   {% for lang in user.Language_desired %}
-        <li>{{ lang.language.language_name }}</li>
-   {% endfor %}<br/>
-
-
-    {% if room_name %}
-        {{ user.name }} is starting room: {{ room_name }}
-    {% else %}
-        {{ user.name }} is in the waiting room.
-    {% endif %}
-
-
-  </p> -->
-
+    <div id="subscribers"></div>
+ -->
 <div id="videochat_wrapper">
 
 <div id="video_wrapper">
@@ -76,33 +55,11 @@
 <button id="end_session_btn">End Video Chat session</button>
 </div><!--videochat_wrapper-->
 
-<!-- 
- <form id="join" method='POST' action="#">
-    <input type="text" name="join_room" id="join_room" placeholder="Room Name">
-    <input type="submit" value="Join Room">
- </form> -->
 
 
- <!-- <form id="send_msg_to_clientA" method='POST' action='#'>
-        <input type="text" name="emit_data" id="emit_data" placeholder="Message">
-        <input type="submit" value="Send back to original sender"></div>
- </form> -->
 
-<!--   <form id="broadcast_to_all" method='POST' action='#'>
-        <input type="text" name="broadcast_data" id="broadcast_data" placeholder="Message">
-        <input type="submit" value="Broadcast to everyone (in any room)">
-    </form>
 
-    <form id="send_msg_to_room" method='POST' action='#'>
-        <input type="text" name="room_name" id="room_name" placeholder="Room Name">
-        <input type="text" name="room_data" id="room_data" placeholder="Message">
-        <input type="submit" value="Send to Room">
-    </form>
 
-    <form id="leave" method='POST' action='#'>
-        <input type="text" name="leave_room" id="leave_room" placeholder="Room Name">
-        <input type="submit" value="Leave Room">
-    </form> -->
 
 
 
@@ -283,7 +240,5 @@
 
 
 </script>
-
-
 
 {% endblock %}

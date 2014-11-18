@@ -14,3 +14,11 @@ greenlet==0.4.2
 itsdangerous==0.23
 ujson==1.33
 wsgiref==0.1.2
+
+
+-e git+https://github.com/opentok/Opentok-Python-SDK.git@2634cd1adfd0e06b83f8adb202d9a1a648cd13df#egg=opentok-master
+pytz==2014.9
+requests==2.4.3
+six==1.8.0
+MarkupSafe==0.23
+enum34==1.0.3

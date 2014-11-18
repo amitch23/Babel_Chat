@@ -4,17 +4,32 @@ monkey.patch_all()
 from flask import Flask, render_template, redirect, request, flash, session
 from model import User, Country, Language, Language_desired, Game, Conversation, session as dbsession 
 import jinja2
-
 import time
 from threading import Thread
 from flask.ext.socketio import SocketIO, emit, join_room, leave_room
 
 
+from opentok import OpenTok
+import os
+
+try:
+    api_key = os.environ['API_KEY']
+    api_secret = os.environ['API_SECRET']
+except Exception:
+    raise Exception('You must define API_KEY and API_SECRET environment variables')
+
+
 app = Flask(__name__)
-app.debug = True
+app.debug=True
 app.config['SECRET_KEY']='secret!'
 socketio=SocketIO(app)
 thread=None
+
+opentok = OpenTok(api_key, api_secret)
+toksession = opentok.create_session()
+
+
+
 
 @app.route("/clearsession")
 def clearsession():
@@ -181,20 +196,57 @@ def logout():
 
 # ------------------ sockets fired upon url below! --------------------#
 
-@app.route("/video_chat")
-def video_chat():
+
+# @app.route("/tokvideotest")
+# def hello():
+#     key = api_key
+#     session_id = session.session_id
+#     token = opentok.generate_token(session_id)
+#     return render_template('tokvideotest1.html', api_key=key, session_id=session_id, token=token)
+
+
+@app.route("/test")
+def test2():
+
+     #handles opentok session, token creation    
+
+    key = api_key
+    session_id = toksession.session_id
+    token = opentok.generate_token(session_id)    
+
+
+
+    return render_template("test3.html", api_key=key, session_id=session_id, token=token)
+
+
+
+
+# @app.route("/video_chat")
+# def video_chat():
+
+#     #handles opentok session, token creation    
+#     opentok = OpenTok(api_key, api_secret)
+#     toksession = opentok.create_session()
+
+#     key = api_key
+#     session_id = toksession.session_id
+#     token = opentok.generate_token(session_id)    
+    
+#     user = dbsession.query(User).filter_by(name=session['login']).first()
+
+#     start = request.args.get('start')
+#     room_name = None
 
     
-    user = dbsession.query(User).filter_by(name=session['login']).first()
+#     if start:
+#         room_name = session['login'] + "\'s " + session["mother_tongue"] + " Room" 
+#     print session
+#     return render_template("videochat.html", user=user, room_name=room_name, api_key=key, session_id=session_id, token=token)
 
-    start = request.args.get('start')
-    room_name = None
 
-    if start:
-        room_name = session['login'] + "\'s " + session["mother_tongue"] + " Room" 
-    print session
-    return render_template("videochat.html", user=user, room_name=room_name)
-
+# @app.route("/tokvideotest")
+# def tok_test():
+#     return render_template("tokvideotest.html")
 
 #--------------------------------------------------^^
      #flask routes above, socket.io handlers below
@@ -329,5 +381,5 @@ def fetch_nxt_q(message):
 
 
 if __name__ == "__main__":
-    socketio.run(app)
+    socketio.run(app, host="0.0.0.0")
     # app.run(debug=True)
