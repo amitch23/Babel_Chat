@@ -208,6 +208,12 @@ margin-right:100px;
 }
 
 #publisher {
-	width:700px;
 
 }
+
+#subscribers {
+	float: right;
+	margin-top: -100px;
+
+}
+
