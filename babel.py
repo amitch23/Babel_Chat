@@ -70,7 +70,13 @@ def login():
 @app.route("/signup")
 def sign_up():
     print session
-    return render_template("signup.html")
+    if session.get('login', False):
+        flash("You are already logged in.")
+
+        return redirect("/")
+
+    else:
+        return render_template("signup.html")
 
 @app.route("/add_new_usr", methods=['POST'])
 def create_new_user():
@@ -103,20 +109,23 @@ def lang_desired():
 
 @app.route("/add_desired_lang", methods=['POST'])
 def add_desired_lang():
-
+    print session
     #get input from user
     language_code = request.form.get("language")
     level = request.form.get("level")
 
-    #query languages db to get language name, not code
-    lang = dbsession.query(Language).filter_by(language_code=language_code).first()
+    if language_code and level:
 
-    session['language']=lang.language_name
-    session['level']=level
+        #query languages db to get language name, not code
+        lang = dbsession.query(Language).filter_by(language_code=language_code).first()
 
-    print session
-    #pass language as variable to 
-    return redirect("/reason")
+        session['language']=lang.language_name
+        session['level']=level
+        return redirect("/reason")
+
+    else:
+        flash("Please fill out all the info.")
+   
 
 @app.route("/reason")
 def reason():
@@ -131,6 +140,7 @@ def add_reason():
     #add to session
     session['reason']=reason
     print session
+
 
     #create instance of user and 
     #input all info into user table in database
@@ -212,6 +222,13 @@ def video_chat():
 #--------------------------------------------------
 
 #----handles join/leave room/connecting socket and start game-------
+
+# @socketio.on('waiting_room',namespace='/chat')
+# def waiting(message):
+#     #returns names of people in waiting room
+#     in_waiting_room = []
+
+    
 
 
 @socketio.on('join', namespace='/chat')

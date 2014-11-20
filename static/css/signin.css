@@ -4,15 +4,17 @@ body {
   background-color: ;
 }
 
-
-
+.signupnav {
+  background-color: #6aa5a8 !important;
+}
+/*don't touch this*/
 .form-signin {
   max-width: 450px;
   padding: 35px;
   margin: 0 auto;
   background-color: #cdd4b8;
-  opacity: .8;
-  border-radius: 8px;
+  opacity: 1;
+  border-radius: 0px;
 
 }
 .form-signin .form-signin-heading,
@@ -49,8 +51,10 @@ body {
 
 }
 
-#login_box {
+#login_box {/*
   margin: 50px 0px 50px 0px;
+  */
+  margin: auto;
 
 }
 
@@ -62,17 +66,89 @@ body {
 #login_box button {
 
     background-color: #e9a34d;
-    border-color: #e9a34d;
+    border: none;
     width: 150px;
-   /* float: right;*/
+    float: right;
 
 }
 
 #login_box h1 {
 
- color: #c69c6d;
- font-size: 25px;
+ color: #626348;
+ font-size: 23px;
+ font-style: italic;
+
+
+}
+
+#signup {
+background-color: #fff;
+margin-top: 50px;
+border-radius: none !important;
+color: #363636;
 }
 
 
+#signup_upper_bar {
+background: #f6f6f6;
+max-width: 450px;
+margin: auto;
+}
+
+
+
+#signup_upper_bar h1{
+color: #363636;
+font-size: 20px;
+text-align: left;
+padding: 20px;
+margin: 50px 0px -50px 0px;
+}
+
+
+
+
+#signup_lwr_bar {
+background: #f6f6f6;
+max-width: 450px;
+margin: auto;
+padding: 20px;
+}
+
+
+#signup_lwr_bar button{
+
+background-color: #fff;
+color: #767676;
+border: 1px solid#d3d3d3;
+padding: 8px 20px 8px 20px;
+margin-left: 220px;
+}
+
+
+#signup_lwr_bar button:hover{
+
+background-color: #6aa5a8;
+color: #fff;
+
+
+}
+
+#signup select {
+margin: 20px 0px 20px 0px;
+background-color: #fbf4e3;
+color: #838380;
+display: inline;
+font-style: italic;
+width: 150px;
+height: 35px;
+}
+
+
+#signup h4{
+text-align: left;
+font-size: 15px;
+padding: 20px;
+display: inline;
+}
 

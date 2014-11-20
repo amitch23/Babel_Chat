@@ -1,5 +1,5 @@
 
-{% extends 'base.html' %}
+{% extends 'base_in.html' %}
 {% block body %}
 
 <!--imports sockets.js from templates directory -->
@@ -46,6 +46,10 @@
 
 <div id="videochat_wrapper">
 
+{% for msg in get_flashed_messages() %}
+              {{ msg }}
+        {% endfor %}
+
 <div id="video_wrapper">
 
     <div id="publisher"></div>
@@ -59,6 +63,7 @@
 
 
 <div id="game_forms">
+<div id="waiting_room"></div>
 
 <div id="join_button_placeholder"><button id='join_room' class="hidden">Join </button></div>
 

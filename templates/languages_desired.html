@@ -1,40 +1,59 @@
-{% extends 'base.html' %}
+{% extends 'base_in.html' %}
 {% block body %}
 
-<div id="login_box">
-    <form method="post" action="/add_desired_lang" id="add_lang" class='form-signin' role='form'>
+<div id="signup_box_wrapper">
+
+  <div id="signup_upper_bar">
+      <h1>Create New Profile</h1>  
+  </div>
+
+    <form method="post" action="/add_desired_lang" id="signup" class='form-signin' role='form'>
+
     {% for msg in get_flashed_messages() %}
               {{ msg }}
         {% endfor %}
 
-        <h1> What Language do you want to learn?</h1>
-        <p></p>
 
          <div id="language">
-            <h4>Language</h4>
-           <select name="language">
+             <h4> I want to practice my: </h4>
+
+           <select name="language" required>
               <option value="en-US">English</option>
               <option value="es-ES">Spanish</option>
               <option value="fr-FR">French</option>
            </select>
         </div>
             
+        <div id="level">
+             <h4> Level: </h4>
 
+
+
+           <select name="level" required>
+              <option value="beginner">Beginner</option>
+              <option value="intermediate">Intermediate</option>
+              <option value="advanced">Advanced</option>
+           </select>
+        </div>
+            
+
+<!-- 
         <div id="level">
             <h4>Level</h4>
            <input type="radio" name="level" value="beginner">Beginner</input>
            <input type="radio" name="level" value="intermediate">Intermediate</input>
            <input type="radio" name="level" value="advanced">Advanced</input>
-        </div>
-
-
-        <button type="submit" id="submit_button" name="submit">Next</button> 
-
-
-</div> 
+        </div> -->
 
 
 
+ 
+
+</div>
+<div id="signup_lwr_bar">
+       <button type="submit" id="submit_button" name="submit">Next</button> 
+    </div>
+</form>
 
 <!-- 
 

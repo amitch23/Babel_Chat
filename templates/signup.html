@@ -1,15 +1,18 @@
-{% extends 'base.html' %}
+{% extends 'base_in.html' %}
 {% block body %}
 
 
-<div id="">
-    <form method="post" action="/add_new_usr" id="login" class='form-signin' role='form'>
+<div id="signup_box_wrapper">
+
+  <div id="signup_upper_bar">
+      <h1>Create New Profile</h1>  
+  </div>
+
+
+    <form method="post" action="/add_new_usr" id="signup" class='form-signin' role='form'>
     {% for msg in get_flashed_messages() %}
               {{ msg }}
         {% endfor %}
-
-        <h1> Create New Profile</h1>
-        <p></p>
 
          <div id="fullname">
             <input type="text" name="fullname" class='form-control' placeholder="Full Name" required>
@@ -42,43 +45,33 @@
 </div> -->
 
 
-<!--   <div class="dropdown">
-  <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true">
-    Dropdown
-    <span class="caret"></span>
-  </button>
-  <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
-    <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Action</a></li>
-    <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Another action</a></li>
-    <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Something else here</a></li>
-    <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Separated link</a></li>
-  </ul>
-</div> -->
-
-    <!--      <div id="mother_tongue_selector">
-            <h4>Mother Tongue</h4>
-          <select class="select" name="mother_tongue">
+         <div id="mother_tongue_selector">
+           
+          <h4>I'm fluent in:</h4> <select class="select" name="mother_tongue" required>
               <option class="option_dd" value="en-US">English</option>
               <option value="es-ES">Spanish</option>
               <option value="fr-FR">French</option>
            </select>
         </div>
 
- -->
 
-<div class="dropdown">
-  <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true">
-    Dropdown
-    <span class="caret"></span>
-  </button>
-  <ul class="dropdown-menu dropdown-menu-right cntr" role="menu" aria-labelledby="dropdownMenu1" id="language-dropdown">
-    <li role="presentation"><a role="menuitem" data-lang-id="en" tabindex="-1" href="#">Action</a></li>
-    <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Another action</a></li>
-    <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Something else here</a></li>
-    <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Separated link</a></li>
-  </ul>
-</div>
+        <div id="country_code_selector">
+            <h4>I live in:</h4>
+          <select name="country_code" required>
+              <option value="US">U.S.A.</option>
+              <option value="ES">Spain</option>
+              <option value="FR">France</option>
+           </select>
+        </div>
 
+</div><!--signup_box_wrapper end div-->
+
+  <div id="signup_lwr_bar">
+       <button type="submit" id="submit_button" name="submit">Next</button> 
+  </div>
+
+</form>
+<!-- 
 <script>
   $("select a tag inside ul with id language-dropdown").click(function(e){
     e.preventDefault();
@@ -88,24 +81,6 @@
   })
 
 
-</script>
-
-        <div id="country_code">
-            <p>Country of Residence</p>
-          <select name="country_code">
-              <option value="US">U.S.A.</option>
-              <option value="ES">Spain</option>
-              <option value="FR">France</option>
-           </select>
-        </div>
-
-        <button type="submit" id="submit_button" name="submit">Next</button> 
-
-
-
-</div> 
-
-<script>
   $("Select button").click(function(e){
     e.preventDefault();
     console.log(this);
@@ -114,8 +89,7 @@
     $.post("/flask_route", {data: formValue})
   })
 
-
 </script>
-
+ -->
 
 {% endblock %}

@@ -1,5 +1,5 @@
 /*
-Colors pallette, index:
+Color pallette, index:
 camel yellow: #e9a34d
 sage green: #cdd4b8
 input text gray: #838380
@@ -9,19 +9,25 @@ link brown: #534741
 Welcome text brown: #c69c6d
 Logo navy blue: #6aa5a8
 background cream: #fff4e3
+dark sage: #626348;
+
+f1c334
+background cream: #f3eddd
+input boxes: #f3eddd
+light gray: #f6f6f6
+dark gray: #363636
 
 */
 
 /* -------------------index.html and login forms------ */
-body {
-
-}
 
 html, body, h1, h2, h3, h4, h5, h6, p {
 
-font-family: "Open Sans"; !important
+font-family: "Open Sans" !important;
 
 }
+
+
 
 .navbar {
 max-height: 35px; !important
@@ -29,9 +35,9 @@ max-height: 35px; !important
 }
 
 .navbar-inverse {
-
-	background-color: #e9a34d; !important
-	color: #fff; !important
+	background-color: #e9a34d;
+/*	background-color: #e9a34d; !important
+*/	color: #fff; !important
 
 }
 .navbar-nav>li>a {
@@ -48,17 +54,17 @@ max-height: 35px; !important
 
 .navbar-inverse .navbar-collapse, .navbar-inverse .navbar-form{
 
-	border-color: #e9a34d; !important
+	border-color: none !important;
 }
 
 .navbar-inverse {
-
-	border-color: #e9a34d; !important
+	border: none !important;
 }
+
 
 .btn-primary {
 	background-color: #e9a34d; !important
-	border-color: #e9a34d; !important
+	border-color: #fff; !important
 }
 
 
@@ -115,12 +121,16 @@ background-color: #fbf4e3;
 
 }
 
-/*.select {
-background-color:  ;
-padding: 50px;
+
+input.form-control,input.form-control:focus {
+    border:none;
+    box-shadow: none;
+   -webkit-box-shadow: none;
+   -moz-box-shadow: none;
+   -moz-transition: none;
+   -webkit-transition: none;
 }
 
-*/
 /* --------------------videochat.html-----*/
 
 #videochat_wrapper {
@@ -165,6 +175,33 @@ visibility: hidden;
 #end_session_btn {
 
 background-color: #fff;
+color: rgb(60, 58, 58);
+margin: 25px 0px 0px 0px;
+padding: 8px;
+float: right;
+
+}
+
+#join_button_placeholder {
+
+color: rgb(60, 58, 58);
+margin: 25px 0px 0px 0px;
+padding: 8px;
+float: right;
+
+}
+
+#next_placeholder {
+
+color: rgb(60, 58, 58);
+margin: 25px 0px 0px 0px;
+padding: 8px;
+float: right;
+
+}
+
+#next_card_placeholder {
+
 color: rgb(60, 58, 58);
 margin: 25px 0px 0px 0px;
 padding: 8px;

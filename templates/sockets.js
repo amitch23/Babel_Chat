@@ -1,10 +1,14 @@
-    var in_room = null;
+    // var in_room = null;
     
+
     $(document).ready(function(){
-        console.log("sockets fired");
+
+
         namespace = '/chat';
 
         var socket = io.connect('http://' + document.domain + ':' + location.port + namespace);
+
+        console.log("sockets fired");
 
         var game_content_list = []; 
         var room_name = "{{ room_name }}";
@@ -12,17 +16,40 @@
         var placeholder_txt = "It's not your turn now. Listen to your partner and guess the word."
         var turn = false;
 
+        var in_room = [];
+
 
         //1.upon socket connection, emit the message "you're connected" to the client and send message "join" to server with room name
         socket.on('connect', function() {
+            //when user connects, send message with name (?) to the server to broadcast message back and jquery html the names to the div 'waiting_room' in html file. This will show all the entering users in the waiting room who is in the waiting room.
+
+            //if a user starts a game via the link on the profile page, they get added to the in_room array, a link is displayed to all users in the waiting room (but not that user). If one person clicks, they enter the room, their name is added to the in_room list. 
+
+            //if the other user tries to enter room via the button, they can't get in. If length of in-room is 2, don't add 3rd user. Give them a 'can't enter' message and ask if they want to create their own room
+
             $('#log').append("<br>You're connected");
+
+            // socket.emit("waiting_room", {});
+
+
+            $("#in_room").html("{{ user.name }}" + "in waiting room");
+           
+
+
+
             //if initiating usr, join room in server and invite others to join
             {% if room_name %}
                 //populate input box with room name if in room
                 //upon connect of initiating, join room
                 socket.emit('join', {start: 1, room: "{{ room_name }}" });
+                
+                // in_room.push("{{user.name}}");
+                // console.log(in_room);
+
             {% endif %}
             });
+
+
 
         //5. put a button on the page for jose when 1st client starts room to join the room and pass the room name and maybe his name?)
         socket.on('invite_to_join', function(msg) {
@@ -37,6 +64,8 @@
                     room_name = msg.room_name;
                 });
                 $("#navbar").addClass("hidden");
+                // in_room.push("{{user.name}}");
+                // console.log(in_room);
             {% endif %}
 
             //append received message to log div
@@ -48,6 +77,7 @@
 
         //msg 'start_game' to server to get game content
         socket.on("start_game", function(msg) {
+            console.log(in_room);
             console.log("game started");
             $('#join_room').addClass("hidden");
             room_name=msg.room_name; 
