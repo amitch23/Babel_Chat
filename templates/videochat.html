@@ -12,6 +12,7 @@
 <!--enables webrtc in this template, when usr enters videochat.html -->
   <script src="//static.opentok.com/webrtc/v2.2/js/TB.min.js"></script>
     <script type="text/javascript">
+
         var apiKey = '{{ api_key }}';
         var sessionId = '{{ session_id }}';
         var token = '{{ token }}';
@@ -51,10 +52,10 @@
         {% endfor %}
 
 <div id="video_wrapper">
-
+    <div id="subscribers"></div>
+    
     <div id="publisher"></div>
 
-    <div id="subscribers"></div>
 
 
 </div>
@@ -63,7 +64,12 @@
 
 
 <div id="game_forms">
-<div id="waiting_room"></div>
+
+<div id="waiting_room">
+    <ul id="waiting_room_list">
+        
+    </ul>
+</div>
 
 <div id="join_button_placeholder"><button id='join_room' class="hidden">Join </button></div>
 

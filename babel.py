@@ -223,21 +223,44 @@ def video_chat():
 
 #----handles join/leave room/connecting socket and start game-------
 
+
+
 # @socketio.on('waiting_room',namespace='/chat')
 # def waiting(message):
 #     #returns names of people in waiting room
-#     in_waiting_room = []
+#     print message
+#     print "message %s" % message['inroom']
+#     print "name %s" % message['name']
+
+#     #store info in db, query for people in room,
+#     #broadcast to all members. 
 
     
+#     emit('show_ppl_waiting',
+#              {"in_room": message['inroom'],
 
+#              },
+#              broadcast=True)
+
+
+room_list = {}
 
 @socketio.on('join', namespace='/chat')
 def join(message):
+    global room_list
+
+    #if length of the value of room_list['room'] is greater than 2
+    #emit msg that room is full to that user
+
     # join users to room
     join_room(message['room'])
+    room_list.setdefault(message['room'], [])
+    room_list[message['room']].append(session['login'])
+
   
     print message
     print session
+    print "room list: ", room_list
     
     #output info to log div in html with info about who's in room
     emit('output to log',
@@ -271,6 +294,12 @@ def leave_the_room(message):
           'count': session['receive_count']}) 
 
 #--------handles game moves-----------------#
+
+GAME_INSTRUCTIONS = {
+    'taboo': """
+    In her free time, Andrea enjoys songwriting, taking photos, and practicing her natural language skills.
+    """
+}
 
 @socketio.on("get_game_content", namespace = '/chat')
 def fetch_game_content(message):
@@ -306,6 +335,8 @@ def fetch_game_content(message):
         
         for card in game_cards:
             card_url_list.append(card.filename)
+
+        instructins = GAME_INSTRUCTIONS['taboo']
 
         emit("display_card_content",
               {'room':message['room'], 'card_content':card_url_list}, 

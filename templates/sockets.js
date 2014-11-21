@@ -15,12 +15,17 @@
         var counter = 0;
         var placeholder_txt = "It's not your turn now. Listen to your partner and guess the word."
         var turn = false;
-
         var in_room = [];
+
+
 
 
         //1.upon socket connection, emit the message "you're connected" to the client and send message "join" to server with room name
         socket.on('connect', function() {
+
+            in_room.push("{{user.name}}");
+            socket.emit("waiting_room", {inroom: "in the waiting room: " + in_room, name: "{{user.name}}"});
+
             //when user connects, send message with name (?) to the server to broadcast message back and jquery html the names to the div 'waiting_room' in html file. This will show all the entering users in the waiting room who is in the waiting room.
 
             //if a user starts a game via the link on the profile page, they get added to the in_room array, a link is displayed to all users in the waiting room (but not that user). If one person clicks, they enter the room, their name is added to the in_room list. 
@@ -29,14 +34,10 @@
 
             $('#log').append("<br>You're connected");
 
-            // socket.emit("waiting_room", {});
-
+            // socket.emit("waiting_room", {})
 
             $("#in_room").html("{{ user.name }}" + "in waiting room");
            
-
-
-
             //if initiating usr, join room in server and invite others to join
             {% if room_name %}
                 //populate input box with room name if in room
@@ -47,9 +48,17 @@
                 // console.log(in_room);
 
             {% endif %}
+
+            //if room_name==none, then join user to a room called waiting room.
             });
 
 
+        socket.on("show_ppl_waiting", function(msg) {
+            console.log("waiting room!!");
+            $("#waiting_room_list").append("<li>" + msg.in_room + "</li>");
+
+
+        });
 
         //5. put a button on the page for jose when 1st client starts room to join the room and pass the room name and maybe his name?)
         socket.on('invite_to_join', function(msg) {
@@ -62,11 +71,15 @@
                 $("#join_room").click(function(evt){
                     socket.emit('join', {start: 2, room: msg.room_name});
                     room_name = msg.room_name;
+                    //socket.emit('makebtndisappearforallotherusersinwaitingroom')
+                    //broadcast, new func in server to get Addclass('hidden') to the join room button
                 });
                 $("#navbar").addClass("hidden");
                 // in_room.push("{{user.name}}");
                 // console.log(in_room);
             {% endif %}
+
+
 
             //append received message to log div
             $('#log').append('<br>Received #' + msg.count + ': ' + msg.data);

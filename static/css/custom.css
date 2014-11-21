@@ -245,12 +245,12 @@ margin-right:100px;
 }
 
 #publisher {
-
+float:right;
+margin-top: -100px;
 }
 
 #subscribers {
-	float: right;
-	margin-top: -100px;
+
 
 }
 
