@@ -223,62 +223,45 @@ def video_chat():
 
 #----handles join/leave room/connecting socket and start game-------
 
+room_dict = {}
 
-
-# @socketio.on('waiting_room',namespace='/chat')
-# def waiting(message):
-#     #returns names of people in waiting room
-#     print message
-#     print "message %s" % message['inroom']
-#     print "name %s" % message['name']
-
-#     #store info in db, query for people in room,
-#     #broadcast to all members. 
-
-    
-#     emit('show_ppl_waiting',
-#              {"in_room": message['inroom'],
-
-#              },
-#              broadcast=True)
-
-
-room_list = {}
-
+#joins clients to room regardless of how they entered
 @socketio.on('join', namespace='/chat')
 def join(message):
-    global room_list
+    global room_dict
 
     #if length of the value of room_list['room'] is greater than 2
     #emit msg that room is full to that user
 
-    # join users to room
+    # join user to room
     join_room(message['room'])
-    room_list.setdefault(message['room'], [])
-    room_list[message['room']].append(session['login'])
+    #set key in room_dict to room_name
+    room_dict.setdefault(message['room'], [])
 
-  
-    print message
-    print session
-    print "room list: ", room_list
-    
-    #output info to log div in html with info about who's in room
-    emit('output to log',
-         {'data': 'In rooms: ' + message['room'],
-          'room': message['room']})
+    print "room dict: ", room_dict
 
-    #if the message was from game initiator, send msg to 2nd client to join 
+    #if the message was from game starter, add login name to room_dict and send msg to 2nd client to join 
     if message['start'] == 1:
+        room_dict[message['room']].append(session['login'])
         emit('invite_to_join',
-             { 'data': "%s created room %s" % (session["login"], message['room']), 
-               'room_name': message['room']},
+             {'room_name': message['room']},
              broadcast=True)
 
-    #if the msg from 2nd player, send msg 'start_game' to client
+    #if the msg from joiner, send msg 'start_game' to client
     else:
+        print session['login']
+        room_dict[message['room']].append(session['login'])
+        print room_dict
+        print room_dict[message['room']][0]
         emit('start_game',
-              {'data': "%s has joined %s" % (session['login'], message['room']),
+              {'starter': room_dict[message['room']][0], 'joiner':room_dict[message['room']][1],
               'room_name': message['room']})
+
+#sends msg who's in room to both clients
+@socketio.on("display_to_room", namespace='/chat')
+def send_unique_usr_data(message):
+    emit("room_message", {'starter':message['starter'], 'joiner':message['joiner'], 'room':message['room']}, room=message['room'])
+
 
 
 @socketio.on('leave', namespace='/chat')
@@ -290,8 +273,9 @@ def leave_the_room(message):
     print "---------"
     print session
     emit('output to log',
-         {'data': 'In rooms: ' + ', '.join(request.namespace.rooms),
-          'count': session['receive_count']}) 
+         {'count': session['receive_count']}) 
+
+
 
 #--------handles game moves-----------------#
 
@@ -336,7 +320,7 @@ def fetch_game_content(message):
         for card in game_cards:
             card_url_list.append(card.filename)
 
-        instructins = GAME_INSTRUCTIONS['taboo']
+        instructions = GAME_INSTRUCTIONS['taboo']
 
         emit("display_card_content",
               {'room':message['room'], 'card_content':card_url_list}, 
@@ -352,7 +336,10 @@ def fetch_nxt_q(message):
         emit("display_nxt_q",
           {'room':message['room'], "counter":message['counter']}, room=message['room'])
 
+
 #------------------end of game moves --------
+
+
 
 if __name__ == "__main__":
     socketio.run(app, host="0.0.0.0")

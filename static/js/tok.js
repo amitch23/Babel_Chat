@@ -2,7 +2,7 @@
 var session = TB.initSession(sessionId);
 
 // Initialize a Publisher, and place it into the element with id="publisher"
-var publisher = TB.initPublisher(apiKey, 'publisher', {width:150, height:100});
+var publisher = TB.initPublisher(apiKey, 'publisher', {width:180, height:130});
 // Attach event handlers
 session.on({
 

@@ -151,17 +151,18 @@ color: #1B1B1B;
 }
 
 #game_wrapper {
-width:300px;
+width:270px;
 height: 430px;
-background: #6aa5a8;
+background-image: url("../img/linen.png");
 float: right;
-color: #fff;
+color: #000;
+border: 1px solid #838380;
 }
 
 #game_forms {
 	padding: 25px;
-text-shadow: 0 1px 3px rgba(0,0,0,.5);
-
+/*text-shadow: 0 1px 3px rgba(0,0,0,.5);
+*/
 /*	background-color: red;
 */
 
@@ -246,7 +247,8 @@ margin-right:100px;
 
 #publisher {
 float:right;
-margin-top: -100px;
+overflow: visible;
+margin: -70px 0px 0px 0px;
 }
 
 #subscribers {
