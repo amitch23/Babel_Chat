@@ -51,6 +51,8 @@
 {% for msg in get_flashed_messages() %}
               {{ msg }}
         {% endfor %}
+<div id="game_wrapper_label"></div>
+
 
 <div id="video_wrapper">
     <div id="subscribers"></div>
@@ -66,13 +68,8 @@
 
 <div id="game_forms">
 
-<div id="game_wrapper_label"></div>
+<!-- <div id="game_wrapper_label"></div> -->
 
-<div id="waiting_room">
-    <ul id="waiting_room_list">
-        
-    </ul>
-</div>
 
 <div id="join_button_placeholder"><button id='join_room' class="hidden">Join </button></div>
 

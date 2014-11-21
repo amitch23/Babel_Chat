@@ -230,7 +230,7 @@ room_dict = {}
 def join(message):
     global room_dict
 
-    if len(room_dict[message['room']]) > 2:
+    # if len(room_dict[message['room']]) > 2:
         #send message to client trying to connect that the room is full. 
 
     # join user to room

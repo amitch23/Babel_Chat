@@ -42,9 +42,9 @@
         //once usrs in room, display msg to both re: who's in room with whom
         socket.on('room_message', function(msg) {
              {% if room_name==None %}
-                $("#game_wrapper_label").append("You're in " + msg.room + "with " + msg.starter)              
+                $("#game_wrapper_label").append("<p>You're in " + msg.room + " with " + msg.starter + "</p>")              
              {% elif room_name!=None %}
-                 $("#game_wrapper_label").append("You're in " + msg.room + "with " + msg.joiner)
+                 $("#game_wrapper_label").append("<p>You're in " + msg.room + " with " + msg.joiner + "</p>")
             {% endif %}       
         });
 
@@ -162,7 +162,7 @@
 
      socket.on('output to log', function(msg) {
             console.log(msg);
-            $('#log').append('<br>Received: ' + msg.);
+            $('#log').append('<br>Received: ');
         });
     
 
