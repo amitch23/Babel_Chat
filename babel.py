@@ -223,36 +223,48 @@ def video_chat():
 
 #----handles join/leave room/connecting socket and start game-------
 
-room_dict = {}
+rooms = []
 
 #joins clients to room and adds clients to room_dict
 @socketio.on('join', namespace='/chat')
 def join(message):
-    global room_dict
+    global rooms
 
-    # if len(room_dict[message['room']]) > 2:
-        #send message to client trying to connect that the room is full. 
+    print "rooms %s" % rooms
 
     # join user to room
     join_room(message['room'])
-    #set key in room_dict to room_name
-    room_dict.setdefault(message['room'], [])
-
-    print "room dict: ", room_dict
 
     #if the message was from game starter, add login name to room_dict and send msg to 2nd client to join 
     if message['start'] == 1:
-        room_dict[message['room']].append(session['login'])
+        # room_dict[message['room']].append(session['login'])
+
+        room = {}
+        room['room_name'] = message['room']
+        room['starter'] = session['login']
+
+        if len(rooms)==0:
+            rooms.append(room)
+        else:
+            rooms[0].setdefault('room_name', session['login'])
+        print rooms
+        
         emit('invite_to_join',
              {'room_name': message['room']},
              broadcast=True)
 
     #if the msg from joiner, send msg 'start_game' to client
     else:
-        room_dict[message['room']].append(session['login'])
+        #search the rooms list for a dictionary whose value for name is message["name"]
+        
+        rooms[0]['joiner'] = session['login']
+
+        print "rooms: ", rooms
+        print "starter: ", rooms[0]['starter']
+        print "joiner: ", rooms[0]['joiner']
+
         emit('start_game',
-              {'starter': room_dict[message['room']][0], 'joiner':room_dict[message['room']][1],
-              'room_name': message['room']})
+              {'starter': rooms[0]['starter'], 'joiner': rooms[0]['joiner'],'room_name': message['room']})
 
 
 #sends msg who's in room to both clients

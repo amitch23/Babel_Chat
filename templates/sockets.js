@@ -60,7 +60,7 @@
             starter=msg.starter;
             joiner=msg.joiner;
 
-            socket.emit("display_to_room", {starter: starter, joiner: joiner,room: msg.room_name});
+            socket.emit("display_to_room", {starter: starter, joiner: joiner, room: msg.room_name});
 
             socket.emit('get_game_content', {room: msg.room_name});
         });
