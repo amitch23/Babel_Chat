@@ -13,32 +13,18 @@
         var starter = false;
         var joiner = false;
 
-        //1.upon socket connection, send message "join" to server with room name
         socket.on('connect', function() {
-            //on socket connect, if the client started the room
+            //on socket connect, if client started the room, send msg to server.
 
-
-            //when user connects, send message with name (?) to the server to broadcast message back and jquery html the names to the div 'waiting_room' in html file. This will show all the entering users in the waiting room who is in the waiting room.
-
-            //if a user starts a game via the link on the profile page, they get added to the in_room array, a link is displayed to all users in the waiting room (but not that user). If one person clicks, they enter the room, their name is added to the in_room list. 
-
-            //if the other user tries to enter room via the button, they can't get in. If length of in-room is 2, don't add 3rd user. Give them a 'can't enter' message and ask if they want to create their own room
-
-            $('#log').append("<br>You're connected");
-           
-            //if initiating usr, send msg 'join' and invite others in waiting room to join
             {% if room_name %}
-                
                 socket.emit('join', {start: 1, room: "{{ room_name }}" });
-                
             {% endif %}
+            $('#log').append("<br>You're connected");
             });
 
-        //5. put a button on the page for jose when 1st client starts room to join the room and pass the room name and maybe his name?)
+        
         socket.on('invite_to_join', function(msg) {
             //invites usr in waiting room to join room via btn click
-            console.log(msg);
-
             {% if room_name==None %}
                 console.log("{{ user.name }}");
                 $("#join_room").removeClass('hidden');
@@ -51,21 +37,15 @@
                 });
                 $("#navbar").addClass("hidden");
             {% endif %}
-            //append received message to log div
-            // $('#log').append(msg.data);
         });
 
         //once usrs in room, display msg to both re: who's in room with whom
         socket.on('room_message', function(msg) {
-            console.log(msg);
              {% if room_name==None %}
-                $("#game_wrapper_label").append("You're in " + msg.room + "with " + msg.starter)
-                 
+                $("#game_wrapper_label").append("You're in " + msg.room + "with " + msg.starter)              
              {% elif room_name!=None %}
                  $("#game_wrapper_label").append("You're in " + msg.room + "with " + msg.joiner)
-                 
             {% endif %}       
-
         });
 
 //-----------handles starting conversation game-----------------------
@@ -182,7 +162,7 @@
 
      socket.on('output to log', function(msg) {
             console.log(msg);
-            $('#log').append('<br>Received: ' + msg.room + msg.starter + msg.joiner);
+            $('#log').append('<br>Received: ' + msg.);
         });
     
 

@@ -225,13 +225,13 @@ def video_chat():
 
 room_dict = {}
 
-#joins clients to room regardless of how they entered
+#joins clients to room and adds clients to room_dict
 @socketio.on('join', namespace='/chat')
 def join(message):
     global room_dict
 
-    #if length of the value of room_list['room'] is greater than 2
-    #emit msg that room is full to that user
+    if len(room_dict[message['room']]) > 2:
+        #send message to client trying to connect that the room is full. 
 
     # join user to room
     join_room(message['room'])
@@ -249,19 +249,16 @@ def join(message):
 
     #if the msg from joiner, send msg 'start_game' to client
     else:
-        print session['login']
         room_dict[message['room']].append(session['login'])
-        print room_dict
-        print room_dict[message['room']][0]
         emit('start_game',
               {'starter': room_dict[message['room']][0], 'joiner':room_dict[message['room']][1],
               'room_name': message['room']})
+
 
 #sends msg who's in room to both clients
 @socketio.on("display_to_room", namespace='/chat')
 def send_unique_usr_data(message):
     emit("room_message", {'starter':message['starter'], 'joiner':message['joiner'], 'room':message['room']}, room=message['room'])
-
 
 
 @socketio.on('leave', namespace='/chat')
@@ -276,12 +273,11 @@ def leave_the_room(message):
          {'count': session['receive_count']}) 
 
 
-
 #--------handles game moves-----------------#
 
 GAME_INSTRUCTIONS = {
     'taboo': """
-    In her free time, Andrea enjoys songwriting, taking photos, and practicing her natural language skills.
+    taboo instructions blabbidy bla di bla"
     """
 }
 
