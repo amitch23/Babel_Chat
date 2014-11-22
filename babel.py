@@ -8,6 +8,7 @@ import time
 from threading import Thread
 from flask.ext.socketio import SocketIO, emit, join_room, leave_room
 
+from random import choice
 
 from opentok import OpenTok
 import os
@@ -280,10 +281,9 @@ def leave_the_room(message):
 
 #--------handles game moves-----------------#
 
-GAME_INSTRUCTIONS = {
+GAME_INX = {
     'taboo': """
-    taboo instructions blabbidy bla di bla"
-    """
+    Your goal is to help your partner guess the word printed at the top of the card. You may say sentences or single words, but you may not say any of the words that are on the list, for these words are considered "taboo". (You can't say "baby" or "sitter" if the word is "babysitter")."""
 }
 
 @socketio.on("get_game_content", namespace = '/chat')
@@ -316,16 +316,29 @@ def fetch_game_content(message):
     #choose game randomly, import choice for list of ['taboo', 'guesswho', 'whereami']
     if usr.reason=="Fun":
         # need to distinguish game, maybe pass as additional data?
-        game_cards = dbsession.query(Game).filter_by(game_type="taboo").all()
-        
+        game_choice = choice(dbsession.query(Game.game_type).distinct().all())[0]
+
+        game_cards = dbsession.query(Game).filter_by(game_type=game_choice).all()
+
+        print game_cards
+                
+
         for card in game_cards:
             card_url_list.append(card.filename)
 
-        instructions = GAME_INSTRUCTIONS['taboo']
+        inx = GAME_INX['taboo']
+        print inx
 
         emit("display_card_content",
               {'room':message['room'], 'card_content':card_url_list}, 
               room=message['room'])
+
+@socketio.on("send_inx", namespace='/chat')
+def display_instructions(message):
+
+    emit("show_inx", {"inx": GAME_INX['taboo']}, room=message['room'])
+
+
 
 
 # sends room name and msg to both clients for game 'loops'

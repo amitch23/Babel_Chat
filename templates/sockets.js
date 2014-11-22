@@ -97,17 +97,19 @@
             $('#game_content').html(game_content_list[msg.counter]);
         });
 
-//-------------------handles card games and game moves-----------------------
+//--------------handles card games and game moves-----------------------
 
         socket.on("display_card_content", function(msg) {
 
             for (var i = 0; i < msg.card_content.length; i++) {
                     game_content_list.push(msg.card_content[i]);
                 };
-                console.log(msg.game_content_list);
+            
+            socket.emit("send_inx", {room: room_name});
            
             counter = 0;
            $('#nxt_card').removeClass('hidden');
+           //show inx to both players
 
             {% if room_name==None %}
                  $('#card_wrapper').html('<img src="' + game_content_list[counter] + '" id="card"></img>');
@@ -117,6 +119,16 @@
                 $('#game_content').html(placeholder_txt);
                 turn = false;
            {% endif %}
+
+        });
+
+
+        socket.on('show_inx', function(msg) {
+            console.log("show_inx hit");
+            $('#game_forms').append()
+
+
+            $('#inx').html('<p>' + msg.inx + '</p');
 
         });
 

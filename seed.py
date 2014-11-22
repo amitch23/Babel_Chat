@@ -159,6 +159,12 @@ def load_games(session):
     game_4 = ["taboo", "static/img/taboo4.jpg"]
     game_5 = ["taboo", "static/img/taboo5.jpg"]
 
+    game_6 = ["catchphrase", "catchphrase"]    
+    game_7 = ["catchphrase", "catchphrase"]
+    game_8 = ["catchphrase", "catchphrase"]
+    game_9 = ["catchphrase", "catchphrase"]    
+    game_10 = ["catchphrase", "catchphrase"]
+
     game1 = model.Game(
                         game_type=game_1[0],
                         filename=game_1[1])
@@ -179,12 +185,37 @@ def load_games(session):
                         game_type=game_5[0],
                         filename=game_5[1])
 
+    game6 = model.Game(
+                        game_type=game_6[0],
+                        filename=game_6[1])
+
+    game7 = model.Game(
+                        game_type=game_7[0],
+                        filename=game_7[1])
+
+    game8 = model.Game(
+                        game_type=game_8[0],
+                        filename=game_8[1])
+
+    game9 = model.Game(
+                        game_type=game_9[0],
+                        filename=game_9[1])
+
+    game10 = model.Game(
+                        game_type=game_10[0],
+                        filename=game_10[1])
+
 
     session.add(game1)
     session.add(game2)
     session.add(game3)
     session.add(game4)
     session.add(game5)
+    session.add(game6)
+    session.add(game7)
+    session.add(game8)
+    session.add(game9)
+    session.add(game10)
 
     session.commit()
     
