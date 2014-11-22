@@ -26,7 +26,7 @@ The Breakdown:
 -	babelchat.db: database that stores user, language, and game information
 
 - Templates directory: 
-  Html templates that implement Jinja to render pages in the browser, as well as sockets.js, which creates and handles websocket connection with the server for multiple-client functionality.
+  Html templates that implement Jinja to render pages in the browser, as well as sockets.js, which creates and handles websocket connectivity with the server for multiple-client functionality.
 
 
 - Static directory:
