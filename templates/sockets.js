@@ -66,23 +66,18 @@
         });
 
 
-        //display 1st game element to both clients
+        //display 1st convo question to both clients
         socket.on("display_convo_content", function(msg) {
-            
-            //save content as list in game_content_list (global var) 
+            //save content as list in game_content_list 
             for (var i = 0; i < msg.game_content.length; i++) {
                 game_content_list.push(msg.game_content[i]);
             };
             counter = 0;
-            //display instructions for game
-
-            //display first question
+            //need to display instructions for convo
             $('#game_content').append(msg.game_content[counter]);
-           //remove hidden class on 'next' button
-           $('#nxt_q').removeClass('hidden');
+            $('#nxt_q').removeClass('hidden');
         });
 
-        //event listener for nxt-question button
         $('#nxt_q').click(function(evt){
             socket.emit("request_nxt_q", {counter:counter+1, room: room_name});
         });
@@ -91,44 +86,40 @@
         socket.on("display_nxt_q", function(msg) {
             //get next item in list by counter
             counter = msg.counter;
-            console.log(" this is the room: {{ room_name}} ");
-            //if 
-
             $('#game_content').html(game_content_list[msg.counter]);
         });
 
 //--------------handles card games and game moves-----------------------
 
         socket.on('send_inx', function(msg) {
-            console.log('send inx hit');
-            socket.emit("show_inx", {room: room_name, game_name: msg.game_name});
-            $('#start_btn').removeClass('hidden');
+            for (var i = 0; i < msg.card_content.length; i++) {
+                    game_content_list.push(msg.card_content[i]);
+                };
+            socket.emit("show_inx", {room: room_name, game: msg.game});
         });
 
 
       socket.on('show_inx', function(msg) {
-            console.log("show_inx hit");
+            $("#game_title").html(msg.game)
             $('#inx').html('<p>' + msg.inx + '</p');
-
+            $('#start_btn').removeClass('hidden');
         });
 
+
       $("#start_btn").click(function(evt) {
-          //request next card from server and increase counter by 1
-          socket.emit("show_1st_card", {counter:counter+1, room: room_name, game_type:"cards", });
+        //send msg to server to show 1st card
+          socket.emit("send_1st_card", {room: room_name});
+          
       });
 
 
-
-
-        socket.on("display_card_content", function(msg) {
-            for (var i = 0; i < msg.card_content.length; i++) {
-                    game_content_list.push(msg.card_content[i]);
-                };
-                                
+        socket.on("display_1st_card", function(msg) {
+            $("#game_title").html('');
+            $('#inx').html('');
+            $('#start_btn').addClass('hidden');
+        
             counter = 0;
            $('#nxt_card').removeClass('hidden');
-           //show inx to both players
-
             {% if room_name==None %}
                  $('#card_wrapper').html('<img src="' + game_content_list[counter] + '" id="card"></img>');
                 turn = true;
@@ -137,59 +128,46 @@
                 $('#game_content').html(placeholder_txt);
                 turn = false;
            {% endif %}
-
         });
 
 
-      
- 
-        //event listener for next card button
         $("#nxt_card").click(function(evt) {
             //request next card from server and increase counter by 1
-            socket.emit("request_nxt_q", {counter:counter+1, room: room_name, game_type:"cards", });
+            socket.emit("request_nxt_q", {counter:counter+1, room: room_name, game_type:"cards"});
         });
 
         
-
         // displays next card by updated counter #
         socket.on("display_nxt_card", function(msg) {
-            //get next item in list by counter
-            
-            if (counter < game_content_list.length){
-                //switch values for turn for each player
+            //get next item in list by counter    
+            if (counter < game_content_list.length){    
                 turn = !turn;
                 counter = msg.counter;
-                //put placeholder txt, clear img src, hide nxt btn
                 if (turn==false) {
                     $('#game_content').html(placeholder_txt);
                     $('#card_wrapper').html('');
-
-                    // $('#card').attr('src', '');
                     $('#nxt_card').addClass('hidden');
                 }
-                //clear txt area, add next card img, unhide nxt btn
+
                 else {
                     $('#game_content').html('');
-                    // $('#card').attr('src', game_content_list[msg.counter]);
                     $('#card_wrapper').html('<img src="' + game_content_list[msg.counter] + '" id="card"></img>');
                     $('#nxt_card').removeClass('hidden');
                 }
             }
-
             else {
-                //clear button and image
+                //clear button and image for both (send msg to server)
                 //call another function to play again or end session
+                //redirect to profile page?
             }
         });
+
 
      socket.on('output to log', function(msg) {
             console.log(msg);
             $('#log').append('<br>Received: ');
         });
-    
-
-        //debugging, print to browser
-      
+          
     
 });
 

@@ -315,9 +315,9 @@ def fetch_game_content(message):
               {'room':message['room'], 'game_content':game_content_list}, 
               room=message['room'])
 
-    #choose game randomly, import choice for list of ['taboo', 'guesswho', 'whereami']
+    
     if usr.reason=="Fun":
-        # need to distinguish game, maybe pass as additional data?
+        #query database for random game, append urls to empty card_list
         game_choice = choice(dbsession.query(Game.game_type).distinct().all())[0]
 
         game_cards = dbsession.query(Game).filter_by(game_type=game_choice).all()
@@ -325,25 +325,23 @@ def fetch_game_content(message):
         for card in game_cards:
             card_url_list.append(card.filename)
 
-        emit("send_inx", {'room':message['room'], 'game_name': game_choice},  room=message['room'])    
+        emit("send_inx", {'room':message['room'], 'card_content':card_url_list, 'game':game_choice},  room=message['room'])    
 
 
 @socketio.on("show_inx", namespace='/chat')
 def display_instructions(message):
     print "show inx hit"
-    emit("show_inx", {"inx": GAME_INX[message['game_name']]}, room=message['room'])
+    print message
+    emit("show_inx", {"game": message['game'], "inx": GAME_INX[message['game']]}, room=message['room'])
 
 
-
-@socketio.on("show_1st_card", namespace='/chat')
+@socketio.on("send_1st_card", namespace='/chat')
 def display_1st_card(message):
-    
-    emit("display_card_content",
-          {'room':message['room'], 'card_content':card_url_list, 'game_name': game_choice}, room=message['room'])
+    emit("display_1st_card",
+          {'room':message['room']}, room=message['room'])
 
 
-
-# sends room name and msg to both clients for game 'loops'
+# sends room name and msg to both clients for game flow
 @socketio.on("request_nxt_q", namespace='/chat')
 def fetch_nxt_q(message):
     if message.get("game_type") == "cards":
