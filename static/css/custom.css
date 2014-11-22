@@ -150,6 +150,33 @@ float: left;
 color: #1B1B1B;
 }
 
+#subscriber_wrapper {
+width: 603px;
+height:430px;
+background: #000;
+float:left;
+}
+
+
+#publisher_wrapper {
+width: 180px;
+height: 133px;
+background: #000;
+float:right;
+margin: -70px -15px 0px 0px;
+
+}
+
+
+#game_wrapper_label {
+color: #000;
+margin: -15px 0px 10px 0px;
+height: 20px;
+float: left;
+}
+
+
+
 #game_wrapper {
 width:270px;
 height: 430px;
@@ -244,23 +271,6 @@ background-color: #6aa5a8;
 margin-right:100px;
 
 }
-
-#publisher {
-float:right;
-overflow: visible;
-margin: -70px 0px 0px 0px;
-}
-
-#subscribers {
-}
-
-#game_wrapper_label {
-color: #000;
-margin: -15px 0px 10px 0px;
-height: 20px;
-float: left;
-}
-
 
 
 

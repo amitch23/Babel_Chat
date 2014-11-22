@@ -19,7 +19,7 @@
             {% if room_name %}
                 socket.emit('join', {start: 1, room: "{{ room_name }}" });
             {% endif %}
-            $('#log').append("<br>You're connected");
+            $('#log').append("<br>You're connected.");
             });
 
         

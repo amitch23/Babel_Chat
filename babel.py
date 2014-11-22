@@ -237,8 +237,6 @@ def join(message):
 
     #if the message was from game starter, add login name to room_dict and send msg to 2nd client to join 
     if message['start'] == 1:
-        # room_dict[message['room']].append(session['login'])
-
         room = {}
         room['room_name'] = message['room']
         room['starter'] = session['login']
@@ -255,14 +253,9 @@ def join(message):
 
     #if the msg from joiner, send msg 'start_game' to client
     else:
-        #search the rooms list for a dictionary whose value for name is message["name"]
-        
+                
         rooms[0]['joiner'] = session['login']
-
-        print "rooms: ", rooms
-        print "starter: ", rooms[0]['starter']
-        print "joiner: ", rooms[0]['joiner']
-
+        print rooms
         emit('start_game',
               {'starter': rooms[0]['starter'], 'joiner': rooms[0]['joiner'],'room_name': message['room']})
 

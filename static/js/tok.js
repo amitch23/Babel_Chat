@@ -11,6 +11,10 @@ session.on({
     // Publish the publisher we initialzed earlier (this will trigger 'streamCreated' on other
     // clients)
     session.publish(publisher);
+
+
+
+
   },
 
   // This function runs when another client publishes a stream (eg. session.publish())
