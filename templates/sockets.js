@@ -9,7 +9,7 @@
         var counter = 0;
         var placeholder_txt = "It's not your turn now. Listen to your partner and guess the word."
         var turn = false;
-        //values assigned @ socket.on(start game)
+        //values assigned @ function: start game
         var starter = false;
         var joiner = false;
 
@@ -42,9 +42,13 @@
         //once usrs in room, display msg to both re: who's in room with whom
         socket.on('room_message', function(msg) {
              {% if room_name==None %}
-                $("#game_wrapper_label").append("<p>You're in " + msg.room + " with " + msg.starter + "</p>")              
+                $("#game_wrapper_label").append("<p>You're in " + msg.room + " with " + msg.starter + "</p>")  
+                $("#end_session_btn").removeClass('hidden')
+   
              {% elif room_name!=None %}
                  $("#game_wrapper_label").append("<p>You're in " + msg.room + " with " + msg.joiner + "</p>")
+                 $("#end_session_btn").removeClass('hidden')
+
             {% endif %}       
         });
 
@@ -54,12 +58,9 @@
         //msg 'start_game' to server to get game content
         socket.on("start_game", function(msg) {
             console.log("game started");
-
             $('#join_room').addClass("hidden");
-
             starter=msg.starter;
             joiner=msg.joiner;
-
             socket.emit("display_to_room", {starter: starter, joiner: joiner, room: msg.room_name});
 
             socket.emit('get_game_content', {room: msg.room_name});
@@ -162,11 +163,21 @@
             }
         });
 
+//--------------ever-present btn handlers/misc.-----------------------
 
      socket.on('output to log', function(msg) {
-            console.log(msg);
+        console.log(msg);
             $('#log').append('<br>Received: ');
         });
+
+     $("#end_session_btn").click(function(evt) {
+        console.log("end session");
+        //have user leave room (flasksocketio method)
+        //modal pops up on both: on person who clicked, "are you sure you want to leave this session?"
+        //for other person, 'your partner has ended the session.'
+        //redirect both to profile pages or home page
+
+     });
           
     
 });

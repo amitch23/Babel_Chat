@@ -51,52 +51,57 @@
 {% for msg in get_flashed_messages() %}
               {{ msg }}
         {% endfor %}
-<div id="game_wrapper_label"></div>
+
+    <div id="game_wrapper_label"></div>
 
 
-<div id="video_wrapper">
+    <div id="video_wrapper">
 
-<div id="subscriber_wrapper">
-    <div id="subscribers"></div>
-</div>
+        <div id="subscriber_wrapper">
+            <div id="subscribers"></div>
+        </div>
 
-<div id="publisher_wrapper">
-    <div id="publisher"></div>
-</div>
+        <div id="publisher_wrapper">
+            <div id="publisher"></div>
+        </div>
 
-</div>
-
-<div id="game_wrapper">
-
-<div id="game_forms">
-<h4 id="game_title"></h4>
-<div id="inx">
-</div>
-
-<div id="start_btn_placeholder"><button id='start_btn' class="hidden">Start Playing </button></div>
-
-<div id="join_button_placeholder"><button id='join_room' class="hidden">Join </button></div>
+    </div> <!--video_wrapper -->
 
 
-<div id="next_placeholder"><button id='nxt_q' class="hidden">Next</button></div>
+    <div id="game_wrapper">
 
-<div id="next_card_placeholder"><button id='nxt_card' class="hidden">Next Card</button></div>
+        <div id="game_forms">
+            <h4 id="game_title"></h4>
+            <div id="inx">
+        </div>
+
+            <div id="start_btn_placeholder"><button id='start_btn' class="hidden">Start Playing </button>
+            </div>
+
+            <div id="join_button_placeholder"><button id='join_room' class="hidden">Join </button>
+            </div>
 
 
-<div id="game_content"></div>
+            <div id="next_placeholder"><button id='nxt_q' class="hidden">Next</button>
+            </div>
 
-<div id="card_wrapper"></div> 
-
-
-<h4>Messages received:</h4>
-<div id="log"></div>
+            <div id="next_card_placeholder"><button id='nxt_card' class="hidden">Next Card</button>
+            </div>
 
 
-</div><!--game forms-->
+            <div id="game_content"></div>
 
-</div><!--game_wrapper-->
-<!-- 
-<button id="end_session_btn">End Video Chat session</button> -->
+            <div id="card_wrapper"></div> 
+
+
+            <h4>Messages received:</h4>
+            <div id="log"></div>
+
+
+        </div><!--game forms-->
+
+    </div><!--game_wrapper-->
+
 </div><!--videochat_wrapper-->
 
 

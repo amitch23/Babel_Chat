@@ -237,25 +237,6 @@ float: right;
 
 }
 
-/* these need to select not ALL buttons, because then it messes with
-the functionality of the next button for next game. Write separate selectors 
-for the buttons on videochat.html */
-
-/*input, select, button, textarea {
-
-  background-color: #e9a34d;
-    border-color: #e9a34d;
-    width: 100%;
-    }*/
-
-/*input, select, textarea {
-
-background-color: #6aa5a8;
-    border-color: #e9a34d;
-    width: 100%;
-    }
-
-*/
 
 #card {
 	width: 100%;

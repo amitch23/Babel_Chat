@@ -4,45 +4,31 @@ w{% extends 'base_in.html' %}
 
 <div id="profile_wrapper">
 
+	<p>name: {{ user.name }} <br/>
+	   email: {{ user.email }} <br/>
+	   native language: {{ user.language.language_name }} <br/>
+	   country: {{ user.country.country_name }} <br/>
+	   
+	    <strong><ul>Wants to learn</ul></strong>
+	   {% for lang in user.Language_desired %}
+	        <li>{{ lang.language.language_name }}</li>
+	   {% endfor %}<br/>
 
-<p>name: {{ user.name }} <br/>
-   email: {{ user.email }} <br/>
-   native language: {{ user.language.language_name }} <br/>
-   country: {{ user.country.country_name }} <br/>
-   
-    <strong><ul>Wants to learn</ul></strong>
-   {% for lang in user.Language_desired %}
-        <li>{{ lang.language.language_name }}</li>
-   {% endfor %}<br/>
-
- </p>
-
-
-<!-- <button type="submit" id="submit_button" name="submit" class="btn btn-lg btn-primary btn-block">Start Video Chat</button> -->
-
-<h1 style="font-size: 35px; font-color: #000; !important"> <a href="/video_chat?start={{ user.mother_tongue_code }}">Start A New Game</a> </h1>
+	 </p>
 
 
-<h1 style="font-size: 35px; font-color: #000; !important"> <a href="/video_chat">Join the Waiting Room</a> </h1>
+	<h1 style="font-size: 35px; font-color: #000; !important"> <a href="/video_chat?start={{ user.mother_tongue_code }}">Start A New Game</a> </h1>
 
-</div>
+
+	<h1 style="font-size: 35px; font-color: #000; !important"> <a href="/video_chat">Join the Waiting Room</a> </h1>
+
+</div> <!--profile_wrapper -->
 
 
 <!-- header bar, with logo/link to index, login name, logout link
 
 profile filler pic, name info, (all database info passed as variables)
-
-//button on this page that leads to the video chat page. On video chat page, a "join room" button, which
-creates the room, sends the name of the room and client A's id/name to the server. 
-
-The server then broadcasts a message "client A wants to chat in room xxx" to all connected clients
-
-a button will appear on client B's browser "join room with client A"?
-client b accepts, enters room, and userb.id and room name is passed to session? (socket session, somehow)
-
-
-
- -->
+-->
 
 
 {% endblock %}
