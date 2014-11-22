@@ -120,6 +120,7 @@ def add_reason():
     reason = request.form.get("reason")
     session['reason']=reason
     print session
+    print reason
 
     usr = User(
                 name=session["name"], 
@@ -252,6 +253,7 @@ def fetch_game_content(message):
     print "fetching game content"
     game_content_list = []
     card_url_list = []
+
 
     if usr.reason=="Job":
         job_qs = dbsession.query(Conversation).filter_by(category="job").all()
