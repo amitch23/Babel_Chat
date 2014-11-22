@@ -99,14 +99,32 @@
 
 //--------------handles card games and game moves-----------------------
 
-        socket.on("display_card_content", function(msg) {
+        socket.on('send_inx', function(msg) {
+            console.log('send inx hit');
+            socket.emit("show_inx", {room: room_name, game_name: msg.game_name});
+            $('#start_btn').removeClass('hidden');
+        });
 
+
+      socket.on('show_inx', function(msg) {
+            console.log("show_inx hit");
+            $('#inx').html('<p>' + msg.inx + '</p');
+
+        });
+
+      $("#start_btn").click(function(evt) {
+          //request next card from server and increase counter by 1
+          socket.emit("show_1st_card", {counter:counter+1, room: room_name, game_type:"cards", });
+      });
+
+
+
+
+        socket.on("display_card_content", function(msg) {
             for (var i = 0; i < msg.card_content.length; i++) {
                     game_content_list.push(msg.card_content[i]);
                 };
-            
-            socket.emit("send_inx", {room: room_name});
-           
+                                
             counter = 0;
            $('#nxt_card').removeClass('hidden');
            //show inx to both players
@@ -123,15 +141,7 @@
         });
 
 
-        socket.on('show_inx', function(msg) {
-            console.log("show_inx hit");
-            $('#game_forms').append()
-
-
-            $('#inx').html('<p>' + msg.inx + '</p');
-
-        });
-
+      
  
         //event listener for next card button
         $("#nxt_card").click(function(evt) {

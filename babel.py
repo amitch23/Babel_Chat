@@ -283,7 +283,9 @@ def leave_the_room(message):
 
 GAME_INX = {
     'taboo': """
-    Your goal is to help your partner guess the word printed at the top of the card. You may say sentences or single words, but you may not say any of the words that are on the list, for these words are considered "taboo". (You can't say "baby" or "sitter" if the word is "babysitter")."""
+    Your goal is to help your partner guess the word printed at the top of the card. You may say sentences or single words, but you may not say any of the words that are on the list, for these words are considered "taboo". (You can't say "baby" or "sitter" if the word is "babysitter").""",
+    'catchphrase':"""
+    catchphrase instructions"""
 }
 
 @socketio.on("get_game_content", namespace = '/chat')
@@ -319,25 +321,25 @@ def fetch_game_content(message):
         game_choice = choice(dbsession.query(Game.game_type).distinct().all())[0]
 
         game_cards = dbsession.query(Game).filter_by(game_type=game_choice).all()
-
-        print game_cards
                 
-
         for card in game_cards:
             card_url_list.append(card.filename)
 
-        inx = GAME_INX['taboo']
-        print inx
+        emit("send_inx", {'room':message['room'], 'game_name': game_choice},  room=message['room'])    
 
-        emit("display_card_content",
-              {'room':message['room'], 'card_content':card_url_list}, 
-              room=message['room'])
 
-@socketio.on("send_inx", namespace='/chat')
+@socketio.on("show_inx", namespace='/chat')
 def display_instructions(message):
+    print "show inx hit"
+    emit("show_inx", {"inx": GAME_INX[message['game_name']]}, room=message['room'])
 
-    emit("show_inx", {"inx": GAME_INX['taboo']}, room=message['room'])
 
+
+@socketio.on("show_1st_card", namespace='/chat')
+def display_1st_card(message):
+    
+    emit("display_card_content",
+          {'room':message['room'], 'card_content':card_url_list, 'game_name': game_choice}, room=message['room'])
 
 
 
