@@ -12,6 +12,7 @@
 	    <strong><ul>Wants to learn</ul></strong>
 	   {% for lang in user.Language_desired %}
 	        <li>{{ lang.language.language_name }}</li>
+	        <li>Reason for learning: {{ user.reason }}</li>
 	   {% endfor %}<br/>
 
 	 </p>

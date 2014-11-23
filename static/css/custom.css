@@ -136,22 +136,24 @@ input.form-control,input.form-control:focus {
 #videochat_wrapper {
 background-image: url("../img/halftone.png");
 width: 1000px;
-height: 580px;
+height: 600px;
 margin: auto;
 padding: 40px;
 border: #fff 1px;
 }
 
+
 #video_wrapper {
-width:600px;
+width:573px;
 height:430px;
 background: #000;
 float: left;
 color: #1B1B1B;
 }
 
+
 #subscriber_wrapper {
-width: 603px;
+width: 573px;
 height:430px;
 background: #000;
 float:left;
@@ -159,8 +161,8 @@ float:left;
 
 
 #publisher_wrapper {
-width: 180px;
-height: 133px;
+width: 173px;
+height: 130px;
 background: #000;
 float:right;
 margin: -70px -15px 0px 0px;
@@ -172,8 +174,7 @@ margin: -70px -15px 0px 0px;
 color: #000;
 margin: -15px 0px 10px 0px;
 height: 20px;
-float: left;
-}
+text-align: left;}
 
 
 
@@ -186,8 +187,9 @@ color: #000;
 border: 1px solid #838380;
 }
 
+
 #game_forms {
-	padding: 25px;
+	padding: 15px 15px 0px 15px;
 /*text-shadow: 0 1px 3px rgba(0,0,0,.5);
 */
 /*	background-color: red;
@@ -207,6 +209,7 @@ color: rgb(60, 58, 58);
 margin: 25px 0px 0px 0px;
 padding: 8px;
 float: right;
+border: 1px solid gray;
 
 }
 

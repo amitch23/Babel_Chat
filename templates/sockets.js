@@ -19,7 +19,7 @@
             {% if room_name %}
                 socket.emit('join', {start: 1, room: "{{ room_name }}" });
             {% endif %}
-            $('#log').append("<br>You're connected.");
+            // $('#log').append("<br>You're connected.");
             });
 
         
@@ -90,7 +90,7 @@
             $('#game_content').html(game_content_list[msg.counter]);
         });
 
-//--------------handles card games and game moves-----------------------
+//------------handles card games and game moves-----------------------
 
         socket.on('send_inx', function(msg) {
             for (var i = 0; i < msg.card_content.length; i++) {
@@ -123,10 +123,34 @@
            $('#nxt_card').removeClass('hidden');
             {% if room_name==None %}
                  $('#card_wrapper').html('<img src="' + game_content_list[counter] + '" id="card"></img>');
+
+                 timer = 3
+                 $("#timer").html("<h4>Timer:" + timer + "</h4");
+
+                 //when this function is called, every x seconds, the click event will fire
+                 timeout = setTimeout('$("#nxt_card").click()', 3000);
+
+                 //displays timer in browser for player whose turn it is
+                
+                 timer_interval = setInterval(function() 
+                 {
+                  timer -= 1;
+                  $("#timer").html("<h4>Timer:" + timer + "</h4");
+                  if (timer == 0){
+                   clearInterval(timer_interval);
+                   // clearTimeout(timeout);
+                   // $("#nxt_card").click()
+                   $("#timer").html('');
+                  }
+                 }, 1000);
+
                 turn = true;
+
+
             {% elif room_name!=None %}
                 $('#nxt_card').addClass('hidden');
                 $('#game_content').html(placeholder_txt);
+
                 turn = false;
            {% endif %}
         });
@@ -135,40 +159,73 @@
         $("#nxt_card").click(function(evt) {
             //request next card from server and increase counter by 1
             socket.emit("request_nxt_q", {counter:counter+1, room: room_name, game_type:"cards"});
+            //clear timer and interval
+            clearInterval(timer_interval);
+            clearTimeout(timeout);
+            $("#timer").html('');
+
         });
 
         
         // displays next card by updated counter #
-        socket.on("display_nxt_card", function(msg) {
+        socket.on("display_nxt_card", function(msg) {            
             //get next item in list by counter    
-            if (counter < game_content_list.length){    
+            if (counter < (game_content_list.length - 1)) {    
                 turn = !turn;
                 counter = msg.counter;
+
                 if (turn==false) {
+                    console.log("turn=false");
                     $('#game_content').html(placeholder_txt);
                     $('#card_wrapper').html('');
-                    $('#nxt_card').addClass('hidden');
+                    $('#nxt_card').addClass('hidden');               
                 }
 
                 else {
+                    console.log("counter: " + counter);
+                    console.log(game_content_list.length);
+                    console.log(game_content_list[counter]);
+                    
                     $('#game_content').html('');
                     $('#card_wrapper').html('<img src="' + game_content_list[msg.counter] + '" id="card"></img>');
                     $('#nxt_card').removeClass('hidden');
+
+                    timer = 3
+                    $("#timer").html("<h4>Timer:" + timer + "</h4");
+
+                    //when this function is called, every x seconds, the click event will fire
+                    timeout = setTimeout('$("#nxt_card").click()', 3000);
+
+                    //displays timer in browser for player whose turn it is              
+                    timer_interval = setInterval(function() 
+                    {
+                     timer -= 1;
+                     $("#timer").html("<h4>Timer:" + timer + "</h4");
+                     if (timer == 0){
+                      clearInterval(timer_interval);
+                      // clearTimeout(timeout);
+                      // $("#nxt_card").click()
+                      $("#timer").html('');
+                     }
+                    }, 1000);
+
                 }
             }
             else {
+                console.log("counter is more than length of game content");
                 //clear button and image for both (send msg to server)
                 //call another function to play again or end session
                 //redirect to profile page?
+                //stop
             }
         });
 
 //--------------ever-present btn handlers/misc.-----------------------
 
-     socket.on('output to log', function(msg) {
-        console.log(msg);
-            $('#log').append('<br>Received: ');
-        });
+     // socket.on('output to log', function(msg) {
+     //    console.log(msg);
+     //        $('#log').append('<br>Received: ');
+     //    });
 
      $("#end_session_btn").click(function(evt) {
         console.log("end session");

@@ -8,9 +8,12 @@ def load_users(session):
 #populate users table with 2 users        
     user_1 = ["Andrea Mitchell", "andrealeemitchell@gmail.com", "pass1", "en-US", "US", "Fun"]
 
-    user_2 = ["Jose Gonzalez", "jose@gmail.com", "pass2", "es-ES", "ES", "Job"]
+    user_2 = ["Mer De Alba", "mer@gmail.com", "pass2", "es-ES", "ES", "Job"]
   
-    user_3 = ["Pierre Beret", "Pierre@gmail.com", "pass3", "fr-FR", "FR", "Travel"]
+    user_3 = ["Pierre Croissant", "pierre@gmail.com", "pass3", "fr-FR", "FR", "Travel"]
+    
+    user_4 = ["John Doe", "john@gmail.com", "pass4", "en-US", "US", "Fun"]
+
 
 
     user1 = model.User(  
@@ -37,11 +40,20 @@ def load_users(session):
                         country_code=user_3[4],
                         reason=user_3[5])
 
+    user4 = model.User( 
+                        name =user_4[0],
+                        email=user_4[1],
+                        password=user_4[2],
+                        mother_tongue_code=user_4[3],
+                        country_code=user_4[4],
+                        reason=user_4[5])
 
 
     session.add(user1)
     session.add(user2)
     session.add(user3)
+    session.add(user4)
+
     session.commit()
 
 
@@ -159,11 +171,11 @@ def load_games(session):
     game_4 = ["taboo", "static/img/taboo4.jpg"]
     game_5 = ["taboo", "static/img/taboo5.jpg"]
 
-    game_6 = ["catchphrase", "catchphrase"]    
-    game_7 = ["catchphrase", "catchphrase"]
-    game_8 = ["catchphrase", "catchphrase"]
-    game_9 = ["catchphrase", "catchphrase"]    
-    game_10 = ["catchphrase", "catchphrase"]
+    game_6 = ["catchplace", "static/img/place1.jpg"]    
+    game_7 = ["catchplace", "static/img/place2.jpg"]
+    game_8 = ["catchplace", "static/img/place3.jpg"]
+    game_9 = ["catchplace", "static/img/place4.jpg"]    
+    game_10 = ["catchplace", "static/img/place5.jpg"]
 
     game1 = model.Game(
                         game_type=game_1[0],

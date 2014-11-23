@@ -2,7 +2,7 @@
 var session = TB.initSession(sessionId);
 
 // Initialize a Publisher, and place it into the element with id="publisher"
-var publisher = TB.initPublisher(apiKey, 'publisher', {width:180, height:130});
+var publisher = TB.initPublisher(apiKey, 'publisher', {width:173, height:130});
 // Attach event handlers
 session.on({
   // This function runs when session.connect() asynchronously completes
@@ -18,7 +18,7 @@ session.on({
     subContainer.id = 'stream-' + event.stream.streamId;
     document.getElementById('subscribers').appendChild(subContainer);
     // Subscribe to the stream that caused this event, put it inside the container just made
-    session.subscribe(event.stream, subContainer, {width:603, height:430});
+    session.subscribe(event.stream, subContainer, {width:573, height:430});
   }
 
 });

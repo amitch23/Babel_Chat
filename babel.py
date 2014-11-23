@@ -197,6 +197,29 @@ def video_chat():
 
 rooms = []
 
+"""
+rooms = {}
+
+# This checks if the room already exists
+
+dictionary.get("some key", "default value")
+
+# If the room isn't in our dict of rooms, we'll add it here.
+if rooms.get(mesage["room"]) == None:
+    rooms[message["room"]]= set()
+
+# How many people are in the room?
+len(rooms[message["room"]])
+
+## What to do if I'm already in the room?
+
+# Add a person to the room:
+# join_room(message["room"]) #<--- socket.io version of this
+# rooms[message["room"]].add(session['login'])
+
+
+"""
+
 #joins clients to room and adds clients to rooms
 @socketio.on('join', namespace='/chat')
 def join(message):
@@ -240,9 +263,11 @@ def send_unique_usr_data(message):
 
 GAME_INX = {
     'taboo': """
-    Your goal is to have your partner say the word at the top of the card. You can say anything BUT any of the words that are on the list (including, obviously, the target word at the top) - these words are considered "taboo".""",
-    'catchphrase':"""
-    catchphrase instructions"""
+    Your goal is to have your partner say the word at the top of the card. You can say anything BUT any of the words that are on the list (including, obviously, the target word at the top) - these words are considered "taboo". When your partner has guessed the word, click 'next'.""",
+    'catchplace':"""
+    "Your goal is to help your partner guess the name of the city shown in the picture. You may say anything you please except for the name of the city or country that the city is in".
+e.g. card:
+"This is a very famous city in Europe where you can eat croissants." """
 }
 
 @socketio.on("get_game_content", namespace = '/chat')
@@ -250,7 +275,7 @@ def fetch_game_content(message):
     #fetch game content in a list by 2nd usr's reason in users table
     usr = dbsession.query(User).filter_by(name=session["login"]).first()
 
-    print "fetching game content"
+    print session['login']
     game_content_list = []
     card_url_list = []
 
@@ -319,6 +344,7 @@ def leave_the_room(message):
     emit('output to log',
          {'count': session['receive_count']}) 
 
+#disconnect msg handler that I would use to check the room's dictionary. If any client disconnects, this function is automatically called and I could then clear their name from the rooms dictionary, or send a message to the still-connected client that their partner has disconnected 
 
 if __name__ == "__main__":
     socketio.run(app, host="0.0.0.0")
