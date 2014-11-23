@@ -344,7 +344,7 @@ def leave_the_room(message):
     emit('output to log',
          {'count': session['receive_count']}) 
 
-#disconnect msg handler that I would use to check the room's dictionary. If any client disconnects, this function is automatically called and I could then clear their name from the rooms dictionary, or send a message to the still-connected client that their partner has disconnected 
+#disconnect msg handler that I would use to check the room's dictionary. If any client disconnects, this function is automatically called and I could then clear their name from the rooms dictionary, or send a message to the still-connected client that their partner has disconnected. 
 
 if __name__ == "__main__":
     socketio.run(app, host="0.0.0.0")

@@ -52,7 +52,7 @@
             {% endif %}       
         });
 
-//-----------handles starting conversation game-----------------------
+//--------handles starting conversation game-----------------------
 
 
         //msg 'start_game' to server to get game content
@@ -90,7 +90,7 @@
             $('#game_content').html(game_content_list[msg.counter]);
         });
 
-//------------handles card games and game moves-----------------------
+//---------handles card games and game moves-----------------------
 
         socket.on('send_inx', function(msg) {
             for (var i = 0; i < msg.card_content.length; i++) {
@@ -123,7 +123,6 @@
            $('#nxt_card').removeClass('hidden');
             {% if room_name==None %}
                  $('#card_wrapper').html('<img src="' + game_content_list[counter] + '" id="card"></img>');
-
                  timer = 3
                  $("#timer").html("<h4>Timer:" + timer + "</h4");
 
@@ -131,15 +130,12 @@
                  timeout = setTimeout('$("#nxt_card").click()', 3000);
 
                  //displays timer in browser for player whose turn it is
-                
                  timer_interval = setInterval(function() 
                  {
                   timer -= 1;
                   $("#timer").html("<h4>Timer:" + timer + "</h4");
                   if (timer == 0){
                    clearInterval(timer_interval);
-                   // clearTimeout(timeout);
-                   // $("#nxt_card").click()
                    $("#timer").html('');
                   }
                  }, 1000);
@@ -163,7 +159,6 @@
             clearInterval(timer_interval);
             clearTimeout(timeout);
             $("#timer").html('');
-
         });
 
         
@@ -203,8 +198,6 @@
                      $("#timer").html("<h4>Timer:" + timer + "</h4");
                      if (timer == 0){
                       clearInterval(timer_interval);
-                      // clearTimeout(timeout);
-                      // $("#nxt_card").click()
                       $("#timer").html('');
                      }
                     }, 1000);
@@ -213,14 +206,15 @@
             }
             else {
                 console.log("counter is more than length of game content");
-                //clear button and image for both (send msg to server)
+
+                //clear all button and images for both clients with if statements targeting turn=true/false
                 //call another function to play again or end session
                 //redirect to profile page?
-                //stop
+                //OR display 2 btns to play another game or keep chatting without games...
             }
         });
 
-//--------------ever-present btn handlers/misc.-----------------------
+//-----------ever-present btn handlers/misc.-----------------------
 
      // socket.on('output to log', function(msg) {
      //    console.log(msg);
@@ -229,9 +223,12 @@
 
      $("#end_session_btn").click(function(evt) {
         console.log("end session");
-        //have user leave room (flasksocketio method)
-        //modal pops up on both: on person who clicked, "are you sure you want to leave this session?"
-        //for other person, 'your partner has ended the session.'
+        //alert pops up before function fires: on person who clicked, "are you sure you want to leave this session?"
+
+            //have user leave room (flasksocketio method)
+            //send socket msg to server to remove that user from global room dictionary
+            
+            //send msg to other person: 'your partner has ended the session.'
         //redirect both to profile pages or home page
 
      });
