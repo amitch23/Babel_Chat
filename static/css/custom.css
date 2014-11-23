@@ -27,7 +27,10 @@ font-family: "Open Sans" !important;
 
 }
 
+body p{
+font-size: 10px;
 
+}
 
 .navbar {
 max-height: 35px; !important
@@ -179,7 +182,7 @@ text-align: left;}
 
 
 #game_wrapper {
-width:270px;
+width:320px;
 height: 430px;
 background-image: url("../img/linen.png");
 float: right;
@@ -188,25 +191,48 @@ border: 1px solid #838380;
 }
 
 
+#game_wrapper button{
+background: #6aa5a8;
+border: none;
+color: white;
+}
+
 #game_forms {
-	padding: 15px 15px 0px 15px;
+	/*padding: 15px 15px 0px 15px;*/
 /*text-shadow: 0 1px 3px rgba(0,0,0,.5);
 */
 /*	background-color: red;
 */
-
 }
 
+#game_title{
+	background: #e9a34d;
+	/*font-weight: bold;*/
+	padding: 10px;
+	color: #fff;
+}
+
+
+#game_title h5{
+	/*background: #f6f6f6;*/
+	/*margin: -10px 0px 0px 0px;*/
+	font-weight: bold;
+	/*padding: 10px;*/
+	color: #fff;
+	/*background: red;*/
+}
 .hidden {
 visibility: hidden;
+/*position: absolute;*/
 
 }
 
-#end_session_btn {
 
-background-color: #fff;
-color: rgb(60, 58, 58);
-margin: 25px 0px 0px 0px;
+
+#end_session_btn {
+background: #6aa5a8;
+border: none;
+color: white;
 padding: 8px;
 float: right;
 border: 1px solid gray;
@@ -216,7 +242,7 @@ border: 1px solid gray;
 #join_button_placeholder {
 
 color: rgb(60, 58, 58);
-margin: 25px 0px 0px 0px;
+/*margin: 25px 0px 0px 0px;*/
 padding: 8px;
 float: right;
 
@@ -240,15 +266,14 @@ float: right;
 
 }
 
+#game_buttons {
+	background: blue;
+	
+}
 
 #card {
 	width: 100%;
 	max-height: 100%;
-}
-
-
-#card_wrapper {
-	height: 300px;
 }
 
 .cntr {

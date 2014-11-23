@@ -101,7 +101,8 @@
 
 
       socket.on('show_inx', function(msg) {
-            $("#game_title").html(msg.game)
+            $('#game_title').removeClass("hidden");
+            $("#game_title").html("<h5>You're playing: " + msg.game + "</h5>");
             $('#inx').html('<p>' + msg.inx + '</p');
             $('#start_btn').removeClass('hidden');
         });
@@ -115,7 +116,7 @@
 
 
         socket.on("display_1st_card", function(msg) {
-            $("#game_title").html('');
+            // $("#game_title").html('');
             $('#inx').html('');
             $('#start_btn').addClass('hidden');
         
@@ -124,7 +125,7 @@
             {% if room_name==None %}
                  $('#card_wrapper').html('<img src="' + game_content_list[counter] + '" id="card"></img>');
                  timer = 3
-                 $("#timer").html("<h4>Timer:" + timer + "</h4");
+                 $("#timer").html("<h5>Timer:" + timer + "</h5");
 
                  //when this function is called, every x seconds, the click event will fire
                  timeout = setTimeout('$("#nxt_card").click()', 3000);
@@ -133,7 +134,7 @@
                  timer_interval = setInterval(function() 
                  {
                   timer -= 1;
-                  $("#timer").html("<h4>Timer:" + timer + "</h4");
+                  $("#timer").html("<h5>Timer:" + timer + "</h5");
                   if (timer == 0){
                    clearInterval(timer_interval);
                    $("#timer").html('');
@@ -186,7 +187,7 @@
                     $('#nxt_card').removeClass('hidden');
 
                     timer = 3
-                    $("#timer").html("<h4>Timer:" + timer + "</h4");
+                    $("#timer").html("<h5>Timer:" + timer + "</h5");
 
                     //when this function is called, every x seconds, the click event will fire
                     timeout = setTimeout('$("#nxt_card").click()', 3000);
@@ -195,7 +196,7 @@
                     timer_interval = setInterval(function() 
                     {
                      timer -= 1;
-                     $("#timer").html("<h4>Timer:" + timer + "</h4");
+                     $("#timer").html("<h5>Timer:" + timer + "</h5");
                      if (timer == 0){
                       clearInterval(timer_interval);
                       $("#timer").html('');
@@ -208,6 +209,8 @@
                 console.log("counter is more than length of game content");
 
                 //clear all button and images for both clients with if statements targeting turn=true/false
+                //($("#game_title").html('');
+
                 //call another function to play again or end session
                 //redirect to profile page?
                 //OR display 2 btns to play another game or keep chatting without games...
