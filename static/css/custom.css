@@ -267,7 +267,7 @@ float: right;
 }
 
 #game_buttons {
-	background: blue;
+	background: ;
 	
 }
 
@@ -281,7 +281,10 @@ margin-right:100px;
 
 }
 
+#keep_chatting {
+float:right;
 
+}
 
 
 

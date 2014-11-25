@@ -19,7 +19,7 @@
             {% if room_name %}
                 socket.emit('join', {start: 1, room: "{{ room_name }}" });
             {% endif %}
-            // $('#log').append("<br>You're connected.");
+            $('#log').append("<br>You're connected.");
             });
 
         
@@ -27,6 +27,8 @@
             //invites usr in waiting room to join room via btn click
             {% if room_name==None %}
                 console.log("{{ user.name }}");
+
+                console.log("connected");
                 $("#join_room").removeClass('hidden');
                 $("#join_room").html("Join " + msg.room_name);
                 $("#join_room").click(function(evt){
@@ -124,11 +126,11 @@
            $('#nxt_card').removeClass('hidden');
             {% if room_name==None %}
                  $('#card_wrapper').html('<img src="' + game_content_list[counter] + '" id="card"></img>');
-                 timer = 3
+                 timer = 10
                  $("#timer").html("<h5>Timer:" + timer + "</h5");
 
                  //when this function is called, every x seconds, the click event will fire
-                 timeout = setTimeout('$("#nxt_card").click()', 3000);
+                 timeout = setTimeout('$("#nxt_card").click()', 10000);
 
                  //displays timer in browser for player whose turn it is
                  timer_interval = setInterval(function() 
@@ -142,7 +144,6 @@
                  }, 1000);
 
                 turn = true;
-
 
             {% elif room_name!=None %}
                 $('#nxt_card').addClass('hidden');
@@ -171,26 +172,22 @@
                 counter = msg.counter;
 
                 if (turn==false) {
-                    console.log("turn=false");
                     $('#game_content').html(placeholder_txt);
                     $('#card_wrapper').html('');
                     $('#nxt_card').addClass('hidden');               
                 }
 
                 else {
-                    console.log("counter: " + counter);
-                    console.log(game_content_list.length);
-                    console.log(game_content_list[counter]);
-                    
+                                    
                     $('#game_content').html('');
                     $('#card_wrapper').html('<img src="' + game_content_list[msg.counter] + '" id="card"></img>');
                     $('#nxt_card').removeClass('hidden');
 
-                    timer = 3
+                    timer = 10
                     $("#timer").html("<h5>Timer:" + timer + "</h5");
 
                     //when this function is called, every x seconds, the click event will fire
-                    timeout = setTimeout('$("#nxt_card").click()', 3000);
+                    timeout = setTimeout('$("#nxt_card").click()', 10000);
 
                     //displays timer in browser for player whose turn it is              
                     timer_interval = setInterval(function() 
@@ -206,7 +203,34 @@
                 }
             }
             else {
-                console.log("counter is more than length of game content");
+                console.log("starter"+starter, 'joiner'+joiner);
+
+                if (turn==false) {
+                    $('#game_content').html('');
+                    $("#game_title").html("Great job!");
+                    // socket.emit('leave', {room : msg.room});
+
+                    $("#end_of_game").html("Your improvement is an inspiration to us all.");
+
+                    // $("#keep_chatting").removeClass("hidden");
+                    // $("#play_again").removeClass("hidden");
+
+                }
+
+                else {
+                    $('#card_wrapper').html('');
+                    $('#nxt_card').addClass('hidden');
+                    $("#game_title").html("Great job!");
+                    // socket.emit('leave', {room : msg.room});
+
+                    $("#end_of_game").html("Your improvement is an inspiration to us all.");
+
+                    
+
+                    // $("#keep_chatting").removeClass("hidden");
+                    // $("#play_again").removeClass("hidden");
+
+                }
 
                 //clear all button and images for both clients with if statements targeting turn=true/false
                 //($("#game_title").html('');
@@ -215,27 +239,48 @@
                 //redirect to profile page?
                 //OR display 2 btns to play another game or keep chatting without games...
             }
+
+
+            $("#play_again").click(function(evt) {
+                console.log("play again btn fired");
+                $("#end_of_game").html("");
+
+                $("#keep_chatting").addClass("hidden");
+                $("#play_again").addClass("hidden");
+
+                socket.emit("get_game_content", {room: room_name, round2: true});
+            });
+
+
         });
 
 //-----------ever-present btn handlers/misc.-----------------------
 
-     // socket.on('output to log', function(msg) {
-     //    console.log(msg);
-     //        $('#log').append('<br>Received: ');
-     //    });
+     socket.on('output to log', function(msg) {
+        console.log(msg);
+            $('#log').append('<br>Received: ');
+        });
+
 
      $("#end_session_btn").click(function(evt) {
-        console.log("end session");
         //alert pops up before function fires: on person who clicked, "are you sure you want to leave this session?"
-
-            //have user leave room (flasksocketio method)
-            //send socket msg to server to remove that user from global room dictionary
-            
-            //send msg to other person: 'your partner has ended the session.'
+        alert("Are you sure you want to leave? Your partner will probably be insulted.");
+        //send socket msg to server to remove that user from global room dictionary
+        socket.emit('leave', {room: room_name});
+        //send msg to other person: 'your partner has ended the session.'
+        
         //redirect both to profile pages or home page
+        window.location = "/";
+        });
 
-     });
-          
+
+
+        socket.on('display_disconnect_alert', function(msg) {
+            console.log("disconnect");
+            alert(msg.leaving_usr + " has left the room. You are now all alone.");    
+        });
+
+
     
 });
 

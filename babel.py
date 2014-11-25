@@ -195,7 +195,7 @@ def video_chat():
 
 #----handles join/leave room/connecting socket and start game-------
 
-rooms = []
+rooms = {}
 
 """
 rooms = {}
@@ -220,37 +220,67 @@ len(rooms[message["room"]])
 
 """
 
+# rooms = {
+#    "Pierre's French room": set(["andrea", "pierre"])
+# }
 #joins clients to room and adds clients to rooms
 @socketio.on('join', namespace='/chat')
 def join(message):
     global rooms
     print "rooms %s" % rooms
 
-    # join user to room
-    join_room(message['room'])
+    if rooms.get(message["room"]) == None:
+        rooms[message["room"]] = set()
 
-    #if the message was from game starter, add login name to room_dict and send msg to 2nd client to join 
-    if message['start']==1:
-        room = {}
-        room['room_name'] = message['room']
-        room['starter'] = session['login']
+    elif message['start'] == 1:
+        join_room(message['room'])
+        rooms[message['room']].add(session['login'])
 
-        if len(rooms)==0:
-            rooms.append(room)
-        else:
-            rooms[0].setdefault('room_name', session['login'])
-        print rooms
-        
         emit('invite_to_join',
              {'room_name': message['room']},
              broadcast=True)
 
-    #if the msg from joiner, send msg 'start_game' to client
-    else:       
-        rooms[0]['joiner'] = session['login']
-        print rooms
-        emit('start_game',
-              {'starter': rooms[0]['starter'], 'joiner': rooms[0]['joiner'],'room_name': message['room']})
+    elif message['start']==2:
+        join_room(message['room'])
+        rooms[message['room']].add(session['login'])
+
+
+        starter = list(rooms[message['room']])[0]
+        joiner = list(rooms[message['room']])[1]
+
+        print starter, joiner
+        print "rooms: %s" % rooms
+
+
+        emit('start_game', {'room_name': message['room'], 'starter': starter, 'joiner': joiner})
+
+
+
+    # # join user to room
+    # join_room(message['room'])
+
+    # #if the message was from game starter, add login name to room_dict and send msg to 2nd client to join 
+    # if message['start']==1:
+    #     room = {}
+    #     room['room_name'] = message['room']
+    #     room['starter'] = session['login']
+
+    #     if len(rooms)==0:
+    #         rooms.append(room)
+    #     else:
+    #         rooms[0].setdefault('room_name', session['login'])
+    #     print rooms
+        
+    #     emit('invite_to_join',
+    #          {'room_name': message['room']},
+    #          broadcast=True)
+
+    # #if the msg from joiner, send msg 'start_game' to client
+    # else:       
+    #     rooms[0]['joiner'] = session['login']
+    #     print rooms
+    #     emit('start_game',
+    #           {'starter': rooms[0]['starter'], 'joiner': rooms[0]['joiner'],'room_name': message['room']})
 
 
 #sends msg re: who's in which room to both clients
@@ -337,14 +367,23 @@ def fetch_nxt_q(message):
 
 @socketio.on('leave', namespace='/chat')
 def leave_the_room(message):
-    print "LEAVE ROOM: ", message
+    #removes user from room, from rooms dictionary, alerts other player
     leave_room(message['room'])
-    print "---------"
-    print session
-    emit('output to log',
-         {'count': session['receive_count']}) 
 
-#disconnect msg handler that I would use to check the room's dictionary. If any client disconnects, this function is automatically called and I could then clear their name from the rooms dictionary, or send a message to the still-connected client that their partner has disconnected. 
+    rooms[message['room']].remove(session['login'])
+    
+    print "rooms: %s" % rooms
+
+
+    emit('display_disconnect_alert', {'leaving_usr':session['login']}, room=message['room'])
+
+
+
+
+    # emit('output to log',
+    #      {'room': message['room']}) 
+
+#disconnect msg handler that I would use to check the room's dictionary. If any client disconnects, this function is automatically called and I could then clear their name from the rooms dictionary, or send a message to the still-connected client that their partner has disconnected.  
 
 if __name__ == "__main__":
     socketio.run(app, host="0.0.0.0")
