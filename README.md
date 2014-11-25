@@ -10,11 +10,29 @@ Babel Chat is built in Python with a Flask framework, uses a SQLite database, an
 
 Getting started:
 --------------------
-First, clone this directory to your computer. Then
-- Create and activate a new, empty virtual environment.
-- Install the packages listed in requirements.txt (pip install -r requirements)
-- Start the application by running 'python babel.py' in your terminal.
-- Head to 'localhost:5000' in Chrome or Firefox, and open another browser in incognito/private mode to see the sockets in action. (Create a new profile and enter the chat room!)
+1) First, clone this directory to your computer.
+
+<pre><code>$ git clone https://github.com/amitch23/Babel_Chat.git</code></pre>
+
+2) Create and activate a virtual environment in the same directory: 
+
+<pre><code>$ pip install virtualenv
+$ virtualenv env
+$ . env/bin/activate 
+</code></pre>
+
+3) Install the required packages using pip:
+
+<pre><code>(env)$ pip install -r requirements.txt
+</code></pre>
+
+
+4) In Chrome or Firefox, open 2 browsers - one in 'normal' mode and another in incognito or private mode:
+
+<pre><code>http://localhost:5000/</code></pre> 
+
+Create new profiles and enter the chat room!
+
 
 
 The Breakdown:
