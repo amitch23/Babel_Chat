@@ -275,6 +275,8 @@ padding: 20px;
 #card {
 	width: 70%;
 	max-height: 100%;
+	border: 1px solid black;
+	
 }
 
 .cntr {

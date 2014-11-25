@@ -163,6 +163,8 @@ def add_reason():
 
 @app.route("/profile")
 def display_profile():
+    global rooms
+    rooms = {}
     user = dbsession.query(User).filter_by(name=session["login"]).first()
     print session
     return render_template("profile.html", user=user)
@@ -191,6 +193,7 @@ def video_chat():
         room_name = session['login'] + "\'s " + session["mother_tongue"] + " Room" 
 
     print session
+    print "room_name %s" % room_name
     return render_template("videochat.html", user=user, room_name=room_name, api_key=key, session_id=session_id, token=token)
 
 #--------------------------------------------------^^
@@ -233,18 +236,21 @@ def join(message):
     global rooms
     print "rooms %s" % rooms
 
+    if rooms.get(message["room"]) == None:
+        rooms[message["room"]] = set()
+
     if len(rooms.get(message['room'], [])) < 2:
 
 
-        if rooms.get(message["room"]) == None:
-            rooms[message["room"]] = set()
+        # if rooms.get(message["room"]) == None:
+        #     rooms[message["room"]] = set()
 
-        elif message['start'] == 1:
+        if message['start'] == 1:
             join_room(message['room'])
             rooms[message['room']].add(session['login'])
 
             print "rooms %s" % rooms
-            
+
             print "emiting invite_to_join"
             emit('invite_to_join',
                  {'room_name': message['room']},
@@ -266,34 +272,6 @@ def join(message):
     else:
         emit('full_room', {})
 
-
-    # # join user to room
-    # join_room(message['room'])
-
-    # #if the message was from game starter, add login name to room_dict and send msg to 2nd client to join 
-    # if message['start']==1:
-    #     room = {}
-    #     room['room_name'] = message['room']
-    #     room['starter'] = session['login']
-
-    #     if len(rooms)==0:
-    #         rooms.append(room)
-    #     else:
-    #         rooms[0].setdefault('room_name', session['login'])
-    #     print rooms
-        
-    #     emit('invite_to_join',
-    #          {'room_name': message['room']},
-    #          broadcast=True)
-
-    # #if the msg from joiner, send msg 'start_game' to client
-    # else:       
-    #     rooms[0]['joiner'] = session['login']
-    #     print rooms
-    #     emit('start_game',
-    #           {'starter': rooms[0]['starter'], 'joiner': rooms[0]['joiner'],'room_name': message['room']})
-
-
 #sends msg re: who's in which room to both clients
 @socketio.on("display_to_room", namespace='/chat')
 def send_unique_usr_data(message):
@@ -306,9 +284,14 @@ GAME_INX = {
     'Taboo': """
     Your goal is to have your partner say the word at the top of the card. You can say anything BUT any of the words that are on the list (including, obviously, the target word at the top) - these words are considered "taboo". When your partner has guessed the word, click 'next'.""",
     'Catchplace':"""
-    "Your goal is to help your partner guess the name of the city shown in the picture. You may say anything you please except for the name of the city or country that the city is in".
+    Your goal is to help your partner guess the name of the city shown in the picture. You may say anything you please except for the name of the city or country that the city is in.
 e.g. card:
-"This is a very famous city in Europe where you can eat croissants." """
+This is a very famous city in Europe where you can eat croissants.""",
+    'Work': """
+    Instructions for conversation topic: work.
+     """,
+     'Travel': """
+     Instructions for travel topic."""
 }
 
 @socketio.on("get_game_content", namespace = '/chat')
@@ -327,8 +310,8 @@ def fetch_game_content(message):
             for q in job_qs:
                 game_content_list.append(q.question)
                 
-            emit("display_convo_content",
-                  {'room':message['room'], 'game_content':game_content_list}, 
+            emit("send_convo_inx",
+                  {'room':message['room'], 'game_content':game_content_list, 'game':"Work"}, 
                   room=message['room'])
 
         elif usr.reason=="Travel":
@@ -336,10 +319,9 @@ def fetch_game_content(message):
             for q in travel_qs:
                 game_content_list.append(q.question)
 
-            emit("display_convo_content",
-                  {'room':message['room'], 'game_content':game_content_list}, 
+            emit("send_convo_inx",
+                  {'room':message['room'], 'game_content':game_content_list, 'game':"Travel"}, 
                   room=message['room'])
-
         
         if usr.reason=="Fun":
             #query database for random game, append urls to empty card_list
@@ -356,13 +338,21 @@ def fetch_game_content(message):
 @socketio.on("show_inx", namespace='/chat')
 def display_instructions(message):
     print message
-    emit("show_inx", {"game": message['game'], "inx": GAME_INX[message['game']]}, room=message['room'])
+    if message.get("game") == 'Work' or message.get("game") == "Travel":
+        emit("show_convo_inx", {"game": message['game'], "inx": GAME_INX[message['game']]}, room=message['room'])
+    else:
+        emit("show_game_inx", {"game": message['game'], "inx": GAME_INX[message['game']]}, room=message['room'])
 
 
-@socketio.on("send_1st_card", namespace='/chat')
+@socketio.on("send_1st_item", namespace='/chat')
 def display_1st_card(message):
-    emit("display_1st_card",
-          {'room':message['room']}, room=message['room'])
+    print message['topic']
+    if message.get("topic") == "convo":
+        emit("display_first_q",{'room':message['room']}, room=message['room'] )
+    else:
+
+        emit("display_1st_card",
+              {'room':message['room']}, room=message['room'])
 
 
 # sends room name and msg to both clients for game flow

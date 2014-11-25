@@ -67,23 +67,44 @@
             socket.emit('get_game_content', {room: msg.room_name});
         });
 
-
         socket.on('full_room', function(msg) {
             alert("Sorry, the room is full.");
         });
 
 
-        //display 1st convo question to both clients
-        socket.on("display_convo_content", function(msg) {
+
+        socket.on('send_convo_inx', function(msg) {
             //save content as list in game_content_list 
             for (var i = 0; i < msg.game_content.length; i++) {
-                game_content_list.push(msg.game_content[i]);
-            };
+                    game_content_list.push(msg.game_content[i]);
+                };
+            socket.emit("show_inx", {room: room_name, game: msg.game});
+        });
+
+        socket.on('show_convo_inx', function(msg) {
+              $('#game_title').removeClass("hidden");
+              $("#game_title").html("<h5>" + msg.game + "</h5>");
+              $('#inx').html('<p>' + msg.inx + '</p');
+              $('#start_convo_btn').removeClass('hidden');
+          });
+
+        $("#start_convo_btn").click(function(evt) {
+          //send msg to server to show 1st card
+            socket.emit("send_1st_item", {room: room_name, topic:"convo"});
+            
+        });
+
+        //display 1st convo question to both clients
+        socket.on("display_first_q", function(msg) {
+            $('#inx').html('');
+            $('#start_convo_btn').addClass('hidden');
+            console.log(game_content_list);
             counter = 0;
             //need to display instructions for convo
-            $('#game_content').append(msg.game_content[counter]);
+            $('#game_content').append(game_content_list[counter]);
             $('#nxt_q').removeClass('hidden');
         });
+
 
         $('#nxt_q').click(function(evt){
             socket.emit("request_nxt_q", {counter:counter+1, room: room_name});
@@ -106,9 +127,9 @@
         });
 
 
-      socket.on('show_inx', function(msg) {
+      socket.on('show_game_inx', function(msg) {
             $('#game_title').removeClass("hidden");
-            $("#game_title").html("<h5>You're playing: " + msg.game + "</h5>");
+            $("#game_title").html("<h5>" + msg.game + "</h5>");
             $('#inx').html('<p>' + msg.inx + '</p');
             $('#start_btn').removeClass('hidden');
         });
@@ -116,7 +137,7 @@
 
       $("#start_btn").click(function(evt) {
         //send msg to server to show 1st card
-          socket.emit("send_1st_card", {room: room_name});
+          socket.emit("send_1st_item", {room: room_name, topic:"game"});
           
       });
 
