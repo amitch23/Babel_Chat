@@ -7,7 +7,7 @@
         var game_content_list = []; 
         var room_name = "{{ room_name }}";
         var counter = 0;
-        var placeholder_txt = "It's not your turn now. Listen to your partner and guess the word."
+        var placeholder_txt = "<p>It's not your turn now. Listen to your partner and guess the word.</p>"
         var turn = false;
         //values assigned @ function: start game
         var starter = false;
@@ -64,8 +64,12 @@
             starter=msg.starter;
             joiner=msg.joiner;
             socket.emit("display_to_room", {starter: starter, joiner: joiner, room: msg.room_name});
-
             socket.emit('get_game_content', {room: msg.room_name});
+        });
+
+
+        socket.on('full_room', function(msg) {
+            alert("Sorry, the room is full.");
         });
 
 
@@ -129,7 +133,7 @@
                  timer = 10
                  $("#timer").html("<h5>Timer:" + timer + "</h5");
 
-                 //when this function is called, every x seconds, the click event will fire
+                 // when this function is called, every x seconds, the click event will fire
                  timeout = setTimeout('$("#nxt_card").click()', 10000);
 
                  //displays timer in browser for player whose turn it is
@@ -186,7 +190,7 @@
                     timer = 10
                     $("#timer").html("<h5>Timer:" + timer + "</h5");
 
-                    //when this function is called, every x seconds, the click event will fire
+                    // when this function is called, every x seconds, the click event will fire
                     timeout = setTimeout('$("#nxt_card").click()', 10000);
 
                     //displays timer in browser for player whose turn it is              
@@ -207,7 +211,7 @@
 
                 if (turn==false) {
                     $('#game_content').html('');
-                    $("#game_title").html("Great job!");
+                    $("#game_content").html("Great job!");
                     // socket.emit('leave', {room : msg.room});
 
                     $("#end_of_game").html("Your improvement is an inspiration to us all.");
@@ -220,10 +224,10 @@
                 else {
                     $('#card_wrapper').html('');
                     $('#nxt_card').addClass('hidden');
-                    $("#game_title").html("Great job!");
+                    $("#game_content").html("Great job!");
                     // socket.emit('leave', {room : msg.room});
 
-                    $("#end_of_game").html("Your improvement is an inspiration to us all.");
+                    $("#end_of_game").html("<p>Your improvement is an inspiration to us all.</p>");
 
                     
 
@@ -232,12 +236,7 @@
 
                 }
 
-                //clear all button and images for both clients with if statements targeting turn=true/false
-                //($("#game_title").html('');
-
-                //call another function to play again or end session
-                //redirect to profile page?
-                //OR display 2 btns to play another game or keep chatting without games...
+            
             }
 
 
@@ -263,21 +262,16 @@
 
 
      $("#end_session_btn").click(function(evt) {
-        //alert pops up before function fires: on person who clicked, "are you sure you want to leave this session?"
         alert("Are you sure you want to leave? Your partner will probably be insulted.");
-        //send socket msg to server to remove that user from global room dictionary
-        socket.emit('leave', {room: room_name});
-        //send msg to other person: 'your partner has ended the session.'
         
-        //redirect both to profile pages or home page
+        socket.emit('leave', {room: room_name});        
         window.location = "/";
         });
 
 
-
         socket.on('display_disconnect_alert', function(msg) {
             console.log("disconnect");
-            alert(msg.leaving_usr + " has left the room. You are now all alone.");    
+            alert(msg.leaving_usr + " has left the room. You are now chatting with yourself.");    
         });
 
 

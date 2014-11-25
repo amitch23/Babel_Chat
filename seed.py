@@ -12,47 +12,53 @@ def load_users(session):
   
     user_3 = ["Pierre Croissant", "pierre@gmail.com", "pass3", "fr-FR", "FR", "Travel"]
     
-    user_4 = ["John Doe", "john@gmail.com", "pass4", "en-US", "US", "Fun"]
+    # user_4 = ["John Doe", "john@gmail.com", "pass4", "en-US", "US", "Fun"]
 
 
 
     user1 = model.User(  
                         name =user_1[0],
                         email=user_1[1],
-                        password=user_1[2],
                         mother_tongue_code=user_1[3],
                         country_code=user_1[4],
                         reason=user_1[5])
 
+    user1.set_password(user_1[2])
+
     user2 = model.User( 
                         name =user_2[0],
                         email=user_2[1],
-                        password=user_2[2],
                         mother_tongue_code=user_2[3],
                         country_code=user_2[4],
                         reason=user_2[5])
 
+    user2.set_password(user_2[2])
+
+
     user3 = model.User( 
                         name =user_3[0],
                         email=user_3[1],
-                        password=user_3[2],
                         mother_tongue_code=user_3[3],
                         country_code=user_3[4],
                         reason=user_3[5])
 
-    user4 = model.User( 
-                        name =user_4[0],
-                        email=user_4[1],
-                        password=user_4[2],
-                        mother_tongue_code=user_4[3],
-                        country_code=user_4[4],
-                        reason=user_4[5])
+    user3.set_password(user_3[2])
+
+
+    # user4 = model.User( 
+    #                     name =user_4[0],
+    #                     email=user_4[1],
+    #                     mother_tongue_code=user_4[3],
+    #                     country_code=user_4[4],
+    #                     reason=user_4[5])
+
+    # user4.set_password(user_4[2])
 
 
     session.add(user1)
     session.add(user2)
     session.add(user3)
-    session.add(user4)
+    # session.add(user4)
 
     session.commit()
 
@@ -165,17 +171,17 @@ def load_languages_desired(session):
 def load_games(session):
 #populate games table
 
-    game_1 = ["taboo", "static/img/taboo1.jpg"]    
-    game_2 = ["taboo", "static/img/taboo2.jpg"]
-    game_3 = ["taboo", "static/img/taboo3.jpg"]
-    game_4 = ["taboo", "static/img/taboo4.jpg"]
-    game_5 = ["taboo", "static/img/taboo5.jpg"]
+    game_1 = ["Taboo", "static/img/taboo1.jpg"]    
+    game_2 = ["Taboo", "static/img/taboo2.jpg"]
+    game_3 = ["Taboo", "static/img/taboo3.jpg"]
+    game_4 = ["Taboo", "static/img/taboo4.jpg"]
+    game_5 = ["Taboo", "static/img/taboo5.jpg"]
 
-    game_6 = ["catchplace", "static/img/place1.jpg"]    
-    game_7 = ["catchplace", "static/img/place2.jpg"]
-    game_8 = ["catchplace", "static/img/place3.jpg"]
-    game_9 = ["catchplace", "static/img/place4.jpg"]    
-    game_10 = ["catchplace", "static/img/place5.jpg"]
+    game_6 = ["Catchplace", "static/img/place1.jpg"]    
+    game_7 = ["Catchplace", "static/img/place2.jpg"]
+    game_8 = ["Catchplace", "static/img/place3.jpg"]
+    game_9 = ["Catchplace", "static/img/place4.jpg"]    
+    game_10 = ["Catchplace", "static/img/place5.jpg"]
 
     game1 = model.Game(
                         game_type=game_1[0],

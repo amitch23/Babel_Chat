@@ -28,7 +28,8 @@ font-family: "Open Sans" !important;
 }
 
 body p{
-font-size: 10px;
+font-size: 13px;
+text-align: left;
 
 }
 
@@ -137,8 +138,8 @@ input.form-control,input.form-control:focus {
 /* --------------------videochat.html-----*/
 
 #videochat_wrapper {
-background-image: url("../img/halftone.png");
-width: 1000px;
+/*background-image: url("../img/halftone.png");
+*/width: 1000px;
 height: 600px;
 margin: auto;
 padding: 40px;
@@ -168,7 +169,7 @@ width: 173px;
 height: 130px;
 background: #000;
 float:right;
-margin: -70px -15px 0px 0px;
+margin: -130px 0px 0px 0px;
 
 }
 
@@ -195,6 +196,7 @@ border: 1px solid #838380;
 background: #6aa5a8;
 border: none;
 color: white;
+padding: 10px;
 }
 
 #game_forms {
@@ -205,8 +207,13 @@ color: white;
 */
 }
 
+#game_content p{
+
+	padding: 20px;
+}
+
 #game_title{
-	background: #e9a34d;
+	background: #E9E9E9;
 	/*font-weight: bold;*/
 	padding: 10px;
 	color: #fff;
@@ -218,34 +225,20 @@ color: white;
 	/*margin: -10px 0px 0px 0px;*/
 	font-weight: bold;
 	/*padding: 10px;*/
-	color: #fff;
-	/*background: red;*/
-}
-.hidden {
-visibility: hidden;
-/*position: absolute;*/
-
+	color: #767272;
+	font-size: 18px;
+		/*background: red;*/
 }
 
 
-
-#end_session_btn {
-background: #6aa5a8;
-border: none;
-color: white;
-padding: 8px;
-float: right;
-border: 1px solid gray;
-
-}
 
 #join_button_placeholder {
 
 color: rgb(60, 58, 58);
 /*margin: 25px 0px 0px 0px;*/
-padding: 8px;
-float: right;
-
+padding: 20px;
+/*float: right;
+*/
 }
 
 #next_placeholder {
@@ -271,8 +264,16 @@ float: right;
 	
 }
 
+#inx p {
+font-size: 13px;
+text-align: left;
+padding: 20px;
+
+
+}
+
 #card {
-	width: 100%;
+	width: 70%;
 	max-height: 100%;
 }
 
@@ -281,11 +282,28 @@ margin-right:100px;
 
 }
 
-#keep_chatting {
-float:right;
+#end_session_btn {
+background: #6aa5a8;
+border: none;
+color: white;
+padding: 8px;
+float: right;
+border: 1px solid gray;
+margin-top: 15px;
 
 }
 
+#timer {
+	color: #000;
+}
 
+#end_of_game {
+	padding: 20px;
+}
 
+.hidden {
+visibility: hidden;
+/*position: absolute;*/
+
+}
 

@@ -7,11 +7,10 @@ import jinja2
 import time
 from threading import Thread
 from flask.ext.socketio import SocketIO, emit, join_room, leave_room
-
 from random import choice
-
 from opentok import OpenTok
 import os
+
 
 try:
     api_key = os.environ['API_KEY']
@@ -47,9 +46,9 @@ def login():
     email = request.form.get("email")
     password = request.form.get("password")
 
-    usr = dbsession.query(User).filter_by(email=email).filter_by(password=password).first()
+    usr = dbsession.query(User).filter_by(email=email).first()
 
-    if usr:
+    if usr and usr.check_password(password):
         session["login"] = usr.name
         session["mother_tongue"] = usr.language.language_name
         # session["lang_desired"] = usr.Language_desired[0].language.language_name
@@ -77,6 +76,8 @@ def create_new_user():
     password = request.form.get("password")
     mother_tongue_code = request.form.get("mother_tongue")
     country_code = request.form.get("country_code")
+
+
 
     #check in db if email, if not add all info to session
     if dbsession.query(User).filter_by(email = email).first():
@@ -122,14 +123,16 @@ def add_reason():
     print session
     print reason
 
+
     usr = User(
                 name=session["name"], 
                 email=session["email"],
-                password=session["password"],
                 country_code=session["country_code"],
                 mother_tongue_code=session["mother_tongue_code"],
                 reason=session['reason']
                 )
+
+    usr.set_password(session['password'])
 
     dbsession.add(usr)
     dbsession.commit()
@@ -171,6 +174,7 @@ def logout():
     return redirect("/")
 
 @app.route("/video_chat")
+# @login_required
 def video_chat():
 
     #handles opentok session, token creation    
@@ -229,31 +233,38 @@ def join(message):
     global rooms
     print "rooms %s" % rooms
 
-    if rooms.get(message["room"]) == None:
-        rooms[message["room"]] = set()
-
-    elif message['start'] == 1:
-        join_room(message['room'])
-        rooms[message['room']].add(session['login'])
-
-        emit('invite_to_join',
-             {'room_name': message['room']},
-             broadcast=True)
-
-    elif message['start']==2:
-        join_room(message['room'])
-        rooms[message['room']].add(session['login'])
+    if len(rooms.get(message['room'], [])) < 2:
 
 
-        starter = list(rooms[message['room']])[0]
-        joiner = list(rooms[message['room']])[1]
+        if rooms.get(message["room"]) == None:
+            rooms[message["room"]] = set()
 
-        print starter, joiner
-        print "rooms: %s" % rooms
+        elif message['start'] == 1:
+            join_room(message['room'])
+            rooms[message['room']].add(session['login'])
+
+            print "rooms %s" % rooms
+            
+            print "emiting invite_to_join"
+            emit('invite_to_join',
+                 {'room_name': message['room']},
+                 broadcast=True)
+
+        elif message['start']==2:
+            join_room(message['room'])
+            rooms[message['room']].add(session['login'])
 
 
-        emit('start_game', {'room_name': message['room'], 'starter': starter, 'joiner': joiner})
+            starter = list(rooms[message['room']])[1]
+            joiner = list(rooms[message['room']])[0]
 
+            print "starter: %s, Joiner: %s" % (starter, joiner)
+            print "rooms: %s" % rooms
+
+
+            emit('start_game', {'room_name': message['room'], 'starter': starter, 'joiner': joiner})
+    else:
+        emit('full_room', {})
 
 
     # # join user to room
@@ -292,9 +303,9 @@ def send_unique_usr_data(message):
 #--------handles game moves-----------------#
 
 GAME_INX = {
-    'taboo': """
+    'Taboo': """
     Your goal is to have your partner say the word at the top of the card. You can say anything BUT any of the words that are on the list (including, obviously, the target word at the top) - these words are considered "taboo". When your partner has guessed the word, click 'next'.""",
-    'catchplace':"""
+    'Catchplace':"""
     "Your goal is to help your partner guess the name of the city shown in the picture. You may say anything you please except for the name of the city or country that the city is in".
 e.g. card:
 "This is a very famous city in Europe where you can eat croissants." """
@@ -309,36 +320,37 @@ def fetch_game_content(message):
     game_content_list = []
     card_url_list = []
 
+    if len(rooms[message['room']]) == 2:
 
-    if usr.reason=="Job":
-        job_qs = dbsession.query(Conversation).filter_by(category="job").all()
-        for q in job_qs:
-            game_content_list.append(q.question)
-            
-        emit("display_convo_content",
-              {'room':message['room'], 'game_content':game_content_list}, 
-              room=message['room'])
-
-    elif usr.reason=="Travel":
-        travel_qs = dbsession.query(Conversation).filter_by(category="travel").all()
-        for q in travel_qs:
-            game_content_list.append(q.question)
-
-        emit("display_convo_content",
-              {'room':message['room'], 'game_content':game_content_list}, 
-              room=message['room'])
-
-    
-    if usr.reason=="Fun":
-        #query database for random game, append urls to empty card_list
-        game_choice = choice(dbsession.query(Game.game_type).distinct().all())[0]
-
-        game_cards = dbsession.query(Game).filter_by(game_type=game_choice).all()
+        if usr.reason=="Job":
+            job_qs = dbsession.query(Conversation).filter_by(category="job").all()
+            for q in job_qs:
+                game_content_list.append(q.question)
                 
-        for card in game_cards:
-            card_url_list.append(card.filename)
+            emit("display_convo_content",
+                  {'room':message['room'], 'game_content':game_content_list}, 
+                  room=message['room'])
 
-        emit("send_inx", {'room':message['room'], 'card_content':card_url_list, 'game':game_choice},  room=message['room'])    
+        elif usr.reason=="Travel":
+            travel_qs = dbsession.query(Conversation).filter_by(category="travel").all()
+            for q in travel_qs:
+                game_content_list.append(q.question)
+
+            emit("display_convo_content",
+                  {'room':message['room'], 'game_content':game_content_list}, 
+                  room=message['room'])
+
+        
+        if usr.reason=="Fun":
+            #query database for random game, append urls to empty card_list
+            game_choice = choice(dbsession.query(Game.game_type).distinct().all())[0]
+
+            game_cards = dbsession.query(Game).filter_by(game_type=game_choice).all()
+                    
+            for card in game_cards:
+                card_url_list.append(card.filename)
+
+            emit("send_inx", {'room':message['room'], 'card_content':card_url_list, 'game':game_choice},  room=message['room'])    
 
 
 @socketio.on("show_inx", namespace='/chat')
@@ -374,6 +386,7 @@ def leave_the_room(message):
     
     print "rooms: %s" % rooms
 
+    #stop game functionality. redirect user to 
 
     emit('display_disconnect_alert', {'leaving_usr':session['login']}, room=message['room'])
 

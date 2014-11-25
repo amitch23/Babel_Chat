@@ -28,7 +28,7 @@ a:hover {
 body {
   height: 100%;
   background-color: #f3eedd;  
-  background-image: url("../img/sprinkles.png");
+background-image: url("../img/bg_main.jpg");
   color: #fff;
   text-align: center;
 }
