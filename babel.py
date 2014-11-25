@@ -241,10 +241,6 @@ def join(message):
 
     if len(rooms.get(message['room'], [])) < 2:
 
-
-        # if rooms.get(message["room"]) == None:
-        #     rooms[message["room"]] = set()
-
         if message['start'] == 1:
             join_room(message['room'])
             rooms[message['room']].add(session['login'])
@@ -278,6 +274,27 @@ def send_unique_usr_data(message):
     emit("room_message", {'starter':message['starter'], 'joiner':message['joiner'], 'room':message['room']}, room=message['room'])
 
 
+@socketio.on('leave', namespace='/chat')
+def leave_the_room(message):
+    #removes user from room, from rooms dictionary, alerts other player
+    leave_room(message['room'])
+
+    rooms[message['room']].remove(session['login'])
+    
+    print "rooms: %s" % rooms
+
+    #stop game functionality. redirect user to 
+
+    emit('display_disconnect_alert', {'leaving_usr':session['login']}, room=message['room'])
+
+
+@socketio.on('disconnect', namespace='/chat')
+def test_disconnect():
+    print('Client disconnected')
+    # emit('display_disconnect_alert', {'leaving_usr':session['login']}, room=message['room'])
+
+
+#disconnect msg handler that I would use to check the room's dictionary. If any client disconnects, this function is automatically called and I could then clear their name from the rooms dictionary, or send a message to the still-connected client that their partner has disconnected.  
 #--------handles game moves-----------------#
 
 GAME_INX = {
@@ -350,7 +367,6 @@ def display_1st_card(message):
     if message.get("topic") == "convo":
         emit("display_first_q",{'room':message['room']}, room=message['room'] )
     else:
-
         emit("display_1st_card",
               {'room':message['room']}, room=message['room'])
 
@@ -365,28 +381,8 @@ def fetch_nxt_q(message):
           {'room':message['room'], "counter":message['counter']}, room=message['room'])
 
 
-#------------------end of game moves --------
+#------------------chat box handlers --------
 
-@socketio.on('leave', namespace='/chat')
-def leave_the_room(message):
-    #removes user from room, from rooms dictionary, alerts other player
-    leave_room(message['room'])
-
-    rooms[message['room']].remove(session['login'])
-    
-    print "rooms: %s" % rooms
-
-    #stop game functionality. redirect user to 
-
-    emit('display_disconnect_alert', {'leaving_usr':session['login']}, room=message['room'])
-
-
-
-
-    # emit('output to log',
-    #      {'room': message['room']}) 
-
-#disconnect msg handler that I would use to check the room's dictionary. If any client disconnects, this function is automatically called and I could then clear their name from the rooms dictionary, or send a message to the still-connected client that their partner has disconnected.  
 
 if __name__ == "__main__":
     socketio.run(app, host="0.0.0.0")

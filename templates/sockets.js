@@ -19,7 +19,7 @@
             {% if room_name %}
                 socket.emit('join', {start: 1, room: "{{ room_name }}" });
             {% endif %}
-            $('#log').append("<br>You're connected.");
+            $('#log').append("<br>You are in the waiting room.");
             });
 
         
@@ -83,6 +83,7 @@
 
         socket.on('show_convo_inx', function(msg) {
               $('#game_title').removeClass("hidden");
+              $("#log").html('');
               $("#game_title").html("<h5>" + msg.game + "</h5>");
               $('#inx').html('<p>' + msg.inx + '</p');
               $('#start_convo_btn').removeClass('hidden');
@@ -112,9 +113,26 @@
 
         //displays next q by updated counter #
         socket.on("display_nxt_q", function(msg) {
-            //get next item in list by counter
+            console.log(game_content_list.length - 1);
             counter = msg.counter;
-            $('#game_content').html(game_content_list[msg.counter]);
+
+            if (counter < (game_content_list.length)) {
+                console.log("hit");
+
+                $('#game_content').html(game_content_list[msg.counter]);
+            }
+            else {
+                console.log("length of counter is greater");
+                $('#game_title').html('');
+                $('#nxt_q').addClass('hidden');
+                $("#game_content").html("Great job!");
+                // socket.emit('leave', {room : msg.room});
+
+                $("#end_of_game").html("<p>Your linguistic improvement is an inspiration to us all.</p>");
+
+            }                
+            //get next item in list by counter
+            
         });
 
 //---------handles card games and game moves-----------------------
@@ -138,7 +156,7 @@
       $("#start_btn").click(function(evt) {
         //send msg to server to show 1st card
           socket.emit("send_1st_item", {room: room_name, topic:"game"});
-          
+        
       });
 
 
@@ -232,7 +250,7 @@
 
                 if (turn==false) {
                     $('#game_content').html('');
-                    $("#game_content").html("Great job!");
+                    $("#game_content").html("<h2>Great job!</h2>");
                     // socket.emit('leave', {room : msg.room});
 
                     $("#end_of_game").html("Your improvement is an inspiration to us all.");
@@ -245,32 +263,13 @@
                 else {
                     $('#card_wrapper').html('');
                     $('#nxt_card').addClass('hidden');
-                    $("#game_content").html("Great job!");
+                    $("#game_content").html("<h2>Great job!</h2>");
                     // socket.emit('leave', {room : msg.room});
 
-                    $("#end_of_game").html("<p>Your improvement is an inspiration to us all.</p>");
-
-                    
-
-                    // $("#keep_chatting").removeClass("hidden");
-                    // $("#play_again").removeClass("hidden");
+                    $("#end_of_game").html("<p>Your linguistic improvement is an inspiration to us all.</p>");
 
                 }
-
-            
             }
-
-
-            $("#play_again").click(function(evt) {
-                console.log("play again btn fired");
-                $("#end_of_game").html("");
-
-                $("#keep_chatting").addClass("hidden");
-                $("#play_again").addClass("hidden");
-
-                socket.emit("get_game_content", {room: room_name, round2: true});
-            });
-
 
         });
 
@@ -290,10 +289,10 @@
         });
 
 
-        socket.on('display_disconnect_alert', function(msg) {
-            console.log("disconnect");
-            alert(msg.leaving_usr + " has left the room. You are now chatting with yourself.");    
-        });
+    socket.on('display_disconnect_alert', function(msg) {
+        console.log("disconnect");
+        alert(msg.leaving_usr + " has left the room. You are now chatting with yourself.");    
+    });
 
 
     
