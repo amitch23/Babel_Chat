@@ -265,8 +265,11 @@ def join(message):
 
 
             emit('start_game', {'room_name': message['room'], 'starter': starter, 'joiner': joiner})
+            emit('full_room', {}, broadcast=True)   
     else:
-        emit('full_room', {})
+        print "full"
+        # emit('full_room', {})
+
 
 #sends msg re: who's in which room to both clients
 @socketio.on("display_to_room", namespace='/chat')

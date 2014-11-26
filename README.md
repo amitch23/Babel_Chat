@@ -27,7 +27,7 @@ $ . env/bin/activate
 </code></pre>
 
 
-4) In Chrome or Firefox, open 2 browsers - one in 'normal' mode and another in incognito or private mode:
+4) In Chrome or Firefox, open 2 browser windows - one in 'normal' mode and another in incognito or private mode:
 
 <pre><code>http://localhost:5000/</code></pre> 
 
@@ -44,7 +44,7 @@ The Breakdown:
 -	babelchat.db: database that stores user, language, and game information
 
 - Templates directory: 
-  Html templates that implement Jinja to render pages in the browser, as well as sockets.js, which creates and handles websocket connectivity with the server for multiple-client functionality.
+ html templates that implement Jinja to render pages in the browser, as well as sockets.js, which creates and handles websocket connectivity with the server for multiple-client functionality.
 
 
 - Static directory:

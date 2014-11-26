@@ -8,11 +8,11 @@ def load_users(session):
 #populate users table with 2 users        
     user_1 = ["Andrea Mitchell", "andrealeemitchell@gmail.com", "pass1", "en-US", "US", "Fun"]
 
-    user_2 = ["Mer De Alba", "mer@gmail.com", "pass2", "es-ES", "ES", "Job"]
+    user_2 = ["Mer Taco", "mer@gmail.com", "pass2", "es-ES", "ES", "Job"]
   
     user_3 = ["Pierre Croissant", "pierre@gmail.com", "pass3", "fr-FR", "FR", "Travel"]
     
-    # user_4 = ["John Doe", "john@gmail.com", "pass4", "en-US", "US", "Fun"]
+    user_4 = ["Joe Hamburger", "joe@gmail.com", "pass4", "en-US", "US", "Fun"]
 
 
 
@@ -45,20 +45,20 @@ def load_users(session):
     user3.set_password(user_3[2])
 
 
-    # user4 = model.User( 
-    #                     name =user_4[0],
-    #                     email=user_4[1],
-    #                     mother_tongue_code=user_4[3],
-    #                     country_code=user_4[4],
-    #                     reason=user_4[5])
+    user4 = model.User( 
+                        name =user_4[0],
+                        email=user_4[1],
+                        mother_tongue_code=user_4[3],
+                        country_code=user_4[4],
+                        reason=user_4[5])
 
-    # user4.set_password(user_4[2])
+    user4.set_password(user_4[2])
 
 
     session.add(user1)
     session.add(user2)
     session.add(user3)
-    # session.add(user4)
+    session.add(user4)
 
     session.commit()
 

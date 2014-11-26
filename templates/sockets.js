@@ -65,14 +65,13 @@
         socket.on("start_game", function(msg) {
             console.log("game started");
             $('#join_room').addClass("hidden");
-            starter=msg.starter;
-            joiner=msg.joiner;
-            socket.emit("display_to_room", {starter: starter, joiner: joiner, room: msg.room_name});
+            socket.emit("display_to_room", {starter: msg.starter, joiner: msg.joiner, room: msg.room_name});
             socket.emit('get_game_content', {room: msg.room_name});
         });
 
         socket.on('full_room', function(msg) {
-            alert("Sorry, the room is full.");
+            console.log("fullroom broadcast all hit");
+            $("#join_room").addClass('hidden');
         });
 
 
