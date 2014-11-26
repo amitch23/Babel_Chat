@@ -146,6 +146,8 @@
 
 
       socket.on('show_game_inx', function(msg) {
+            $("#log").html('');
+
             $('#game_title').removeClass("hidden");
             $("#game_title").html("<h5>" + msg.game + "</h5>");
             $('#inx').html('<p>' + msg.inx + '</p');
@@ -166,14 +168,13 @@
             $('#start_btn').addClass('hidden');
         
             counter = 0;
-           $('#nxt_card').removeClass('hidden');
             {% if room_name==None %}
                  $('#card_wrapper').html('<img src="' + game_content_list[counter] + '" id="card"></img>');
                  timer = 10
                  $("#timer").html("<h5>Timer:" + timer + "</h5");
 
                  // when this function is called, every x seconds, the click event will fire
-                 timeout = setTimeout('$("#nxt_card").click()', 10000);
+                 timeout = setTimeout('$("#card_wrapper").click()', 10000);
 
                  //displays timer in browser for player whose turn it is
                  timer_interval = setInterval(function() 
@@ -189,7 +190,6 @@
                 turn = true;
 
             {% elif room_name!=None %}
-                $('#nxt_card').addClass('hidden');
                 $('#game_content').html(placeholder_txt);
 
                 turn = false;
@@ -197,7 +197,9 @@
         });
 
 
-        $("#nxt_card").click(function(evt) {
+        $("#card_wrapper").click(function(evt) {
+            evt.preventDefault();
+            console.log("img clicked");
             //request next card from server and increase counter by 1
             socket.emit("request_nxt_q", {counter:counter+1, room: room_name, game_type:"cards"});
             //clear timer and interval
@@ -217,20 +219,18 @@
                 if (turn==false) {
                     $('#game_content').html(placeholder_txt);
                     $('#card_wrapper').html('');
-                    $('#nxt_card').addClass('hidden');               
                 }
 
                 else {
                                     
                     $('#game_content').html('');
                     $('#card_wrapper').html('<img src="' + game_content_list[msg.counter] + '" id="card"></img>');
-                    $('#nxt_card').removeClass('hidden');
 
                     timer = 10
                     $("#timer").html("<h5>Timer:" + timer + "</h5");
 
                     // when this function is called, every x seconds, the click event will fire
-                    timeout = setTimeout('$("#nxt_card").click()', 10000);
+                    timeout = setTimeout('$("#card_wrapper").click()', 10000);
 
                     //displays timer in browser for player whose turn it is              
                     timer_interval = setInterval(function() 
@@ -253,7 +253,7 @@
                     $("#game_content").html("<h2>Great job!</h2>");
                     // socket.emit('leave', {room : msg.room});
 
-                    $("#end_of_game").html("Your improvement is an inspiration to us all.");
+                    $("#end_of_game").removeClass("hidden");
 
                     // $("#keep_chatting").removeClass("hidden");
                     // $("#play_again").removeClass("hidden");
@@ -262,11 +262,11 @@
 
                 else {
                     $('#card_wrapper').html('');
-                    $('#nxt_card').addClass('hidden');
                     $("#game_content").html("<h2>Great job!</h2>");
                     // socket.emit('leave', {room : msg.room});
 
-                    $("#end_of_game").html("<p>Your linguistic improvement is an inspiration to us all.</p>");
+                    $("#end_of_game").removeClass("hidden");
+
 
                 }
             }
@@ -283,16 +283,30 @@
 
      $("#end_session_btn").click(function(evt) {
         alert("Are you sure you want to leave? Your partner will probably be insulted.");
-        
         socket.emit('leave', {room: room_name});        
         window.location = "/";
         });
 
 
     socket.on('display_disconnect_alert', function(msg) {
-        console.log("disconnect");
-        alert(msg.leaving_usr + " has left the room. You are now chatting with yourself.");    
+        alert(msg.leaving_usr + " has left the room. See ya!");
+        socket.emit('leave', {room: room_name});        
+        window.location = "/";    
     });
+
+
+
+    //-----------chat box handlers-----------------------
+    
+$('form#send_room').submit(function(event) {
+                socket.emit('my room event', {room: $('#room_name').val(), data: $('#room_data').val()});
+                return false;
+            });
+
+
+socket.on('my response', function(msg) {
+                $('#log').append('<br>Received #' + msg.count + ': ' + msg.data);
+            });
 
 
     

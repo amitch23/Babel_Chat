@@ -70,14 +70,16 @@
 
     <div id="game_wrapper">
         <div id="game_title" class='hidden'></div>
-        <div id="game_forms">
             <div id="timer"></div>
+
+        <div id="game_forms">
+            
 
             <div id="inx"></div>
 
             <div id="game_content"></div>
 
-            <div id="card_wrapper"></div>
+           <a href="#"><div id="card_wrapper"></div></a>
 
             <div id="game_buttons">
                 <div id="start_btn_placeholder"><button id='start_btn' class="hidden">Start Playing </button>
@@ -86,13 +88,11 @@
 
 
 
-                <div id="next_card_placeholder"><button id='nxt_card' class="hidden">Next Card</button>
+                <div id="next_card_placeholder">
                 </div>
 
-                <div id="join_button_placeholder"><button id='join_room' class="hidden">Join</button>
-                </div>
-
-    
+                <button id='join_room' class="hidden">Join</button>
+                
 
                 <div id="next_placeholder"><button id='nxt_q' class="hidden">Next</button>
                 </div>
@@ -100,15 +100,7 @@
             </div><!--game buttons-->
 
 
-            <div id="end_of_game"></div> 
-<!--             <div id='end_btns'>
-                
-                <button id='keep_chatting' class='hidden'>Keep Chatting</button>
-            
-              <button id='play_again' class='hidden'>Play </button>
-
-            </div>
- -->            
+            <div id="end_of_game" class="hidden">Your improvement is an inspiration to us all.</div> 
 
 <!-- 
             <h4>Messages received:</h4> -->
@@ -120,6 +112,20 @@
 
     </div><!--game_wrapper-->
     <button id="end_session_btn" class='hidden'>End Session</button>
+
+
+<div id='chatbox_wrapper'>
+    <div id='chatbox_title'></div>
+    <form id="send_room" method='POST' action='#'>
+            <input type="text" name="room_name" id="room_name" placeholder="Room Name">
+            <input type="text" name="room_data" id="room_data" placeholder="Message">
+            <input type="submit" value="Send to Room">
+        </form>
+
+    <button id='send_txt'></button>
+</div>
+
+
 
 
 </div><!--videochat_wrapper-->

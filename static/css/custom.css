@@ -138,8 +138,8 @@ input.form-control,input.form-control:focus {
 /* --------------------videochat.html-----*/
 
 #videochat_wrapper {
-/*background-image: url("../img/halftone.png");
-*/width: 1000px;
+background: white;
+width: 1000px;
 height: 600px;
 margin: auto;
 padding: 40px;
@@ -232,15 +232,6 @@ padding: 10px;
 
 
 
-#join_button_placeholder {
-
-color: rgb(60, 58, 58);
-/*margin: 25px 0px 0px 0px;*/
-padding: 20px;
-/*float: right;
-*/
-}
-
 #next_placeholder {
 
 color: rgb(60, 58, 58);
@@ -304,8 +295,26 @@ margin-top: 15px;
 }
 
 .hidden {
-visibility: hidden;
-/*position: absolute;*/
+/*visibility: hidden;
+*//*position: fixed;
+
+*/
+margin: 0;
+padding: 0;
+display: none;
+}
+
+#join_room {
+margin-top: 20px;
 
 }
 
+#log {
+color: black;
+
+}
+
+#chatbox_wrapper {
+
+background 	
+}
