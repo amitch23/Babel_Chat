@@ -383,11 +383,14 @@ def fetch_nxt_q(message):
 
 #------------------chat box handlers --------
 
-@socketio.on('my room event', namespace='/chat')
+@socketio.on('send_txt', namespace='/chat')
 def send_room_message(message):
-    session['receive_count'] = session.get('receive_count', 0) + 1
-    emit('my response',
-         {'data': message['data'], 'count': session['receive_count']},
+    print "made it!"
+    print message
+
+
+    emit('display_txt_msg',
+         {'sender': message['sender'], 'txt':message['txt']},
          room=message['room'])
 
 

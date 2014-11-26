@@ -41,8 +41,12 @@
             {% endif %}
         });
 
-        //once usrs in room, display msg to both re: who's in room with whom
+        //once usrs in room, display msg to both re: who's in room with whom and unhide text chat box
         socket.on('room_message', function(msg) {
+            starter=msg.starter;
+            joiner=msg.joiner;
+            $("#chatbox_wrapper").removeClass("hidden");
+
              {% if room_name==None %}
                 $("#game_wrapper_label").append("<p>You're in " + msg.room + " with " + msg.starter + "</p>")  
                 $("#end_session_btn").removeClass('hidden')
@@ -297,15 +301,31 @@
 
 
     //-----------chat box handlers-----------------------
-    
-$('form#send_room').submit(function(event) {
-                socket.emit('my room event', {room: $('#room_name').val(), data: $('#room_data').val()});
-                return false;
+
+$('#send_txt_btn').click(function(event) {
+
+            console.log(starter+joiner);
+
+                {% if room_name!= None %}
+                socket.emit('send_txt', {room: room_name, sender: starter, txt: $('#text_message').val()});
+                {% elif room_name==None %}
+                socket.emit('send_txt', {room: room_name, sender: joiner, txt: $('#text_message').val()});
+                {% endif %}
             });
 
 
-socket.on('my response', function(msg) {
-                $('#log').append('<br>Received #' + msg.count + ': ' + msg.data);
+$('#text_message').keypress(function(evt) {
+    if (evt.which === 13) {
+        $('#send_txt_btn').click();
+    }
+});
+
+
+socket.on('display_txt_msg', function(msg) {
+                console.log(msg);
+                // $('#log').html('asdfkjs;lkdfjlsdkjf');
+
+                $('#txt_msgs').append('<p>'+msg.sender+ ":" + msg.txt + '</p>');
             });
 
 

@@ -114,21 +114,23 @@
     <button id="end_session_btn" class='hidden'>End Session</button>
 
 
-<div id='chatbox_wrapper'>
-    <div id='chatbox_title'></div>
-    <form id="send_room" method='POST' action='#'>
-            <input type="text" name="room_name" id="room_name" placeholder="Room Name">
-            <input type="text" name="room_data" id="room_data" placeholder="Message">
-            <input type="submit" value="Send to Room">
-        </form>
-
-    <button id='send_txt'></button>
-</div>
-
-
 
 
 </div><!--videochat_wrapper-->
+
+<div id='chatbox_wrapper' class='hidden'>
+
+    <div id="txt_msgs"></div>
+
+    <div id='chatbox_title'></div>
+
+            <input type="text" name="text_data" id="text_message" placeholder="Message">
+            <input type='button' id='send_txt_btn'value="Enter">
+            <!-- <button id='send_txt_btn'>Enter</button> -->
+
+</div><!--chatbox_wrapper-->
+
+
 
 
 

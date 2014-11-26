@@ -138,8 +138,8 @@ input.form-control,input.form-control:focus {
 /* --------------------videochat.html-----*/
 
 #videochat_wrapper {
-background: white;
-width: 1000px;
+/*background: white;
+*/width: 1000px;
 height: 600px;
 margin: auto;
 padding: 40px;
@@ -306,15 +306,32 @@ display: none;
 
 #join_room {
 margin-top: 20px;
-
 }
 
 #log {
 color: black;
-
 }
 
 #chatbox_wrapper {
+width: 300px;
+height: 200px;
+background:yellow;	
+}
 
-background 	
+#chatbox_wrapper input {
+color:black;	
+}
+ 
+#send_txt_btn {
+background: white;
+border: none;
+color: #000;
+padding: 8px;
+float: right;
+border: 1px solid gray;
+}
+
+#txt_msgs {
+color: black;
+
 }
