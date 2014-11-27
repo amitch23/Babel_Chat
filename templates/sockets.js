@@ -329,7 +329,17 @@ socket.on('display_txt_msg', function(msg) {
                 $('#txt_msgs').append('<p>' + msg.sender+ ": " + msg.txt + '</p>');
             });
 
+//failed attempts at getting the chatbox to stay at the bottom once scroll appears
+// $('#txt_msgs').animate({scrollTop: $('#txt_msgs').height()}, 'slow');
 
+// $('#txt_msgs').animate({ 
+//                    scrollTop: $("#txt_msgs").prop("scrollHeight")}, 0
+//                 );
+
+// $("#txt_msgs").prop({ scrollTop: $("#txt_msgs").prop("scrollHeight") });
+
+
+//some conflict with opentok API, link doesn't work, hovering makes it go crazy
 // $( "#subscriber_wrapper").hover(
 //   function() {
 //     console.log('buttno shows');
@@ -344,6 +354,8 @@ $('#videochat_wrapper').on('mouseover', function() {
 }).bind('mouseout',  function(){
     $('#end_session_btn').addClass('hidden');
 }); 
+
+
 
 
 });

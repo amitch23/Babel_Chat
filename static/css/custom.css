@@ -214,6 +214,7 @@ background: -webkit-linear-gradient(#82b2b2, #249797);
 background: -o-linear-gradient(#82b2b2, #249797);
 background: -moz-linear-gradient(#82b2b2, #249797);
 background: linear-gradient(#82b2b2, #249797);
+border-radius: 8px;
 }
 
 #game_forms {
@@ -374,8 +375,8 @@ border-radius: 8px;
 }
 
 #txt_msgs {
-overflow: hidden;
-width: 370px;
+overflow: auto;
+width: 300px;
 height: 80px;
 border-bottom: 1px dotted #BCBABA;
 padding: 15px 0px 0px 15px;
@@ -385,7 +386,7 @@ text-align: left;
 }
 
 #chat_input_area {
-	padding-top: 6px;
+padding-top: 6px;
 font-size: 12px;
 margin: 0px 0px 0px 10px;
 
