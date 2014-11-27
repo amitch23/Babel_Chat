@@ -18,7 +18,7 @@ session.on({
     subContainer.id = 'stream-' + event.stream.streamId;
     document.getElementById('subscribers').appendChild(subContainer);
     // Subscribe to the stream that caused this event, put it inside the container just made
-    session.subscribe(event.stream, subContainer, {width:573, height:430});
+    session.subscribe(event.stream, subContainer, {width:550, height:480});
   }
 
 });

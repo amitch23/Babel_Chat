@@ -126,7 +126,7 @@
             }
             else {
                 console.log("length of counter is greater");
-                $('#game_title').html('');
+                // $('#game_title').html('');
                 $('#nxt_q').addClass('hidden');
                 $("#game_content").html("Great job!");
                 // socket.emit('leave', {room : msg.room});
@@ -307,8 +307,11 @@ $('#send_txt_btn').click(function(event) {
 
                 {% if room_name!= None %}
                 socket.emit('send_txt', {room: room_name, sender: starter, txt: $('#text_message').val()});
+                $("#text_message").val('');
                 {% elif room_name==None %}
                 socket.emit('send_txt', {room: room_name, sender: joiner, txt: $('#text_message').val()});
+                $("#text_message").val('');
+
                 {% endif %}
             });
 

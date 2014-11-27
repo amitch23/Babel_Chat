@@ -28,7 +28,7 @@ font-family: "Open Sans" !important;
 }
 
 body p{
-font-size: 13px;
+font-size: 12px;
 text-align: left;
 
 }
@@ -39,9 +39,13 @@ max-height: 35px; !important
 }
 
 .navbar-inverse {
-	background-color: #e9a34d;
-/*	background-color: #e9a34d; !important
+/*	background-color: #e9a34d;
+*//*	background-color: #e9a34d; !important
 */	color: #fff; !important
+background: -webkit-linear-gradient(#82b2b2, #249797);
+background: -o-linear-gradient(#82b2b2, #249797);
+background: -moz-linear-gradient(#82b2b2, #249797);
+background: linear-gradient(#82b2b2, #249797);
 
 }
 .navbar-nav>li>a {
@@ -58,7 +62,6 @@ max-height: 35px; !important
 
 .navbar-inverse .navbar-collapse, .navbar-inverse .navbar-form{
 
-	border-color: none !important;
 }
 
 .navbar-inverse {
@@ -138,9 +141,8 @@ input.form-control,input.form-control:focus {
 /* --------------------videochat.html-----*/
 
 #videochat_wrapper {
-/*background: white;
-*/width: 1000px;
-height: 600px;
+width: 950px;
+height: 700px;
 margin: auto;
 padding: 40px;
 border: #fff 1px;
@@ -148,8 +150,8 @@ border: #fff 1px;
 
 
 #video_wrapper {
-width:573px;
-height:430px;
+width: 550px;
+height: 480px;
 background: #000;
 float: left;
 color: #1B1B1B;
@@ -157,9 +159,9 @@ color: #1B1B1B;
 
 
 #subscriber_wrapper {
-width: 573px;
-height:430px;
-background: #000;
+width: 550px;
+height:480px;
+background: #0F0F0F;
 float:left;
 }
 
@@ -174,29 +176,44 @@ margin: -130px 0px 0px 0px;
 }
 
 
-#game_wrapper_label {
-color: #000;
-margin: -15px 0px 10px 0px;
-height: 20px;
-text-align: left;}
-
-
-
 #game_wrapper {
-width:320px;
-height: 430px;
-background-image: url("../img/linen.png");
-float: right;
+width: 300px;
+height: 480px;
+/* background-image: url("../img/linen.png"); */
+background: #fff;
+float: left;
 color: #000;
-border: 1px solid #838380;
+border-radius: 10px;
+box-shadow: 2px 3px 3px #d3d3d3;
 }
 
 
+#game_wrapper_label {
+color: #FFF;
+/* margin: 0px 0px 0px 0px; */
+height: 25px;
+width: 550px;
+background: #363636;
+padding: 4px;
+position: absolute;
+z-index: 1000;
+}
+
+#game_wrapper_label p{
+text-align: center;
+font-size: 11px;
+color: #c0c0c0;
+}
+
 #game_wrapper button{
 background: #6aa5a8;
-border: none;
-color: white;
+border: 1px solid rgb(56, 154, 143);
+color: #fff;
 padding: 10px;
+background: -webkit-linear-gradient(#82b2b2, #249797);
+background: -o-linear-gradient(#82b2b2, #249797);
+background: -moz-linear-gradient(#82b2b2, #249797);
+background: linear-gradient(#82b2b2, #249797);
 }
 
 #game_forms {
@@ -213,22 +230,26 @@ padding: 10px;
 }
 
 #game_title{
-	background: #E9E9E9;
-	/*font-weight: bold;*/
-	padding: 10px;
-	color: #fff;
+background: #a6a8a1;
+background: linear-gradient(#A9ACAC, #858E8E);
+height:50px;
+padding: 13px 0px 0px 10px;
+color: #fff;
+box-shadow: 2px 3px 3px #d3d3d3;
 }
 
 
 #game_title h5{
-	/*background: #f6f6f6;*/
-	/*margin: -10px 0px 0px 0px;*/
-	font-weight: bold;
-	/*padding: 10px;*/
-	color: #767272;
-	font-size: 18px;
-		/*background: red;*/
-}
+/* background: #f6f6f6; */
+margin: 0px 0px 0px 0px;
+/* font-weight: bold; */
+/* padding: 10px; */
+color: #fff;
+font-size: 20px;
+/* background: red; */
+text-align: left;
+/*text-shadow: 2px 2px #c2c1c1;
+*/}
 
 
 
@@ -313,25 +334,63 @@ color: black;
 }
 
 #chatbox_wrapper {
-width: 300px;
-height: 200px;
-background:yellow;	
+width: 370px;
+height: 125px;
+background: #fff;
+margin: 350px 0px 0px 5px;
+border-radius: 10px;
+-moz-box-shadow: inset 0 0 10px #000000;
+-webkit-box-shadow: inset 0 0 5px #000000;
+box-shadow: inset 0 0 5px #4A4949;
+position: absolute;
+z-index: 1000;
 }
 
 #chatbox_wrapper input {
-color:black;	
+margin: 0px 0px 0px 0px;
+overflow:hidden;
 }
  
 #send_txt_btn {
-background: white;
-border: none;
-color: #000;
-padding: 8px;
-float: right;
-border: 1px solid gray;
+
+border: 1px solid rgb(12, 143, 127);
+color: #fff;
+padding: 5px 10px 5px 10px;
+background: -webkit-linear-gradient(#82b2b2, #249797);
+background: -o-linear-gradient(#82b2b2, #249797);
+background: -moz-linear-gradient(#82b2b2, #249797);
+background: linear-gradient(#82b2b2, #249797);
+border-radius: 8px;
 }
 
 #txt_msgs {
-color: black;
+overflow: hidden;
+width: 370px;
+height: 80px;
+border-bottom: 1px solid #7F7F7F;
+padding: 15px 0px 0px 15px;
+color: #000;
+line-height: .4;
+text-align: left;
+}
 
+#chat_input_area {
+	padding-top: 6px;
+font-size: 12px;
+/*margin: 70px 0px 0px 0px;
+background: red;
+position: absolute;
+width: inherit;
+height: 30px;*/
+
+}
+
+#text_message {
+width: 290px;
+float: left;
+height: 30px;
+border-radius: 8px;
+background: #F4F1F1;
+margin: 0px 0px 0px 8px;
+color: #000;
 }

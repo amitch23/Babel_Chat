@@ -45,21 +45,44 @@
 
   </p> -->
 
-
+<div id="chat_main_wrapper">
 <div id="videochat_wrapper">
 
 {% for msg in get_flashed_messages() %}
               {{ msg }}
         {% endfor %}
 
-    <div id="game_wrapper_label"></div>
 
+        <div id="game_wrapper_label"></div>
+<div id='chatbox_wrapper' class='hidden'>
 
+                <div id="txt_msgs"></div>
+
+                <div id='chatbox_title'></div>
+
+                    <div id="chat_input_area">
+
+                        <input type="text" name="text_data" id="text_message" placeholder="Message">
+                        <input type='button' id='send_txt_btn'value="Enter">
+                    </div>    
+
+            </div><!--chatbox_wrapper-->
+        
     <div id="video_wrapper">
 
+
         <div id="subscriber_wrapper">
-            <div id="subscribers"></div>
-        </div>
+
+            <div id="subscribers">
+                
+            </div>
+
+            
+
+        </div><!--subscriber wrapper-->
+
+
+
 
         <div id="publisher_wrapper">
             <div id="publisher"></div>
@@ -102,35 +125,27 @@
 
             <div id="end_of_game" class="hidden">Your improvement is an inspiration to us all.</div> 
 
+
+
+
+
 <!-- 
             <h4>Messages received:</h4> -->
             <div id="log"></div>
 
 
         </div><!--game forms-->
+        <button id="end_session_btn" class='hidden'>End Session</button>
 
 
     </div><!--game_wrapper-->
-    <button id="end_session_btn" class='hidden'>End Session</button>
-
+    
 
 
 
 </div><!--videochat_wrapper-->
 
-<div id='chatbox_wrapper' class='hidden'>
-
-    <div id="txt_msgs"></div>
-
-    <div id='chatbox_title'></div>
-
-            <input type="text" name="text_data" id="text_message" placeholder="Message">
-            <input type='button' id='send_txt_btn'value="Enter">
-            <!-- <button id='send_txt_btn'>Enter</button> -->
-
-</div><!--chatbox_wrapper-->
-
-
+</div><!--chat main wrapper-->
 
 
 
