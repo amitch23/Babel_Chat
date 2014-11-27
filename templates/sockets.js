@@ -49,11 +49,11 @@
 
              {% if room_name==None %}
                 $("#game_wrapper_label").append("<p>You're in " + msg.room + " with " + msg.starter + "</p>")  
-                $("#end_session_btn").removeClass('hidden')
+                // $("#end_session_btn").removeClass('hidden')
    
              {% elif room_name!=None %}
                  $("#game_wrapper_label").append("<p>You're in " + msg.room + " with " + msg.joiner + "</p>")
-                 $("#end_session_btn").removeClass('hidden')
+                 // $("#end_session_btn").removeClass('hidden')
 
             {% endif %}       
         });
@@ -174,8 +174,7 @@
             {% if room_name==None %}
                  $('#card_wrapper').html('<img src="' + game_content_list[counter] + '" id="card"></img>');
                  timer = 10
-                 $("#timer").html("<h5>Timer:" + timer + "</h5");
-
+                 $("#timer").html("<img src='../static/img/timer.png'><h5>" + timer + "</h5>");
                  // when this function is called, every x seconds, the click event will fire
                  timeout = setTimeout('$("#card_wrapper").click()', 10000);
 
@@ -183,7 +182,7 @@
                  timer_interval = setInterval(function() 
                  {
                   timer -= 1;
-                  $("#timer").html("<h5>Timer:" + timer + "</h5");
+                  $("#timer").html("<img src='../static/img/timer.png'><h5>" + timer + "</h5>");
                   if (timer == 0){
                    clearInterval(timer_interval);
                    $("#timer").html('');
@@ -230,7 +229,7 @@
                     $('#card_wrapper').html('<img src="' + game_content_list[msg.counter] + '" id="card"></img>');
 
                     timer = 10
-                    $("#timer").html("<h5>Timer:" + timer + "</h5");
+                    $("#timer").html("<img src='../static/img/timer.png'><h5>" + timer + "</h5>");
 
                     // when this function is called, every x seconds, the click event will fire
                     timeout = setTimeout('$("#card_wrapper").click()', 10000);
@@ -239,7 +238,7 @@
                     timer_interval = setInterval(function() 
                     {
                      timer -= 1;
-                     $("#timer").html("<h5>Timer:" + timer + "</h5");
+                     $("#timer").html("<img src='../static/img/timer.png'><h5>" + timer + "</h5>");
                      if (timer == 0){
                       clearInterval(timer_interval);
                       $("#timer").html('');
@@ -327,10 +326,25 @@ socket.on('display_txt_msg', function(msg) {
                 console.log(msg);
                 // $('#log').html('asdfkjs;lkdfjlsdkjf');
 
-                $('#txt_msgs').append('<p>'+msg.sender+ ":" + msg.txt + '</p>');
+                $('#txt_msgs').append('<p>' + msg.sender+ ": " + msg.txt + '</p>');
             });
 
 
-    
+// $( "#subscriber_wrapper").hover(
+//   function() {
+//     console.log('buttno shows');
+//     $('#end_session_btn').removeClass('hidden');
+//   }, function() {
+//     $('#end_session_btn').addClass('hidden');
+//   }
+// );
+
+$('#videochat_wrapper').on('mouseover', function() {
+        $('#end_session_btn').removeClass('hidden');
+}).bind('mouseout',  function(){
+    $('#end_session_btn').addClass('hidden');
+}); 
+
+
 });
 

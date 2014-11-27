@@ -16,7 +16,6 @@
         var apiKey = '{{ api_key }}';
         var sessionId = '{{ session_id }}';
         var token = '{{ token }}';
-        console.log("token1" + token);
     </script>
     <script src="{{ url_for('static', filename='js/tok.js') }}"></script>
 
@@ -46,6 +45,8 @@
   </p> -->
 
 <div id="chat_main_wrapper">
+
+
 <div id="videochat_wrapper">
 
 {% for msg in get_flashed_messages() %}
@@ -54,20 +55,9 @@
 
 
         <div id="game_wrapper_label"></div>
-<div id='chatbox_wrapper' class='hidden'>
 
-                <div id="txt_msgs"></div>
+        <a href='#'><img id="end_session_btn" title="end the session and exit the room" src='../static/img/end_chat_btn.png' class='hidden'></a>
 
-                <div id='chatbox_title'></div>
-
-                    <div id="chat_input_area">
-
-                        <input type="text" name="text_data" id="text_message" placeholder="Message">
-                        <input type='button' id='send_txt_btn'value="Enter">
-                    </div>    
-
-            </div><!--chatbox_wrapper-->
-        
     <div id="video_wrapper">
 
 
@@ -92,8 +82,24 @@
 
 
     <div id="game_wrapper">
+     <div id="timer"></div>
+
         <div id="game_title" class='hidden'></div>
-            <div id="timer"></div>
+
+
+        <div id='chatbox_wrapper' class='hidden'>
+
+                        <div id="txt_msgs"></div>
+
+                        <div id='chatbox_title'></div>
+
+                            <div id="chat_input_area">
+
+                                <input type="text" name="text_data" id="text_message" placeholder="Message">
+                                <input type='button' id='send_txt_btn'value="Enter">
+                            </div>    
+
+                    </div><!--chatbox_wrapper-->
 
         <div id="game_forms">
             
@@ -116,6 +122,7 @@
 
                 <button id='join_room' class="hidden">Join</button>
                 
+                
 
                 <div id="next_placeholder"><button id='nxt_q' class="hidden">Next</button>
                 </div>
@@ -135,8 +142,8 @@
 
 
         </div><!--game forms-->
-        <button id="end_session_btn" class='hidden'>End Session</button>
 
+        
 
     </div><!--game_wrapper-->
     

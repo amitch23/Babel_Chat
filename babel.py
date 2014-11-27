@@ -302,7 +302,7 @@ def test_disconnect():
 
 GAME_INX = {
     'Taboo': """
-    Your goal is to have your partner say the word at the top of the card. You can say anything BUT any of the words that are on the list (including, obviously, the target word at the top) - these words are considered "taboo". When your partner has guessed the word, click 'next'.""",
+    Your goal is to have your partner say the word at the top of the card. You can say anything BUT any of the words that are on the list (including, obviously, the target word at the top) - these words are considered "taboo". When your partner has guessed the word, click the card.""",
     'Catchplace':"""
     Your goal is to help your partner guess the name of the city shown in the picture. You may say anything you please except for the name of the city or country that the city is in.
 e.g. card:
