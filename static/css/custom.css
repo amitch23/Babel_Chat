@@ -233,10 +233,12 @@ border-radius: 8px;
 #game_title{
 background: #a6a8a1;
 background: linear-gradient(#A9ACAC, #858E8E);
-height:50px;
-padding: 13px 0px 0px 10px;
+height:40px;
+padding: 10px 0px 0px 10px;
 color: #fff;
 box-shadow: 2px 3px 3px #d3d3d3;
+border-radius: 0px 8px 0px 0px;
+
 }
 
 
@@ -300,7 +302,7 @@ margin-right:100px;
 
 #end_session_btn {
 position: absolute;
-margin: 40px 0px 0px 40px;
+margin: 40px 0px 0px 0px;
 z-index: 1000;
 width: 40px;
 }
@@ -312,7 +314,7 @@ width: 40px;
 #timer h5{
 position: absolute;
 float: right;
-margin: 15px 0px 0px 250px;
+margin: 10px 0px 0px 250px;
 color: #DE4800;
 font-weight: 600;
 font-size: 18px;
@@ -320,8 +322,10 @@ font-size: 18px;
 
 #timer img{
 position: absolute;
-margin: 10px 0px 0px 60px;
+margin: 5px 0px 0px 60px;
+width: 30px;
 }
+
 #end_of_game {
 	padding: 20px;
 }
@@ -346,15 +350,33 @@ color: black;
 
 #chatbox_wrapper {
 width: 300px;
-height: 125px;
+height: 155px;
 background: #fff;
-margin: 305px 0px 0px 0px;
+margin: 285px 0px 0px 0px;
 /* border-radius: 10px; */
 -moz-box-shadow: inset 0 0 10px #000000;
 -webkit-box-shadow: inset 0 0 5px #000000;
 box-shadow: inset 0 0 5px #4A4949;
 position: absolute;
 /* z-index: 1000; */
+}
+
+#chatbox_title {
+background: linear-gradient(#A9ACAC, #858E8E);
+height: 30px;
+/*padding: 13px 0px 0px 10px;
+*/color: #fff;
+box-shadow: 2px 3px 3px #d3d3d3;
+}
+
+#chatbox_title h5{
+margin: 0px 0px 0px 0px;
+/* font-weight: bold; */
+color: #fff;
+font-size: 18px;
+text-align: left;
+/* background: red; */
+padding: 5px;
 }
 
 #chatbox_wrapper input {
@@ -378,10 +400,11 @@ border-radius: 8px;
 overflow: auto;
 width: 300px;
 height: 80px;
-border-bottom: 1px dotted #BCBABA;
+border: 1px solid #BCBABA;
 padding: 15px 0px 0px 15px;
 color: #000;
 line-height: .4;
+background: #F3F3F3;
 text-align: left;
 }
 

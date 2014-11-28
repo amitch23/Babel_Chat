@@ -48,10 +48,13 @@
             $("#chatbox_wrapper").removeClass("hidden");
 
              {% if room_name==None %}
+                $("#game_wrapper_label").removeClass('hidden');
                 $("#game_wrapper_label").append("<p>You're in " + msg.room + " with " + msg.starter + "</p>")  
                 // $("#end_session_btn").removeClass('hidden')
    
              {% elif room_name!=None %}
+
+                 $("#game_wrapper_label").removeClass('hidden');
                  $("#game_wrapper_label").append("<p>You're in " + msg.room + " with " + msg.joiner + "</p>")
                  // $("#end_session_btn").removeClass('hidden')
 
@@ -175,6 +178,7 @@
                  $('#card_wrapper').html('<img src="' + game_content_list[counter] + '" id="card"></img>');
                  timer = 10
                  $("#timer").html("<img src='../static/img/timer.png'><h5>" + timer + "</h5>");
+                 
                  // when this function is called, every x seconds, the click event will fire
                  timeout = setTimeout('$("#card_wrapper").click()', 10000);
 
@@ -327,33 +331,26 @@ socket.on('display_txt_msg', function(msg) {
                 // $('#log').html('asdfkjs;lkdfjlsdkjf');
 
                 $('#txt_msgs').append('<p>' + msg.sender+ ": " + msg.txt + '</p>');
+                $("#txt_msgs").prop('scrollTop', $("#txt_msgs").prop('scrollHeight'));
             });
-
-//failed attempts at getting the chatbox to stay at the bottom once scroll appears
-// $('#txt_msgs').animate({scrollTop: $('#txt_msgs').height()}, 'slow');
-
-// $('#txt_msgs').animate({ 
-//                    scrollTop: $("#txt_msgs").prop("scrollHeight")}, 0
-//                 );
-
-// $("#txt_msgs").prop({ scrollTop: $("#txt_msgs").prop("scrollHeight") });
 
 
 //some conflict with opentok API, link doesn't work, hovering makes it go crazy
-// $( "#subscriber_wrapper").hover(
-//   function() {
-//     console.log('buttno shows');
-//     $('#end_session_btn').removeClass('hidden');
-//   }, function() {
-//     $('#end_session_btn').addClass('hidden');
-//   }
-// );
-
-$('#videochat_wrapper').on('mouseover', function() {
-        $('#end_session_btn').removeClass('hidden');
-}).bind('mouseout',  function(){
+$( "#subscriber_wrapper").hover(
+  function() {
+    console.log('buttno shows');
+    $('#end_session_btn').removeClass('hidden');
+  }, function() {
     $('#end_session_btn').addClass('hidden');
-}); 
+  }
+);
+
+//end_session_btn appears on hover of videochat
+// $('#videochat_wrapper').on('mouseover', function() {
+//         $('#end_session_btn').removeClass('hidden');
+// }).bind('mouseout',  function(){
+//     $('#end_session_btn').addClass('hidden');
+// }); 
 
 
 

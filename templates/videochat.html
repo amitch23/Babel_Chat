@@ -54,14 +54,17 @@
         {% endfor %}
 
 
-        <div id="game_wrapper_label"></div>
+        <div id="game_wrapper_label" class='hidden'></div>
 
-        <a href='#'><img id="end_session_btn" title="end the session and exit the room" src='../static/img/end_chat_btn.png' class='hidden'></a>
-
+       <!--  <a href='#'><img id="end_session_btn" title="end the session and exit the room" src='../static/img/end_chat_btn.png' class='hidden'></a>
+ -->
     <div id="video_wrapper">
 
 
         <div id="subscriber_wrapper">
+
+        <a href='#'><img id="end_session_btn" title="end the session and exit the room" src='../static/img/end_chat_btn.png' class='hidden'></a>
+
 
             <div id="subscribers">
                 
@@ -89,9 +92,11 @@
 
         <div id='chatbox_wrapper' class='hidden'>
 
+                        <div id='chatbox_title'><h5>Chat</div>
+
                         <div id="txt_msgs"></div>
 
-                        <div id='chatbox_title'></div>
+                        
 
                             <div id="chat_input_area">
 
