@@ -425,8 +425,6 @@ margin-top: 20px;
 /* --------------------profile.html-----*/
 
 
-
-
 #profile_wrapper {
 color: #000;
 width: 1000px;
@@ -546,7 +544,6 @@ margin: 0px 70px 30px 30px;
 */}
 
 #prof_btns a:hover {
-/*text-decoration: none;
-*/color: #A7A7A7;
+color: #A7A7A7;
 background: red;
 }

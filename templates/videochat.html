@@ -19,76 +19,41 @@
     </script>
     <script src="{{ url_for('static', filename='js/tok.js') }}"></script>
 
-<!-- <script src="../static/js/sockets.js" type="text/javascript" charset="utf-8"></script> -->
-
-
-<!-- 
-<p>
-    name: {{ user.name }}<br/>
-    email: {{ user.email }}<br/>
-    native language: {{ user.language.language_name }}<br/>
-    country: {{ user.country.country_name }}<br/>
-
-    <strong><ul>Wants to learn</ul></strong>
-   {% for lang in user.Language_desired %}
-        <li>{{ lang.language.language_name }}</li>
-   {% endfor %}<br/>
-
-
-    {% if room_name %}
-        {{ user.name }} is starting room: {{ room_name }}
-    {% else %}
-        {{ user.name }} is in the waiting room.
-    {% endif %}
-
-
-  </p> -->
-
 <div id="chat_main_wrapper">
 
+    <div id="videochat_wrapper">
 
-<div id="videochat_wrapper">
-
-{% for msg in get_flashed_messages() %}
-              {{ msg }}
-        {% endfor %}
+    {% for msg in get_flashed_messages() %}
+                  {{ msg }}
+            {% endfor %}
 
 
         <div id="game_wrapper_label" class='hidden'></div>
 
-       <!--  <a href='#'><img id="end_session_btn" title="end the session and exit the room" src='../static/img/end_chat_btn.png' class='hidden'></a>
- -->
-    <div id="video_wrapper">
 
+            <div id="video_wrapper">
 
-        <div id="subscriber_wrapper">
+                <div id="subscriber_wrapper">
 
-        <a href='#'><img id="end_session_btn" title="end the session and exit the room" src='../static/img/end_chat_btn.png' class='hidden'></a>
+                <a href='#'><img id="end_session_btn" title="end the session and exit the room" src='../static/img/end_chat_btn.png' class='hidden'></a>
 
-
-            <div id="subscribers">
+                <div id="subscribers">
                 
-            </div>
+                </div><!--subscriber wrapper-->
+            </div><!--video wrapper-->
 
-            
+                <div id="publisher_wrapper">
+                    <div id="publisher"></div>
+                </div>
 
-        </div><!--subscriber wrapper-->
-
-
-
-
-        <div id="publisher_wrapper">
-            <div id="publisher"></div>
-        </div>
-
-    </div> <!--video_wrapper -->
+                </div> <!--video_wrapper -->
 
 
     <div id="game_wrapper">
-     <div id="timer"></div>
+        
+        <div id="timer"></div>
 
         <div id="game_title" class='hidden'></div>
-
 
         <div id='chatbox_wrapper' class='hidden'>
 
@@ -97,9 +62,7 @@
                         <h5>Chat</h5></div>
 
                         <div id="txt_msgs"></div>
-
-                        
-
+                     
                             <div id="chat_input_area">
 
                                 <input type="text" name="text_data" id="text_message" placeholder="Message">
@@ -109,61 +72,42 @@
                     </div><!--chatbox_wrapper-->
 
         <div id="game_forms">
-            
-
+                
             <div id="inx"></div>
             <img src='../static/img/gold_stars.png' id="gold_stars" class='hidden'>
 
             <div id="game_content"></div>
 
-           <a href="#"><div id="card_wrapper"></div></a>
+            <a href="#"><div id="card_wrapper"></div></a>
 
             <div id="game_buttons">
+               
                 <div id="start_btn_placeholder"><button id='start_btn' class="hidden">Start Playing </button>
                 <button id='start_convo_btn' class="hidden">Start Talking </button>
                 </div>
-
-
 
                 <div id="next_card_placeholder">
                 </div>
 
                 <button id='join_room' class="hidden">Join</button>
-                
-                
-
+             
                 <div id="next_placeholder"><button id='nxt_q' class="hidden">Next</button>
                 </div>
-                
+                    
             </div><!--game buttons-->
-
 
 
             <div id="end_of_game" class="hidden">Your improvement is an inspiration to us all.</div> 
 
+                <div id="log"></div>
 
-
-
-
-<!-- 
-            <h4>Messages received:</h4> -->
-            <div id="log"></div>
-
-
-        </div><!--game forms-->
-
-        
-
-    </div><!--game_wrapper-->
+            </div><!--game forms-->
+   
+        </div><!--game_wrapper-->
     
-
-
-
-</div><!--videochat_wrapper-->
+    </div><!--videochat_wrapper-->
 
 </div><!--chat main wrapper-->
-
-
 
 
 

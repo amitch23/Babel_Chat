@@ -5,16 +5,13 @@ import csv
 
 
 def load_users(session):
-#populate users table with 2 users        
+#populate users table      
     user_1 = ["Andrea Mitchell", "andrealeemitchell@gmail.com", "pass1", "en-US", "US", "Fun", "28", "Female", "English Teacher", "Oakland", "U.S.A.", "Los Angeles", "U.S.A.", "'Do good things.'", "static/img/andrea.jpg"]
 
     user_2 = ["Jacques Cousteau", "jacques@gmail.com", "pass2", "fr-FR", "FR", "Fun", '104', 'Male', 'Oceanographer', 'Paris', "France", "Gironde", "France", "'The sea, the great unifier, is man's only hope. Now, as never before, the old phrase has a literal meaning: We are all in the same boat.'", "static/img/jacques.jpg"]
   
     user_3 = ['Frida Kahlo', 'frida@gmail.com','pass3','es-MX','MX',"Travel",'107', "Female", "Painter", "Coyoacan", "Mexico", "Mexico City", "Mexico", "I hope the exit is joyful - and I hope never to return.", "static/img/frida.jpg"]
-    
-    # user_4 = ["Joe Hamburger", "joe@gmail.com", "pass4", "en-US", "US", "Fun"]
-
-
+ 
     users = [user_1, user_2, user_3]
 
     for user in users:
@@ -42,66 +39,11 @@ def load_users(session):
     
         session.add(user)
 
-
-    # user1 = model.User(  
-    #                     name =user_1[0],
-    #                     email=user_1[1],
-    #                     mother_tongue_code=user_1[3],
-    #                     country_code=user_1[4],
-    #                     reason=user_1[5],
-    #                     age=user_1[6],
-    #                     sex=user_1[7],
-    #                     occupation=user_1[8],
-    #                     current_city=user_1[9],
-    #                     current_country=user_1[10],
-    #                     origin_city=user_1[11],
-    #                     origin_country=user_1[12],
-    #                     about_txt=user_1[13],
-    #                     profile_url=user_1[14]
-    #                     )
-
-    # user1.set_password(user_1[2])
-
-    # user2 = model.User( 
-    #                     name =user_2[0],
-    #                     email=user_2[1],
-    #                     mother_tongue_code=user_2[3],
-    #                     country_code=user_2[4],
-    #                     reason=user_2[5])
-
-    # user2.set_password(user_2[2])
-
-
-    # user3 = model.User( 
-    #                     name =user_3[0],
-    #                     email=user_3[1],
-    #                     mother_tongue_code=user_3[3],
-    #                     country_code=user_3[4],
-    #                     reason=user_3[5])
-
-    # user3.set_password(user_3[2])
-
-
-    # user4 = model.User( 
-    #                     name =user_4[0],
-    #                     email=user_4[1],
-    #                     mother_tongue_code=user_4[3],
-    #                     country_code=user_4[4],
-    #                     reason=user_4[5])
-
-    # user4.set_password(user_4[2])
-
-
-    # session.add(user1)
-    # session.add(user2)
-    # session.add(user3)
-    # session.add(user4)
-
     session.commit()
 
 
 def load_languages(session):
-#populate languages table with 3 languages
+#populate languages table
 
     language_1 = ["en-US", "English"]
     language_2 = ["es-MX", "Spanish"]
@@ -153,7 +95,7 @@ def load_countries(session):
 
 
 def load_languages_desired(session):
-#populate languages_desired table with 2 languages for each user 
+#populate languages_desired table 
     
     lang_des_1=[1, "es-MX", "intermediate"]
     lang_des_2=[1, "fr-FR", "beginner"]

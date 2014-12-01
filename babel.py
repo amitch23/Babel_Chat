@@ -198,7 +198,12 @@ def video_chat():
 
     print session
     print "room_name %s" % room_name
-    return render_template("videochat.html", user=user, room_name=room_name, api_key=key, session_id=session_id, token=token)
+    return render_template("videochat.html", 
+                            user=user,
+                            room_name=room_name, 
+                            api_key=key,
+                            session_id=session_id, 
+                            token=token)
 
 #--------------------------------------------------^^
      #flask routes above, socket.io handlers below
@@ -250,7 +255,10 @@ def join(message):
 #sends msg re: who's in which room to both clients
 @socketio.on("display_to_room", namespace='/chat')
 def send_unique_usr_data(message):
-    emit("room_message", {'starter':message['starter'], 'joiner':message['joiner'], 'room':message['room']}, room=message['room'])
+    emit("room_message", {'starter':message['starter'],
+                          'joiner':message['joiner'], 
+                           'room':message['room']}, 
+                           room=message['room'])
 
 
 @socketio.on('leave', namespace='/chat')
@@ -262,7 +270,8 @@ def leave_the_room(message):
     
     print "rooms: %s" % rooms
 
-    emit('display_disconnect_alert', {'leaving_usr':session['login']}, room=message['room'])
+    emit('display_disconnect_alert', {'leaving_usr':session['login']}, 
+                                       room=message['room'])
 
 
 @socketio.on('disconnect', namespace='/chat')
@@ -273,13 +282,17 @@ def test_disconnect():
 
 GAME_INX = {
     'Taboo': """
-    Your goal is to have your partner say the word at the top of the card. You can say anything BUT any of the words that are on the list (including, obviously, the target word at the top) - these words are considered "taboo". When your partner has guessed the word, click the card.""",
+    Your goal is to have your partner say the word at the top of the card. 
+    You can say anything BUT any of the words that are on the list 
+    (including, obviously, the target word at the top) - these words are considered "taboo". 
+    When your partner has guessed the word, click the card.""",
     'Catchplace':"""
-    Your goal is to help your partner guess the name of the city shown in the picture. You may say anything you please except for the name of the city or country that the city is in.
+    Your goal is to help your partner guess the name of the city shown in the picture.
+    You may say anything you please except for the name of the city or country that the city is in.
 e.g. card:
 This is a very famous city in Europe where you can eat croissants.""",
     'Work': """
-    Instructions for conversation topic: work.
+    Discuss the questions that follow and don't be scared to go off topic!
      """,
      'Travel': """
      Discuss the questions that follow and don't be scared to go off topic!"""
@@ -317,25 +330,32 @@ def fetch_game_content(message):
         if usr.reason=="Fun":
             #query database for random game, append urls to empty card_list
             # game_choice = choice(dbsession.query(Game.game_type).distinct().all())[0]
-
             # game_cards = dbsession.query(Game).filter_by(game_type=game_choice).all()
 
+            #Choose Taboo game for demo day
             game_cards = dbsession.query(Game).filter_by(game_type='Taboo').all()
                     
             for card in game_cards:
                 card_url_list.append(card.filename)
                 print card.filename
 
-            emit("send_inx", {'room':message['room'], 'card_content':card_url_list, 'game':'Taboo'},  room=message['room'])    
+            emit("send_inx", {'room':message['room'], 
+                              'card_content':card_url_list, 
+                              'game':'Taboo'}, 
+                              room=message['room'])    
 
 
 @socketio.on("show_inx", namespace='/chat')
 def display_instructions(message):
     print message
     if message.get("game") == 'Work' or message.get("game") == "Travel":
-        emit("show_convo_inx", {"game": message['game'], "inx": GAME_INX[message['game']]}, room=message['room'])
+        emit("show_convo_inx", {"game": message['game'], 
+            "inx": GAME_INX[message['game']]}, 
+            room=message['room'])
     else:
-        emit("show_game_inx", {"game": message['game'], "inx": GAME_INX[message['game']]}, room=message['room'])
+        emit("show_game_inx", {"game": message['game'], 
+              "inx": GAME_INX[message['game']]}, 
+              room=message['room'])
 
 
 @socketio.on("send_1st_item", namespace='/chat')
@@ -352,7 +372,9 @@ def display_1st_card(message):
 @socketio.on("request_nxt_q", namespace='/chat')
 def fetch_nxt_q(message):
     if message.get("game_type") == "cards":
-        emit("display_nxt_card", {'room':message['room'], 'counter':message['counter']}, room=message['room'])
+        emit("display_nxt_card", {'room':message['room'], 
+                                  'counter':message['counter']}, 
+                                   room=message['room'])
     else:    
         emit("display_nxt_q",
           {'room':message['room'], "counter":message['counter']}, room=message['room'])
@@ -360,13 +382,11 @@ def fetch_nxt_q(message):
 
 #------------------chat box handlers --------
 
+#receives users' text messages and sends them to both clients in room
 @socketio.on('send_txt', namespace='/chat')
 def send_room_message(message):
-    print "made it!"
-    print message
 
-
-    emit('display_txt_msg',
+      emit('display_txt_msg',
          {'sender': message['sender'], 'txt':message['txt']},
          room=message['room'])
 
