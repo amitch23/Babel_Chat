@@ -203,33 +203,6 @@ def video_chat():
 #----handles join/leave room/connecting socket and start game-------
 
 rooms = {}
-
-"""
-rooms = {}
-
-# This checks if the room already exists
-
-dictionary.get("some key", "default value")
-
-# If the room isn't in our dict of rooms, we'll add it here.
-if rooms.get(mesage["room"]) == None:
-    rooms[message["room"]]= set()
-
-# How many people are in the room?
-len(rooms[message["room"]])
-
-## What to do if I'm already in the room?
-
-# Add a person to the room:
-# join_room(message["room"]) #<--- socket.io version of this
-# rooms[message["room"]].add(session['login'])
-
-
-"""
-
-# rooms = {
-#    "Pierre's French room": set(["andrea", "pierre"])
-# }
 #joins clients to room and adds clients to rooms
 @socketio.on('join', namespace='/chat')
 def join(message):
@@ -237,38 +210,37 @@ def join(message):
     print "rooms %s" % rooms
 
     if rooms.get(message["room"]) == None:
-        rooms[message["room"]] = set()
+        rooms[message["room"]] = []
 
     if len(rooms.get(message['room'], [])) < 2:
 
         if message['start'] == 1:
             join_room(message['room'])
-            rooms[message['room']].add(session['login'])
+            rooms[message['room']].append(session['login'])
 
-            print "rooms %s" % rooms
 
-            print "emiting invite_to_join"
+            print "rooms for starter %s" % rooms
+
             emit('invite_to_join',
                  {'room_name': message['room']},
                  broadcast=True)
 
         elif message['start']==2:
             join_room(message['room'])
-            rooms[message['room']].add(session['login'])
+            rooms[message['room']].append(session['login'])
 
+            print "rooms for joiner: %s" % rooms
 
-            starter = list(rooms[message['room']])[1]
-            joiner = list(rooms[message['room']])[0]
+            starter = rooms[message['room']][0]
+            joiner = rooms[message['room']][1]
 
-            print "starter: %s, Joiner: %s" % (starter, joiner)
-            print "rooms: %s" % rooms
+            print "Starter: %s, Joiner: %s" % (starter, joiner)
 
 
             emit('start_game', {'room_name': message['room'], 'starter': starter, 'joiner': joiner})
             emit('full_room', {}, broadcast=True)   
     else:
-        print "full"
-        # emit('full_room', {})
+        print "full room"
 
 
 #sends msg re: who's in which room to both clients
@@ -286,18 +258,13 @@ def leave_the_room(message):
     
     print "rooms: %s" % rooms
 
-    #stop game functionality. redirect user to 
-
     emit('display_disconnect_alert', {'leaving_usr':session['login']}, room=message['room'])
 
 
 @socketio.on('disconnect', namespace='/chat')
 def test_disconnect():
     print('Client disconnected')
-    # emit('display_disconnect_alert', {'leaving_usr':session['login']}, room=message['room'])
-
-
-#disconnect msg handler that I would use to check the room's dictionary. If any client disconnects, this function is automatically called and I could then clear their name from the rooms dictionary, or send a message to the still-connected client that their partner has disconnected.  
+ 
 #--------handles game moves-----------------#
 
 GAME_INX = {

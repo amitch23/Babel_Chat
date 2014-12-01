@@ -6,59 +6,96 @@ import csv
 
 def load_users(session):
 #populate users table with 2 users        
-    user_1 = ["Andrea Mitchell", "andrealeemitchell@gmail.com", "pass1", "en-US", "US", "Fun"]
+    user_1 = ["Andrea Mitchell", "andrealeemitchell@gmail.com", "pass1", "en-US", "US", "Fun", "28", "Female", "English Teacher", "Oakland", "U.S.A.", "Los Angeles", "U.S.A.", "'Do good things.'", "static/img/andrea.jpg"]
 
-    user_2 = ["Mer Taco", "mer@gmail.com", "pass2", "es-ES", "ES", "Job"]
+    user_2 = ["Jacques Cousteau", "jacques@gmail.com", "pass2", "fr-FR", "FR", "Fun", '104', 'Male', 'Oceanographer', 'Paris', "France", "Gironde", "France", "'The sea, the great unifier, is man's only hope. Now, as never before, the old phrase has a literal meaning: We are all in the same boat.'", "static/img/jacques.jpg"]
   
-    user_3 = ["Pierre Croissant", "pierre@gmail.com", "pass3", "fr-FR", "FR", "Travel"]
+    user_3 = ['Frida Kahlo', 'frida@gmail.com','pass3','es-MX','MX',"Travel",'107', "Female", "Painter", "Coyoacan", "Mexico", "Mexico City", "Mexico", "I hope the exit is joyful - and I hope never to return.", "static/img/frida.jpg"]
     
-    user_4 = ["Joe Hamburger", "joe@gmail.com", "pass4", "en-US", "US", "Fun"]
+    # user_4 = ["Joe Hamburger", "joe@gmail.com", "pass4", "en-US", "US", "Fun"]
 
 
+    users = [user_1, user_2, user_3]
 
-    user1 = model.User(  
-                        name =user_1[0],
-                        email=user_1[1],
-                        mother_tongue_code=user_1[3],
-                        country_code=user_1[4],
-                        reason=user_1[5])
+    for user in users:
+        
+        password=user[2]
 
-    user1.set_password(user_1[2])
+        user = model.User(
+            name =user[0],
+            email=user[1],
+            mother_tongue_code=user[3],
+            country_code=user[4],
+            reason=user[5],
+            age=user[6],
+            sex=user[7],
+            occupation=user[8],
+            current_city=user[9],
+            current_country=user[10],
+            origin_city=user[11],
+            origin_country=user[12],
+            about_txt=user[13],
+            profile_url=user[14]
+            )
 
-    user2 = model.User( 
-                        name =user_2[0],
-                        email=user_2[1],
-                        mother_tongue_code=user_2[3],
-                        country_code=user_2[4],
-                        reason=user_2[5])
-
-    user2.set_password(user_2[2])
-
-
-    user3 = model.User( 
-                        name =user_3[0],
-                        email=user_3[1],
-                        mother_tongue_code=user_3[3],
-                        country_code=user_3[4],
-                        reason=user_3[5])
-
-    user3.set_password(user_3[2])
+        user.set_password(password)
+    
+        session.add(user)
 
 
-    user4 = model.User( 
-                        name =user_4[0],
-                        email=user_4[1],
-                        mother_tongue_code=user_4[3],
-                        country_code=user_4[4],
-                        reason=user_4[5])
+    # user1 = model.User(  
+    #                     name =user_1[0],
+    #                     email=user_1[1],
+    #                     mother_tongue_code=user_1[3],
+    #                     country_code=user_1[4],
+    #                     reason=user_1[5],
+    #                     age=user_1[6],
+    #                     sex=user_1[7],
+    #                     occupation=user_1[8],
+    #                     current_city=user_1[9],
+    #                     current_country=user_1[10],
+    #                     origin_city=user_1[11],
+    #                     origin_country=user_1[12],
+    #                     about_txt=user_1[13],
+    #                     profile_url=user_1[14]
+    #                     )
 
-    user4.set_password(user_4[2])
+    # user1.set_password(user_1[2])
+
+    # user2 = model.User( 
+    #                     name =user_2[0],
+    #                     email=user_2[1],
+    #                     mother_tongue_code=user_2[3],
+    #                     country_code=user_2[4],
+    #                     reason=user_2[5])
+
+    # user2.set_password(user_2[2])
 
 
-    session.add(user1)
-    session.add(user2)
-    session.add(user3)
-    session.add(user4)
+    # user3 = model.User( 
+    #                     name =user_3[0],
+    #                     email=user_3[1],
+    #                     mother_tongue_code=user_3[3],
+    #                     country_code=user_3[4],
+    #                     reason=user_3[5])
+
+    # user3.set_password(user_3[2])
+
+
+    # user4 = model.User( 
+    #                     name =user_4[0],
+    #                     email=user_4[1],
+    #                     mother_tongue_code=user_4[3],
+    #                     country_code=user_4[4],
+    #                     reason=user_4[5])
+
+    # user4.set_password(user_4[2])
+
+
+    # session.add(user1)
+    # session.add(user2)
+    # session.add(user3)
+    # session.add(user4)
 
     session.commit()
 
@@ -67,7 +104,7 @@ def load_languages(session):
 #populate languages table with 3 languages
 
     language_1 = ["en-US", "English"]
-    language_2 = ["es-ES", "Spanish"]
+    language_2 = ["es-MX", "Spanish"]
     language_3 = ["fr-FR", "French"]
 
     language1 = model.Language(
@@ -93,7 +130,7 @@ def load_countries(session):
 #populate countries table with 3 countries
 
     country_1 = ["US", "U.S.A."]
-    country_2 = ["ES", "Spain"]
+    country_2 = ["MX", "Mexico"]
     country_3 = ["FR", "France"]
 
     country1 = model.Country(
@@ -118,12 +155,12 @@ def load_countries(session):
 def load_languages_desired(session):
 #populate languages_desired table with 2 languages for each user 
     
-    lang_des_1=[1, "es-ES", "intermediate"]
+    lang_des_1=[1, "es-MX", "intermediate"]
     lang_des_2=[1, "fr-FR", "beginner"]
-    lang_des_3=[2, "en-US", "advanced"]
-    lang_des_4=[2, "fr-FR", "beginner"]
-    lang_des_5=[3, "en-US", "advanced"]
-    lang_des_6=[3, "es-ES", "beginner"]
+    lang_des_3=[3, "en-US", "advanced"]
+    lang_des_4=[3, "fr-FR", "beginner"]
+    lang_des_5=[2, "en-US", "advanced"]
+    lang_des_6=[2, "es-MX", "beginner"]
 
 
 

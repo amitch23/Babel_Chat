@@ -102,20 +102,6 @@ color: #fff;
 
 }
 
-#profile_wrapper {
-	margin-top: 50px;
-	color: #000;
-
-
-}
-
-
-#profile_wrapper p{
-	color: #000; !important
-
-
-}
-
 a, a:focus, a:hover {
 	color: #6aa5a8;
 
@@ -327,8 +313,7 @@ width: 30px;
 }
 
 #end_of_game {
-	padding: 20px;
-}
+padding: 40px 40px 0px 40px;}
 
 .hidden {
 /*visibility: hidden;
@@ -343,7 +328,6 @@ display: none;
 #join_room {
 margin-top: 20px;
 }
-
 #log {
 color: black;
 }
@@ -377,6 +361,12 @@ font-size: 18px;
 text-align: left;
 /* background: red; */
 padding: 5px;
+}
+
+#chatbox_title img {
+float: right;
+width: 6%;
+margin: 7px 220px 0px 0px;
 }
 
 #chatbox_wrapper input {
@@ -424,4 +414,137 @@ border-radius: 8px;
 background: #F4F1F1;
 margin: 0px 0px 0px 8px;
 color: #000;
+}
+
+#gold_stars {
+margin-top: 20px;
+}
+
+/* --------------------profile.html-----*/
+
+
+
+
+#profile_wrapper {
+color: #000;
+width: 1000px;
+height: 500px;
+background: ;
+margin: auto;
+margin-top: 40px;
+
+}
+
+#profile_wrapper p {
+color: #000; 
+padding-right: 60px;
+
+font-size: 14px;
+}
+#prof_lft_col {
+width: 320px;
+background: ;
+height: 500px;
+float: left;
+text-align: left;
+}
+
+#prof_pic {
+width: 320px;
+height: 60%;
+border-radius: 10px 10px 0px 0px;
+background: ;
+overflow:hidden;
+}
+
+#basic_info {
+background: white;
+height: 40%;
+border-radius: 0px 0px 10px 10px;
+border-bottom: 2px solid #cccccc;
+
+}
+
+#basic_info h6{
+font-weight:600;
+}
+
+#basic_info_list {
+text-decoration: none;
+list-style: none;
+font-size: 13px;
+line-height: 2.8;
+padding: 5px 0px 0px 30px;
+
+}
+
+#basic_info_list li {
+display: inline;
+padding: 0px 0px 0px 20px;
+
+
+}
+
+#prof_rt_col {
+width: 615px;
+margin: 0px 25px 0px 0px;
+text-align: left;
+float: right;
+background: ;
+
+}
+
+#prof_name h1{
+font-size: 35px;
+font-weight: 600;
+}
+
+#prof_name h6{
+font-size: 18px;
+font-weight: 400;
+
+}
+
+#prof_body {
+padding: 10px 0px 20px 40px;
+background: #fff;
+border-radius: 10px;
+border-bottom: 2px solid #cccccc;
+margin: 30px 0px 0px 0px;
+}
+
+#prof_body h3 {
+color: #d5560f;
+font-weight: 600;
+}
+
+
+#prof_btns {
+height: 50px;
+margin: 30px 0px 15px 0px;
+
+}
+
+#prof_btns h3 {
+font-size: 20px;
+width: 180px;
+height: 50px;
+color: #fff;
+float: left;
+padding: 15px;
+border-radius: 8px;
+background-color: #b6d290;
+border: none;
+text-align: center;
+margin: 0px 70px 30px 30px;
+}
+
+#prof_btns a{
+/*color: green ;
+*/}
+
+#prof_btns a:hover {
+/*text-decoration: none;
+*/color: #A7A7A7;
+background: red;
 }

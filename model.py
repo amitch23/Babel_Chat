@@ -32,6 +32,16 @@ class User(Base):
     mother_tongue_code = Column(String(64), ForeignKey("languages.language_code"))
     country_code = Column(String(64), ForeignKey("countries.country_code"))
     reason = Column(String(64), nullable=False)
+    
+    age = Column(String(64), nullable=False)
+    sex = Column(String(64), nullable=False)
+    occupation = Column(String(64), nullable=False)
+    current_city = Column(String(64), nullable=False)
+    current_country = Column(String(64), nullable=False)
+    origin_city = Column(String(64), nullable=False)
+    origin_country = Column(String(64), nullable=False)
+    about_txt = Column(String(64), nullable=False)
+    profile_url = Column(String(64), nullable=False)
 
     language = relationship("Language", backref=backref("native_speakers"))
     country = relationship("Country", backref=backref("users"))

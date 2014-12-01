@@ -4,32 +4,61 @@
 
 <div id="profile_wrapper">
 
-	<p>name: {{ user.name }} <br/>
-	   email: {{ user.email }} <br/>
-	   native language: {{ user.language.language_name }} <br/>
-	   country: {{ user.country.country_name }} <br/>
-	   
-	    <strong><ul>Wants to learn</ul></strong>
-	   {% for lang in user.Language_desired %}
-	        <li>{{ lang.language.language_name }}</li>
-	        <li>Reason for learning: {{ user.reason }}</li>
-	   {% endfor %}<br/>
+<div id="prof_lft_col">
 
-	 </p>
+	<div id="prof_pic"><img src="../{{ user.profile_url }}" width='100%'></div>
+
+	<div id="basic_info">
+	<ul id='basic_info_list'>
+		
+	<img src="../static/img/online_icon.png" ><li>Online Now!</li></br>
+
+	<img src="../static/img/gender_icon.png" ><li>{{ user.age }}, {{user.sex }}</li></br>
+	<img src="../static/img/occupation_icon.png" ><li>{{ user.occupation }}</li></br>
+	<img src="../static/img/pin_icon.png" ><li>From {{ user.origin_city }}, {{ user.origin_country }}</li></br>
+	<img src="../static/img/babel_icon.png" ><li><i>Member since October, 2014</i></li></br>
+
+	</ul>
+
+	</div>
+
+</div><!--profile_lft_col-->
+
+<div id="prof_rt_col">
+	<div id='prof_name'><h1>{{ user.name }}</h1><h6>{{ user.current_city }}, {{ user.country.country_name }}</h6>
+	</div>
 
 
-	<h1 style="font-size: 35px; font-color: #000; !important"> <a href="/video_chat?start={{ user.mother_tongue_code }}">Start A New Game</a> </h1>
+	<div id="prof_body">
+
+		<h3>NATIVE LANGUAGE: </h3><p>{{ user.language.language_name }}</p>
+
+		<h3>LEARNING:</h3> 
+		{% for lang in user.Language_desired %}
+		     <p>{{ lang.language.language_name }} ({{ lang.level }})</p>
+
+		{% endfor %}
+
+		<h3>PHILOSOPHY:</h3>
+
+		<p> "{{ user.about_txt }}"</p>
+	
+		<div id="prof_btns">
+
+			<a href="/video_chat?start={{ user.mother_tongue_code }}"><h3>Start Chatting</h3></a> 
 
 
-	<h1 style="font-size: 35px; font-color: #000; !important"> <a href="/video_chat">Join the Waiting Room</a> </h1>
+			<a href="/video_chat"><h3>Waiting Room</h3></a> 
 
+			
+		</div><!--prof_btns-->
+	</div><!--prof body-->
+
+</div><!--prof_rt_col-->
+
+	
 </div> <!--profile_wrapper -->
 
-
-<!-- header bar, with logo/link to index, login name, logout link
-
-profile filler pic, name info, (all database info passed as variables)
--->
 
 
 {% endblock %}

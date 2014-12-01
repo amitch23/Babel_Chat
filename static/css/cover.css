@@ -28,9 +28,9 @@ a:hover {
 body {
   height: 100%;
   background-color: #282626;  
-background-image: url("../img/halftone.png");
-  color: #fff;
-  /*background: #363636;*/
+/*background-image: url("../img/halftone.png");
+*/  color: #fff;
+  background: #efede2;
 
   text-align: center;
 }

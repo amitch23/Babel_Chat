@@ -117,27 +117,25 @@
             socket.emit("request_nxt_q", {counter:counter+1, room: room_name});
         });
 
-        //displays next q by updated counter #
+        //displays next q by updated counter number
         socket.on("display_nxt_q", function(msg) {
             console.log(game_content_list.length - 1);
             counter = msg.counter;
 
             if (counter < (game_content_list.length)) {
-                console.log("hit");
-
                 $('#game_content').html(game_content_list[msg.counter]);
             }
             else {
-                console.log("length of counter is greater");
                 // $('#game_title').html('');
                 $('#nxt_q').addClass('hidden');
-                $("#game_content").html("Great job!");
-                // socket.emit('leave', {room : msg.room});
+                $("#gold_stars").removeClass('hidden');
 
-                $("#end_of_game").html("<p>Your linguistic improvement is an inspiration to us all.</p>");
+
+                $("#game_content").html("<h2>Great job!</h2>");
+                $("#end_of_game").removeClass("hidden");
+
 
             }                
-            //get next item in list by counter
             
         });
 
@@ -178,7 +176,7 @@
                  $('#card_wrapper').html('<img src="' + game_content_list[counter] + '" id="card"></img>');
                  timer = 10
                  $("#timer").html("<img src='../static/img/timer.png'><h5>" + timer + "</h5>");
-                 
+
                  // when this function is called, every x seconds, the click event will fire
                  timeout = setTimeout('$("#card_wrapper").click()', 10000);
 
@@ -255,10 +253,8 @@
                 console.log("starter"+starter, 'joiner'+joiner);
 
                 if (turn==false) {
-                    $('#game_content').html('');
+                    $("#gold_stars").removeClass('hidden');
                     $("#game_content").html("<h2>Great job!</h2>");
-                    // socket.emit('leave', {room : msg.room});
-
                     $("#end_of_game").removeClass("hidden");
 
                     // $("#keep_chatting").removeClass("hidden");
@@ -268,10 +264,10 @@
 
                 else {
                     $('#card_wrapper').html('');
+                    $("#gold_stars").removeClass('hidden');
                     $("#game_content").html("<h2>Great job!</h2>");
-                    // socket.emit('leave', {room : msg.room});
-
                     $("#end_of_game").removeClass("hidden");
+
 
 
                 }
@@ -304,9 +300,10 @@
 
     //-----------chat box handlers-----------------------
 
+//send message and txt sender to server when user clicks button
 $('#send_txt_btn').click(function(event) {
 
-            console.log(starter+joiner);
+                console.log("starter: "+starter+'joiner: '+joiner);
 
                 {% if room_name!= None %}
                 socket.emit('send_txt', {room: room_name, sender: starter, txt: $('#text_message').val()});
@@ -318,27 +315,23 @@ $('#send_txt_btn').click(function(event) {
                 {% endif %}
             });
 
-
+//if user hits enter, run function
 $('#text_message').keypress(function(evt) {
     if (evt.which === 13) {
         $('#send_txt_btn').click();
     }
 });
 
-
+//display message to users in room
 socket.on('display_txt_msg', function(msg) {
-                console.log(msg);
-                // $('#log').html('asdfkjs;lkdfjlsdkjf');
-
-                $('#txt_msgs').append('<p>' + msg.sender+ ": " + msg.txt + '</p>');
-                $("#txt_msgs").prop('scrollTop', $("#txt_msgs").prop('scrollHeight'));
+            $('#txt_msgs').append('<p>' + msg.sender+ ": " + msg.txt + '</p>');
+            $("#txt_msgs").prop('scrollTop', $("#txt_msgs").prop('scrollHeight'));
             });
 
 
-//some conflict with opentok API, link doesn't work, hovering makes it go crazy
+//end_session_btn shows on hover of subscriber wrapper
 $( "#subscriber_wrapper").hover(
   function() {
-    console.log('buttno shows');
     $('#end_session_btn').removeClass('hidden');
   }, function() {
     $('#end_session_btn').addClass('hidden');
