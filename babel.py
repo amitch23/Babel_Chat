@@ -15,6 +15,10 @@ import os
 try:
     api_key = os.environ['API_KEY']
     api_secret = os.environ['API_SECRET']
+
+    api_key = os.environ.get("API_KEY", "No api key.")
+    api_secret = os.environ.get("API_SECRET", "No api secret.")
+    
 except Exception:
     raise Exception('You must define API_KEY and API_SECRET environment variables')
 
@@ -278,7 +282,7 @@ This is a very famous city in Europe where you can eat croissants.""",
     Instructions for conversation topic: work.
      """,
      'Travel': """
-     Instructions for travel topic."""
+     Discuss the questions that follow and don't be scared to go off topic!"""
 }
 
 @socketio.on("get_game_content", namespace = '/chat')
@@ -312,14 +316,17 @@ def fetch_game_content(message):
         
         if usr.reason=="Fun":
             #query database for random game, append urls to empty card_list
-            game_choice = choice(dbsession.query(Game.game_type).distinct().all())[0]
+            # game_choice = choice(dbsession.query(Game.game_type).distinct().all())[0]
 
-            game_cards = dbsession.query(Game).filter_by(game_type=game_choice).all()
+            # game_cards = dbsession.query(Game).filter_by(game_type=game_choice).all()
+
+            game_cards = dbsession.query(Game).filter_by(game_type='Taboo').all()
                     
             for card in game_cards:
                 card_url_list.append(card.filename)
+                print card.filename
 
-            emit("send_inx", {'room':message['room'], 'card_content':card_url_list, 'game':game_choice},  room=message['room'])    
+            emit("send_inx", {'room':message['room'], 'card_content':card_url_list, 'game':'Taboo'},  room=message['room'])    
 
 
 @socketio.on("show_inx", namespace='/chat')

@@ -8,6 +8,12 @@ Babel Chat is built in Python with a Flask framework, uses a SQLite database, an
 
 ![picture](https://github.com/amitch23/Babel_chat/blob/master/static/Babel_chat_index.png)
 
+![picture](https://github.com/amitch23/Babel_chat/blob/master/static/jacques_prof.png)
+
+![picture](https://github.com/amitch23/Babel_chat/blob/master/static/videochat1.png)
+
+
+
 Getting started:
 --------------------
 1) First, clone this directory to your computer.

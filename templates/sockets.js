@@ -324,7 +324,7 @@ $('#text_message').keypress(function(evt) {
 
 //display message to users in room
 socket.on('display_txt_msg', function(msg) {
-            $('#txt_msgs').append('<p>' + msg.sender+ ": " + msg.txt + '</p>');
+            $('#txt_msgs').append('<p><b>' + msg.sender+ "</b>: " + msg.txt + '</p>');
             $("#txt_msgs").prop('scrollTop', $("#txt_msgs").prop('scrollHeight'));
             });
 
@@ -337,13 +337,6 @@ $( "#subscriber_wrapper").hover(
     $('#end_session_btn').addClass('hidden');
   }
 );
-
-//end_session_btn appears on hover of videochat
-// $('#videochat_wrapper').on('mouseover', function() {
-//         $('#end_session_btn').removeClass('hidden');
-// }).bind('mouseout',  function(){
-//     $('#end_session_btn').addClass('hidden');
-// }); 
 
 
 

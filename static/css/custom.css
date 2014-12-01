@@ -396,11 +396,13 @@ color: #000;
 line-height: .4;
 background: #F3F3F3;
 text-align: left;
+line-height: normal;
+font-size: 10px;
 }
 
 #chat_input_area {
 padding-top: 6px;
-font-size: 12px;
+font-size: 11px;
 margin: 0px 0px 0px 10px;
 
 
