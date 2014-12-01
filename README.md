@@ -12,7 +12,6 @@ Profile page:
 ![picture](https://github.com/amitch23/Babel_chat/blob/master/static/jacques_prof.png)
 
 Videochat Room:
-![picture](https://github.com/amitch23/Babel_chat/blob/master/static/videochat1.png)
 
 ![picture](https://github.com/amitch23/Babel_chat/blob/master/static/videochat3.png)
 
@@ -35,6 +34,12 @@ $ . env/bin/activate
 <pre><code>(env)$ pip install -r requirements.txt
 </code></pre>
 
+4) OpenTok API requires api_key and api_secret variables. Go to 'https://tokbox.com/' and sign up to get your keys and set them in BASH:
+
+<pre><code>
+export API_KEY="your_API_key"
+export API_SECRET="your_API_secret"
+</pre></code>
 
 4) In Chrome or Firefox, open 2 browser windows - one in 'normal' mode and another in incognito or private mode:
 
