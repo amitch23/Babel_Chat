@@ -222,7 +222,7 @@ def load_conversations(session):
 
     convo_1 = ["job", "Talk about your job and your role in your company."]    
     convo_2 = ["job", "Talk about your daily work tasks."]    
-    convo_3 = ["job", "Who is most likely to usurp the boss?"] 
+    convo_3 = ["job", "Where would you like to work and why?"] 
     convo_4 = ["travel", "Where have you travelled to and what was your favorite place?"]    
     convo_5 = ["travel", "How often do you travel?"]  
     convo_6 = ["travel", "What are you favorite travel activities?"]   
