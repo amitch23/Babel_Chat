@@ -158,12 +158,15 @@ def add_reason():
 @app.route("/profile")
 def display_profile():
     """display profile page if user in database"""
+    #clear rooms when users go to profile page
+    global rooms
+    rooms = {}
 
     user = dbsession.query(User).filter_by(name=session.get("login")).first()
     
     if not user:
         return redirect(url_for("display_index"))
-        #flash
+        flash("You're not logged in.")
     return render_template("profile.html", user=user)
                            
 
@@ -207,7 +210,6 @@ def video_chat():
 @socketio.on('join', namespace='/chat')
 def join(message):
     """joins and adds clients to global var rooms"""
-
     global rooms
     if rooms.get(message["room"]) == None:
         rooms[message["room"]] = []
@@ -229,7 +231,7 @@ def join(message):
             joiner = rooms[message['room']][1]
 
             emit('start_game', {'room_name': message['room'], 'starter': starter, 'joiner': joiner})
-            emit('full_room', {}, broadcast=True)   
+            # emit('full_room', {}, broadcast=True)   
     else:
         print "full room"
 
@@ -317,7 +319,6 @@ def fetch_game_content(message):
                     
             for card in game_cards:
                 card_url_list.append(card.filename)
-                print card.filename
 
             emit("send_inx", {'room':message['room'], 
                               'card_content':card_url_list, 
@@ -352,7 +353,7 @@ def display_1st_card(message):
 
 @socketio.on("request_nxt_q", namespace='/chat')
 def fetch_nxt_q(message):
-    """send room name and msg to both clients to display next card or question"""
+    """send room name and msg to both clients to display next card or"""
 
     if message.get("game_type") == "cards":
         emit("display_nxt_card", {'room':message['room'], 
@@ -365,11 +366,11 @@ def fetch_nxt_q(message):
 
 #------------------chat box handlers --------
 
-#receives users' text messages and sends them to both clients in room
+
 @socketio.on('send_txt', namespace='/chat')
 def send_room_message(message):
-    """send user text-message and sender name to both clients"""
-
+    """receives users' text messages and sends them to both clients in room"""
+    
     emit('display_txt_msg',
          {'sender': message['sender'], 'txt':message['txt']},
          room=message['room'])

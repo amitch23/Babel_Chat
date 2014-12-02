@@ -62,12 +62,12 @@ $(document).ready(function(){
         socket.emit('get_game_content', {room: msg.room_name});
     });
 
-    //removes join_button when room is full
+    //remove join_button when room is full
     socket.on('full_room', function(msg) {
         $("#join_room").addClass('hidden');
     });
 
-    //saves content as list in global var 'game_content_list' 
+    //save content as list in global var 'game_content_list' 
     socket.on('send_convo_inx', function(msg) {
         for (var i = 0; i < msg.game_content.length; i++) {
                 game_content_list.push(msg.game_content[i]);
@@ -84,7 +84,7 @@ $(document).ready(function(){
           $('#start_convo_btn').removeClass('hidden');
       });
 
-    //sends msg to server to show 1st card
+    //send msg to server to show 1st card
     $("#start_convo_btn").click(function(evt) {
         socket.emit("send_1st_item", {room: room_name, topic:"convo"});
         
@@ -99,7 +99,7 @@ $(document).ready(function(){
         $('#nxt_q').removeClass('hidden');
     });
 
-    // sends data to server to request next card for both clients.
+    // send data to server to request next card for both clients.
     $('#nxt_q').click(function(evt){
         socket.emit("request_nxt_q", {counter:counter+1, room: room_name});
     });
