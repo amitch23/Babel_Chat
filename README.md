@@ -73,7 +73,7 @@ Once a user enters the waiting room or starts a game, the web sockets are connec
 
 For two users to join a room and start a game, 15 separate passes between the clients and server are called. (By ‘pass’, I mean a request or ‘call’ emitted through the cloud.)
 
-The diagram below demonstrates how the server and clients are emitting and receiving data. Each arrow is a function that sends a python dictionary or javascript object to either the front or back end.
+The diagram below demonstrates how the server and clients are emitting and receiving data. Each arrow represents a function that sends a python dictionary (or javascript object) to either the client or server.
 
 
 ![picture](https://github.com/amitch23/Babel_chat/blob/master/static/socketconnection.jpg)
