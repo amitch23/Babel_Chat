@@ -66,6 +66,18 @@ The Breakdown:
   - Jquery and Bootstrap libraries with custom CSS stylesheets.
  
 
+A little bit about websockets:
+--------------------
+
+Once a user enters the waiting room or starts a game, the web sockets are connected for both clients. Instead of standard http requests, web sockets open a bidirectional, real time channel in which the server 'listens' to emissions from the connected clients and vice versa. 
+
+For two users to join a room and start a game, 15 separate passes between the clients and server are called. (By ‘pass’, I mean a request or ‘call’ emitted through the cloud.)
+
+The diagram below demonstrates how the server and clients are emitting and receiving data. Each arrow is a function that sends a python dictionary or javascript object to either the front or back end.
+
+
+![picture](https://github.com/amitch23/Babel_chat/blob/master/static/socketconnection.jpg)
+
 
 Contact information
 ------------------------
