@@ -1,28 +1,23 @@
-from gevent import monkey
-monkey.patch_all()
+import os
+from random import choice
 
-from flask import Flask, render_template, redirect, request, flash, session
-from model import User, Country, Language, Language_desired, Game, Conversation, session as dbsession 
 import jinja2
-import time
+from flask import Flask, render_template, redirect, request, flash, session, url_for
 from threading import Thread
 from flask.ext.socketio import SocketIO, emit, join_room, leave_room
-from random import choice
+from gevent import monkey
 from opentok import OpenTok
-import os
 
+from model import User, Country, Language, Language_desired, Game, Conversation, session as dbsession 
 
 try:
     api_key = os.environ['API_KEY']
     api_secret = os.environ['API_SECRET']
-
-    api_key = os.environ.get("API_KEY", "No api key.")
-    api_secret = os.environ.get("API_SECRET", "No api secret.")
     
 except Exception:
     raise Exception('You must define API_KEY and API_SECRET environment variables')
 
-
+monkey.patch_all()
 app = Flask(__name__)
 app.debug=True
 app.config['SECRET_KEY']='secret!'
@@ -31,12 +26,7 @@ thread=None
 
 opentok = OpenTok(api_key, api_secret)
 toksession = opentok.create_session()
-
-
-@app.route("/clearsession")
-def clearsession():
-    session.clear()
-    return "session cleared"
+rooms = {}
 
 @app.route("/")
 def display_index():
@@ -45,8 +35,9 @@ def display_index():
 
 @app.route("/login", methods=['POST'])
 def login():
-    #check if user in db, add to session and redirect to profile
-    #if not in db, redirect to index page
+    """check if user in db, add to session and redirect to profile
+    if not in db, redirect to index page"""
+
     email = request.form.get("email")
     password = request.form.get("password")
 
@@ -55,33 +46,33 @@ def login():
     if usr and usr.check_password(password):
         session["login"] = usr.name
         session["mother_tongue"] = usr.language.language_name
-        # session["lang_desired"] = usr.Language_desired[0].language.language_name
-        print session   
         return redirect("/profile")
 
     else: 
         flash("User not recognized, please try again.")
         return redirect("/")
 
+
 @app.route("/signup")
 def sign_up():
-    print session
+    """check if user in session, if not render sign up form"""
+
     if session.get('login', False):
         flash("You are already logged in.")
         return redirect("/")
     else:
         return render_template("signup.html")
 
+
 @app.route("/add_new_usr", methods=['POST'])
 def create_new_user():
+    """add user info to session if user email not in database"""
 
     name = request.form.get("fullname")
     email = request.form.get("email")
     password = request.form.get("password")
     mother_tongue_code = request.form.get("mother_tongue")
     country_code = request.form.get("country_code")
-
-
 
     #check in db if email, if not add all info to session
     if dbsession.query(User).filter_by(email = email).first():
@@ -93,16 +84,20 @@ def create_new_user():
         session['password']=password
         session['mother_tongue_code']=mother_tongue_code
         session['country_code']=country_code
-        print session
         return redirect("/language_desired")
+
 
 @app.route("/language_desired")
 def lang_desired():
+    """Render languages desired form template"""
+
     return render_template("languages_desired.html")
+
 
 @app.route("/add_desired_lang", methods=['POST'])
 def add_desired_lang():
-    print session
+    """add language and level to session if user input"""
+
     language_code = request.form.get("language")
     level = request.form.get("level")
 
@@ -111,22 +106,22 @@ def add_desired_lang():
         session['language']=lang.language_name
         session['level']=level
         return redirect("/reason")
-    else:
-        flash("Please fill out all the info.")
+
+    flash("Please fill out all the info.")
+    return redirect(url_for('lang_desired'))
+
    
 @app.route("/reason")
 def reason():
+    """Render reason for learning form template"""
     return render_template("reason.html")
+
 
 @app.route("/add_reason", methods=['POST'])
 def add_reason():
-    #add user to dbsession and redirect to profile.html
-
+    """add user and language desired to dbsession and redirect to profile.html"""
     reason = request.form.get("reason")
     session['reason']=reason
-    print session
-    print reason
-
 
     usr = User(
                 name=session["name"], 
@@ -141,11 +136,7 @@ def add_reason():
     dbsession.add(usr)
     dbsession.commit()
 
-    print session
-    print usr
-
-    lang = dbsession.query(Language).filter_by(language_name=session['language']).first()
-    print lang.language_code
+    lang = dbsession.query(Language).filter_by(language_name=session.get('language')).first()
 
     lang_desired = Language_desired(
                 user_id=usr.id,
@@ -161,43 +152,45 @@ def add_reason():
     #add info to session 
     session["login"] = usr.name
     session["mother_tongue"] = usr.language.language_name
-    # session["lang_desired"] = usr.Language_desired[0].language.language_name
     return redirect("/profile") 
 
 
 @app.route("/profile")
 def display_profile():
-    global rooms
-    rooms = {}
-    user = dbsession.query(User).filter_by(name=session["login"]).first()
-    print session
+    """display profile page if user in database"""
+
+    user = dbsession.query(User).filter_by(name=session.get("login")).first()
+    
+    if not user:
+        return redirect(url_for("display_index"))
+        #flash
     return render_template("profile.html", user=user)
                            
 
 @app.route("/logout")
 def logout():
+    """clear session and redirect to home page"""
     session.clear()
     return redirect("/")
 
-@app.route("/video_chat")
-# @login_required
-def video_chat():
 
-    #handles opentok session, token creation    
+@app.route("/video_chat")
+def video_chat():
+    """pass user instance and variable for room_name if user clicked on 'create 
+    new game' in profile.html"""    
+
     key = api_key
     session_id = toksession.session_id
     token = opentok.generate_token(session_id)    
     
-    user = dbsession.query(User).filter_by(name=session['login']).first()
+    user = dbsession.query(User).filter_by(name=session.get('login')).first()
 
     start = request.args.get('start')
     room_name = None
 
     if start:
-        room_name = session['login'] + "\'s " + session["mother_tongue"] + " Room" 
+        room_name = session.get('login') + "\'s " + session.get("mother_tongue") + " Room" 
 
-    print session
-    print "room_name %s" % room_name
     return render_template("videochat.html", 
                             user=user,
                             room_name=room_name, 
@@ -211,13 +204,11 @@ def video_chat():
 
 #----handles join/leave room/connecting socket and start game-------
 
-rooms = {}
-#joins clients to room and adds clients to rooms
 @socketio.on('join', namespace='/chat')
 def join(message):
-    global rooms
-    print "rooms %s" % rooms
+    """joins and adds clients to global var rooms"""
 
+    global rooms
     if rooms.get(message["room"]) == None:
         rooms[message["room"]] = []
 
@@ -226,10 +217,7 @@ def join(message):
         if message['start'] == 1:
             join_room(message['room'])
             rooms[message['room']].append(session['login'])
-
-
-            print "rooms for starter %s" % rooms
-
+            
             emit('invite_to_join',
                  {'room_name': message['room']},
                  broadcast=True)
@@ -237,14 +225,8 @@ def join(message):
         elif message['start']==2:
             join_room(message['room'])
             rooms[message['room']].append(session['login'])
-
-            print "rooms for joiner: %s" % rooms
-
             starter = rooms[message['room']][0]
             joiner = rooms[message['room']][1]
-
-            print "Starter: %s, Joiner: %s" % (starter, joiner)
-
 
             emit('start_game', {'room_name': message['room'], 'starter': starter, 'joiner': joiner})
             emit('full_room', {}, broadcast=True)   
@@ -252,9 +234,10 @@ def join(message):
         print "full room"
 
 
-#sends msg re: who's in which room to both clients
 @socketio.on("display_to_room", namespace='/chat')
 def send_unique_usr_data(message):
+    """sends message regarding who's in which room to both clientsw"""
+
     emit("room_message", {'starter':message['starter'],
                           'joiner':message['joiner'], 
                            'room':message['room']}, 
@@ -263,13 +246,10 @@ def send_unique_usr_data(message):
 
 @socketio.on('leave', namespace='/chat')
 def leave_the_room(message):
-    #removes user from room, from rooms dictionary, alerts other player
+    """removes user from room, from rooms dictionary, alerts other client in room"""
+
     leave_room(message['room'])
-
     rooms[message['room']].remove(session['login'])
-    
-    print "rooms: %s" % rooms
-
     emit('display_disconnect_alert', {'leaving_usr':session['login']}, 
                                        room=message['room'])
 
@@ -298,17 +278,17 @@ This is a very famous city in Europe where you can eat croissants.""",
      Discuss the questions that follow and don't be scared to go off topic!"""
 }
 
+
 @socketio.on("get_game_content", namespace = '/chat')
 def fetch_game_content(message):
-    #fetch game content in a list by 2nd usr's reason in users table
+    """Fetch game content in a list by 2nd usr's reason in users table in database"""
+
     usr = dbsession.query(User).filter_by(name=session["login"]).first()
 
-    print session['login']
     game_content_list = []
     card_url_list = []
 
     if len(rooms[message['room']]) == 2:
-
         if usr.reason=="Job":
             job_qs = dbsession.query(Conversation).filter_by(category="job").all()
             for q in job_qs:
@@ -332,7 +312,7 @@ def fetch_game_content(message):
             # game_choice = choice(dbsession.query(Game.game_type).distinct().all())[0]
             # game_cards = dbsession.query(Game).filter_by(game_type=game_choice).all()
 
-            #Choose Taboo game for demo day
+            #Choose Taboo game for career day
             game_cards = dbsession.query(Game).filter_by(game_type='Taboo').all()
                     
             for card in game_cards:
@@ -347,7 +327,8 @@ def fetch_game_content(message):
 
 @socketio.on("show_inx", namespace='/chat')
 def display_instructions(message):
-    print message
+    """send message to both clients with game/conversation instructions"""
+
     if message.get("game") == 'Work' or message.get("game") == "Travel":
         emit("show_convo_inx", {"game": message['game'], 
             "inx": GAME_INX[message['game']]}, 
@@ -360,7 +341,8 @@ def display_instructions(message):
 
 @socketio.on("send_1st_item", namespace='/chat')
 def display_1st_card(message):
-    print message['topic']
+    """send message to both clients to display 1st game item"""
+
     if message.get("topic") == "convo":
         emit("display_first_q",{'room':message['room']}, room=message['room'] )
     else:
@@ -368,9 +350,10 @@ def display_1st_card(message):
               {'room':message['room']}, room=message['room'])
 
 
-# sends room name and msg to both clients for game flow
 @socketio.on("request_nxt_q", namespace='/chat')
 def fetch_nxt_q(message):
+    """send room name and msg to both clients to display next card or question"""
+
     if message.get("game_type") == "cards":
         emit("display_nxt_card", {'room':message['room'], 
                                   'counter':message['counter']}, 
@@ -385,12 +368,11 @@ def fetch_nxt_q(message):
 #receives users' text messages and sends them to both clients in room
 @socketio.on('send_txt', namespace='/chat')
 def send_room_message(message):
+    """send user text-message and sender name to both clients"""
 
-      emit('display_txt_msg',
+    emit('display_txt_msg',
          {'sender': message['sender'], 'txt':message['txt']},
          room=message['room'])
-
-
 
 
 if __name__ == "__main__":

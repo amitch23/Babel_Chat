@@ -34,7 +34,7 @@ $ . env/bin/activate
 <pre><code>(env)$ pip install -r requirements.txt
 </code></pre>
 
-4) OpenTok API requires api_key and api_secret variables. Go to 'https://tokbox.com/' and sign up to get your keys and set them in BASH:
+4) The OpenTok API requires api_key and api_secret variables. Go to 'https://tokbox.com/' and sign up to get your keys and set them in your BASH profile:
 
 <pre><code>
 export API_KEY="your_API_key"
