@@ -35,7 +35,7 @@
 
 		<h3>LEARNING:</h3> 
 		{% for lang in user.Language_desired %}
-		     <p>{{ lang.language.language_name }} ({{ lang.level }})</p>
+		     <p>{{ lang.language.language_name }} ({{ lang.level }}), for {{ user.reason }} </p>
 
 		{% endfor %}
 

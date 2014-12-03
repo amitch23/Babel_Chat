@@ -364,6 +364,7 @@ def fetch_nxt_q(message):
           {'room':message['room'], "counter":message['counter']}, room=message['room'])
 
 
+
 #------------------chat box handlers --------
 
 

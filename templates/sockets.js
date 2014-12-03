@@ -259,6 +259,16 @@ $(document).ready(function(){
         window.location = "/";    
     });
 
+
+    //end_session_btn shows on hover of subscriber wrapper
+    $( "#subscriber_wrapper").hover(
+      function() {
+        $('#end_session_btn').removeClass('hidden');
+      }, function() {
+        $('#end_session_btn').addClass('hidden');
+      }
+    );
+
 //-----------chat box handlers-----------------------
 
     //send message and txt sender to server when user clicks button
@@ -288,15 +298,6 @@ $(document).ready(function(){
     });
 
 
-    //end_session_btn shows on hover of subscriber wrapper
-    $( "#subscriber_wrapper").hover(
-      function() {
-        $('#end_session_btn').removeClass('hidden');
-      }, function() {
-        $('#end_session_btn').addClass('hidden');
-      }
-    );
-
-
 });
+
 

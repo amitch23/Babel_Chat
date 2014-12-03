@@ -6,11 +6,11 @@ import csv
 
 def load_users(session):
 #populate users table      
-    user_1 = ["Andrea Mitchell", "andrealeemitchell@gmail.com", "pass1", "en-US", "US", "Fun", "28", "Female", "English Teacher", "Oakland", "U.S.A.", "Los Angeles", "U.S.A.", "'Do good things.'", "static/img/andrea.jpg"]
+    user_1 = ["Andrea Mitchell", "andrealeemitchell@gmail.com", "pass1", "en-US", "US", "Fun", "28", "Female", "English Teacher", "Oakland", "U.S.A.", "Los Angeles", "U.S.A.", "'Do good things.'", "static/img/prof_placeholder.jpg"]
 
     user_2 = ["Jacques Cousteau", "jacques@gmail.com", "pass2", "fr-FR", "FR", "Fun", '104', 'Male', 'Oceanographer', 'Paris', "France", "Gironde", "France", "'The sea, the great unifier, is man's only hope. Now, as never before, the old phrase has a literal meaning: We are all in the same boat.'", "static/img/jacques.jpg"]
   
-    user_3 = ['Frida Kahlo', 'frida@gmail.com','pass3','es-MX','MX',"Travel",'107', "Female", "Painter", "Coyoacan", "Mexico", "Mexico City", "Mexico", "I hope the exit is joyful - and I hope never to return.", "static/img/frida.jpg"]
+    user_3 = ['Frida Kahlo', 'frida@gmail.com','pass3','es-MX','MX',"Fun",'107', "Female", "Painter", "Coyoacan", "Mexico", "Mexico City", "Mexico", "I hope the exit is joyful - and I hope never to return.", "static/img/frida.jpg"]
  
     users = [user_1, user_2, user_3]
 

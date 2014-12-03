@@ -76,7 +76,7 @@ For two users to join a room and start a game, 15 separate passes between the cl
 The diagram below demonstrates how the server and clients are emitting and receiving data. Each arrow represents a function that sends a python dictionary (or javascript object) to either the client or server.
 
 
-![picture](https://github.com/amitch23/Babel_chat/blob/master/static/socketconnection.jpg)
+![picture](https://github.com/amitch23/Babel_chat/blob/master/static/diagram_sockets.jpg)
 
 
 Contact information

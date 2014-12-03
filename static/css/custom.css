@@ -203,13 +203,6 @@ background: linear-gradient(#82b2b2, #249797);
 border-radius: 8px;
 }
 
-#game_forms {
-	/*padding: 15px 15px 0px 15px;*/
-/*text-shadow: 0 1px 3px rgba(0,0,0,.5);
-*/
-/*	background-color: red;
-*/
-}
 
 #game_content p{
 
@@ -228,16 +221,11 @@ box-shadow: 2px 3px 3px #d3d3d3;
 
 
 #game_title h5{
-/* background: #f6f6f6; */
 margin: 0px 0px 0px 0px;
-/* font-weight: bold; */
-/* padding: 10px; */
 color: #fff;
 font-size: 20px;
-/* background: red; */
 text-align: left;
-/*text-shadow: 2px 2px #c2c1c1;
-*/}
+}
 
 
 
@@ -538,9 +526,6 @@ text-align: center;
 margin: 0px 70px 30px 30px;
 }
 
-#prof_btns a{
-/*color: green ;
-*/}
 
 #prof_btns a:hover {
 color: #A7A7A7;
