@@ -271,8 +271,8 @@ GAME_INX = {
     'Catchplace':"""
     Your goal is to help your partner guess the name of the city shown in the picture.
     You may say anything you please except for the name of the city or country that the city is in.
-e.g. card:
-This is a very famous city in Europe where you can eat croissants.""",
+e.g. 
+"This is a very well-known city in Europe where you can eat croissants.""",
     'Work': """
     Discuss the questions that follow and don't be scared to go off topic!
      """,
@@ -314,15 +314,15 @@ def fetch_game_content(message):
             # game_choice = choice(dbsession.query(Game.game_type).distinct().all())[0]
             # game_cards = dbsession.query(Game).filter_by(game_type=game_choice).all()
 
-            #Choose Taboo game for career day
-            game_cards = dbsession.query(Game).filter_by(game_type='Taboo').all()
+            #Choose catchplace game for career day
+            game_cards = dbsession.query(Game).filter_by(game_type='Catchplace').all()
                     
             for card in game_cards:
                 card_url_list.append(card.filename)
 
             emit("send_inx", {'room':message['room'], 
                               'card_content':card_url_list, 
-                              'game':'Taboo'}, 
+                              'game':'Catchplace'}, 
                               room=message['room'])    
 
 

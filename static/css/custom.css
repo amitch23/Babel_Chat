@@ -209,6 +209,16 @@ border-radius: 8px;
 	padding: 20px;
 }
 
+#game_content {
+padding: 20px;
+text-align: left;
+
+}
+
+#game_content h2{
+text-align: center;
+}
+
 #game_title{
 background: #a6a8a1;
 background: linear-gradient(#A9ACAC, #858E8E);

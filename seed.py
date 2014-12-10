@@ -3,12 +3,11 @@ import csv
 
 #bulk insert data into the babelchat database
 
-
 def load_users(session):
 #populate users table      
     user_1 = ["Andrea Mitchell", "andrealeemitchell@gmail.com", "pass1", "en-US", "US", "Fun", "28", "Female", "English Teacher", "Oakland", "U.S.A.", "Los Angeles", "U.S.A.", "'Do good things.'", "static/img/prof_placeholder.jpg"]
 
-    user_2 = ["Jacques Cousteau", "jacques@gmail.com", "pass2", "fr-FR", "FR", "Fun", '104', 'Male', 'Oceanographer', 'Paris', "France", "Gironde", "France", "'The sea, the great unifier, is man's only hope. Now, as never before, the old phrase has a literal meaning: We are all in the same boat.'", "static/img/jacques.jpg"]
+    user_2 = ["Jacques Cousteau", "jacques@gmail.com", "pass2", "fr-FR", "FR", "Travel", '104', 'Male', 'Oceanographer', 'Paris', "France", "Gironde", "France", "'The sea, the great unifier, is man's only hope. Now, as never before, the old phrase has a literal meaning: We are all in the same boat.'", "static/img/jacques.jpg"]
   
     user_3 = ['Frida Kahlo', 'frida@gmail.com','pass3','es-MX','MX',"Fun",'107', "Female", "Painter", "Coyoacan", "Mexico", "Mexico City", "Mexico", "I hope the exit is joyful - and I hope never to return.", "static/img/frida.jpg"]
  
@@ -38,9 +37,7 @@ def load_users(session):
         user.set_password(password)
     
         session.add(user)
-
     session.commit()
-
 
 def load_languages(session):
 #populate languages table
@@ -93,7 +90,6 @@ def load_countries(session):
 
     session.commit()
 
-
 def load_languages_desired(session):
 #populate languages_desired table 
     
@@ -104,48 +100,16 @@ def load_languages_desired(session):
     lang_des_5=[2, "en-US", "advanced"]
     lang_des_6=[2, "es-MX", "beginner"]
 
+    langs = [lang_des_1, lang_des_2, lang_des_3, lang_des_4, lang_des_5, lang_des_6]
 
+    for lang_row in langs:
+        lang = model.Language_desired(
+                        user_id=lang_row[0],
+                        language_code=lang_row[1],
+                        level=lang_row[2])
 
-    lang_des1 = model.Language_desired(
-                        user_id=lang_des_1[0],
-                        language_code=lang_des_1[1],
-                        level=lang_des_1[2])
-
-    lang_des2 = model.Language_desired(
-                        user_id=lang_des_2[0],
-                        language_code=lang_des_2[1],
-                        level=lang_des_2[2])
-
-    lang_des3 = model.Language_desired(
-                        user_id=lang_des_3[0],
-                        language_code=lang_des_3[1],
-                        level=lang_des_3[2])
-
-    lang_des4 = model.Language_desired(
-                        user_id=lang_des_4[0],
-                        language_code=lang_des_4[1],
-                        level=lang_des_4[2])
-
-    lang_des5 = model.Language_desired(
-                        user_id=lang_des_5[0],
-                        language_code=lang_des_5[1],
-                        level=lang_des_5[2])
-
-    lang_des6 = model.Language_desired(
-                        user_id=lang_des_6[0],
-                        language_code=lang_des_6[1],
-                        level=lang_des_6[2])
-
-
-    session.add(lang_des1)
-    session.add(lang_des2)
-    session.add(lang_des3)
-    session.add(lang_des4)
-    session.add(lang_des5)
-    session.add(lang_des6)
-
+        session.add(lang)
     session.commit()
-
 
 def load_games(session):
 #populate games table
@@ -162,60 +126,14 @@ def load_games(session):
     game_9 = ["Catchplace", "static/img/place4.jpg"]    
     game_10 = ["Catchplace", "static/img/place5.jpg"]
 
-    game1 = model.Game(
-                        game_type=game_1[0],
-                        filename=game_1[1])
+    game_cards = [game_1, game_2, game_3, game_4, game_5, game_6, game_7, game_8, game_9, game_10]
 
-    game2 = model.Game(
-                        game_type=game_2[0],
-                        filename=game_2[1])
-
-    game3 = model.Game(
-                        game_type=game_3[0],
-                        filename=game_3[1])
-
-    game4 = model.Game(
-                        game_type=game_4[0],
-                        filename=game_4[1])
-
-    game5 = model.Game(
-                        game_type=game_5[0],
-                        filename=game_5[1])
-
-    game6 = model.Game(
-                        game_type=game_6[0],
-                        filename=game_6[1])
-
-    game7 = model.Game(
-                        game_type=game_7[0],
-                        filename=game_7[1])
-
-    game8 = model.Game(
-                        game_type=game_8[0],
-                        filename=game_8[1])
-
-    game9 = model.Game(
-                        game_type=game_9[0],
-                        filename=game_9[1])
-
-    game10 = model.Game(
-                        game_type=game_10[0],
-                        filename=game_10[1])
-
-
-    session.add(game1)
-    session.add(game2)
-    session.add(game3)
-    session.add(game4)
-    session.add(game5)
-    session.add(game6)
-    session.add(game7)
-    session.add(game8)
-    session.add(game9)
-    session.add(game10)
-
+    for game_row in game_cards:
+        game = model.Game(
+                        game_type=game_row[0],
+                        filename=game_row[1])
+        session.add(game)
     session.commit()
-    
 
 def load_conversations(session):
 #populate conversations table
@@ -223,47 +141,20 @@ def load_conversations(session):
     convo_1 = ["job", "Talk about your job and your role in your company."]    
     convo_2 = ["job", "Talk about your daily work tasks."]    
     convo_3 = ["job", "Where would you like to work and why?"] 
-    convo_4 = ["travel", "Where have you travelled to and what was your favorite place?"]    
-    convo_5 = ["travel", "How often do you travel?"]  
-    convo_6 = ["travel", "What are you favorite travel activities?"]   
+    convo_4 = ["travel", "What are popular tourist destinations in your country?"]    
+    convo_5 = ["travel", "Which is better, package tour or a tour you organize and book yourself?"]  
+    convo_6 = ["travel", "Where did you spend your last vacation?"]   
+    convo_7 = ["travel", "If you were going on a camping trip for a week, what 10 things would you bring? Explain why."]   
 
-    convo1 = model.Conversation(
-                        category=convo_1[0],
-                        question=convo_1[1])
+    convo_qs = [convo_1, convo_2, convo_3, convo_4, convo_5, convo_6, convo_7]
 
-    convo2 = model.Conversation(
-                        category=convo_2[0],
-                        question=convo_2[1])
-
-    convo3 = model.Conversation(
-                        category=convo_3[0],
-                        question=convo_3[1])
-
-
-    convo4 = model.Conversation(
-                        category=convo_4[0],
-                        question=convo_4[1])
-
-    convo5 = model.Conversation(
-                        category=convo_5[0],
-                        question=convo_5[1])
-
-    convo6 = model.Conversation(
-                        category=convo_6[0],
-                        question=convo_6[1])
-
-
-
-    session.add(convo1)
-    session.add(convo2)
-    session.add(convo3)
-    session.add(convo4)
-    session.add(convo5)
-    session.add(convo6)
-
+    for q in convo_qs:
+        convo = model.Conversation(
+                            category=q[0],
+                             question=q[1])
+        session.add(convo)
     session.commit()
 
-    
 def main(session):
     load_users(session)
     load_countries(session)
