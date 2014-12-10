@@ -13,7 +13,7 @@ Profile page:
 
 Videochat Room:
 
-![picture](https://github.com/amitch23/Babel_chat/blob/master/static/videochat3.png)
+![picture](https://github.com/amitch23/Babel_chat/blob/master/static/videochat1.png)
 
 
 Getting started:
