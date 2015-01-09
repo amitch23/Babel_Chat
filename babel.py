@@ -128,7 +128,16 @@ def add_reason():
                 email=session["email"],
                 country_code=session["country_code"],
                 mother_tongue_code=session["mother_tongue_code"],
-                reason=session['reason']
+                reason=session['reason'],
+                age= '',
+                sex= '',
+                occupation='',
+                current_city='',
+                current_country='',
+                origin_city='',
+                origin_country='',
+                about_txt='',
+                profile_url=''
                 )
 
     usr.set_password(session['password'])
