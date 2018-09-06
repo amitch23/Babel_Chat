@@ -71,14 +71,10 @@ A little bit about websockets:
 
 Once a user enters the waiting room or starts a game, the web sockets are connected for both clients. Instead of standard http requests, web sockets open a bidirectional, real time channel in which the server 'listens' to emissions from the connected clients and vice versa. 
 
-For two users to join a room and start a game, 15 separate passes between the clients and server are called. (By ‘pass’, I mean a request or ‘call’ emitted through the cloud.)
+For two users to join a room and start a game, 15 separate interactions between the clients and server are called.
 
 The diagram below demonstrates how the server and clients are emitting and receiving data. Each arrow represents a function that sends a python dictionary (or javascript object) to either the client or server.
 
 
 ![picture](https://github.com/amitch23/Babel_chat/blob/master/static/diagram_sockets.jpg)
 
-
-Contact information
-------------------------
-Email: andrealeemitchell@gmail.com
